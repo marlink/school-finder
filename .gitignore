@@ -10,6 +10,9 @@
 !.yarn/releases
 !.yarn/versions
 
+# Environment variables - ALWAYS keep in project root, NEVER in subfolders
+.env.local
+
 # testing
 /coverage
 

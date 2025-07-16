@@ -1,0 +1,55 @@
+/* Custom styles for Mapbox Geocoder to make it more responsive */
+
+/* Mobile styles */
+@media (max-width: 640px) {
+  .mapboxgl-ctrl-geocoder {
+    min-width: 200px !important;
+    max-width: calc(100vw - 80px) !important;
+    font-size: 14px !important;
+  }
+  
+  .mapboxgl-ctrl-geocoder--input {
+    height: 36px !important;
+    padding: 6px 35px !important;
+    font-size: 14px !important;
+  }
+  
+  .mapboxgl-ctrl-geocoder--icon {
+    top: 8px !important;
+  }
+  
+  .mapboxgl-ctrl-geocoder--icon-search {
+    left: 8px !important;
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  .mapboxgl-ctrl-geocoder--icon-close {
+    right: 8px !important;
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .mapboxgl-ctrl-geocoder--suggestion-title,
+  .mapboxgl-ctrl-geocoder--suggestion-address {
+    font-size: 13px !important;
+  }
+}
+
+/* Tablet and desktop styles */
+@media (min-width: 641px) {
+  .mapboxgl-ctrl-geocoder {
+    min-width: 250px !important;
+  }
+}
+
+/* Common styles */
+.mapboxgl-ctrl-geocoder {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+}
+
+.mapboxgl-ctrl-geocoder--input:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
+}

@@ -1,0 +1,20 @@
+<svg width="40" height="48" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pin shape with shadow -->
+  <filter id="shadow" x="-2" y="0" width="44" height="52">
+    <feDropShadow dx="0" dy="2" stdDeviation="1" flood-opacity="0.3" />
+  </filter>
+  <path d="M20 0C8.954 0 0 8.954 0 20C0 31.046 20 48 20 48C20 48 40 31.046 40 20C40 8.954 31.046 0 20 0Z" fill="#4A80F0" filter="url(#shadow)"/>
+  
+  <!-- School building icon -->
+  <g transform="translate(8, 8)">
+    <!-- Roof -->
+    <path d="M12 2L22 10H2L12 2Z" fill="white"/>
+    <!-- Building -->
+    <rect x="4" y="10" width="16" height="12" fill="white"/>
+    <!-- Door -->
+    <rect x="10" y="16" width="4" height="6" fill="#4A80F0"/>
+    <!-- Windows -->
+    <rect x="6" y="12" width="3" height="3" fill="#4A80F0"/>
+    <rect x="15" y="12" width="3" height="3" fill="#4A80F0"/>
+  </g>
+</svg>
