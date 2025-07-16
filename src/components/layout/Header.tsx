@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Menu, X, ChevronDown, School, User } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { getAppPath } from '@/lib/routeUtils'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -21,7 +22,7 @@ export function Header() {
       <div className="container max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 flex h-14 items-center justify-between">
         {/* Logo and Brand */}
         <div className="flex items-center">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href={getAppPath('/')} className="flex items-center space-x-2">
             <School className="h-6 w-6" />
             <span className="font-bold text-base sm:text-lg md:text-xl hidden sm:inline-block">Katalog Szkół Polska</span>
             <span className="font-bold text-base sm:text-lg md:text-xl sm:hidden">KSP</span>
@@ -30,10 +31,10 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-4">
-          <Link href="/schools" className="text-sm md:text-base font-medium transition-colors hover:text-primary">
+          <Link href={getAppPath('/schools')} className="text-sm md:text-base font-medium transition-colors hover:text-primary">
             Szkoły
           </Link>
-          <Link href="/regions" className="text-sm md:text-base font-medium transition-colors hover:text-primary">
+          <Link href={getAppPath('/regions')} className="text-sm md:text-base font-medium transition-colors hover:text-primary">
             Regiony
           </Link>
           <DropdownMenu>
@@ -42,13 +43,13 @@ export function Header() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <Link href="/about">O nas</Link>
+                <Link href={getAppPath('/about')}>O nas</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/faq">FAQ</Link>
+                <Link href={getAppPath('/faq')}>FAQ</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/contact">Kontakt</Link>
+                <Link href={getAppPath('/contact')}>Kontakt</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -66,13 +67,13 @@ export function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard">Panel</Link>
+                  <Link href={getAppPath('/dashboard')}>Panel</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/profile">Profil</Link>
+                  <Link href={getAppPath('/profile')}>Profil</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/favorites">Ulubione</Link>
+                  <Link href={getAppPath('/favorites')}>Ulubione</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut}>
                   Wyloguj się
@@ -82,10 +83,10 @@ export function Header() {
           ) : (
             <>
               <Button variant="outline" size="sm" asChild>
-                <Link href="/login">Logowanie</Link>
+                <Link href={getAppPath('/login')}>Logowanie</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/register">Rejestracja</Link>
+                <Link href={getAppPath('/register')}>Rejestracja</Link>
               </Button>
             </>
           )}
@@ -106,14 +107,14 @@ export function Header() {
             <div className="container max-w-screen-2xl mx-auto px-4 py-4 space-y-4">
               <nav className="flex flex-col space-y-3">
                 <Link 
-                  href="/schools" 
+                  href={getAppPath('/schools')} 
                   className="text-sm font-medium p-2 rounded hover:bg-accent"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Szkoły
                 </Link>
                 <Link 
-                  href="/regions" 
+                  href={getAppPath('/regions')} 
                   className="text-sm font-medium p-2 rounded hover:bg-accent"
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -121,21 +122,21 @@ export function Header() {
                 </Link>
                 <div className="border-t my-2"></div>
                 <Link 
-                  href="/about" 
+                  href={getAppPath('/about')} 
                   className="text-sm font-medium p-2 rounded hover:bg-accent"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   O nas
                 </Link>
                 <Link 
-                  href="/faq" 
+                  href={getAppPath('/faq')} 
                   className="text-sm font-medium p-2 rounded hover:bg-accent"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   FAQ
                 </Link>
                 <Link 
-                  href="/contact" 
+                  href={getAppPath('/contact')} 
                   className="text-sm font-medium p-2 rounded hover:bg-accent"
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -145,21 +146,21 @@ export function Header() {
                 {user ? (
                   <div className="flex flex-col space-y-2">
                     <Link 
-                      href="/dashboard"
+                      href={getAppPath('/dashboard')}
                       className="text-sm font-medium p-2 rounded hover:bg-accent"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Panel
                     </Link>
                     <Link 
-                      href="/profile"
+                      href={getAppPath('/profile')}
                       className="text-sm font-medium p-2 rounded hover:bg-accent"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Profil
                     </Link>
                     <Link 
-                      href="/favorites"
+                      href={getAppPath('/favorites')}
                       className="text-sm font-medium p-2 rounded hover:bg-accent"
                       onClick={() => setMobileMenuOpen(false)}
                     >
@@ -176,7 +177,7 @@ export function Header() {
                   <div className="flex flex-col space-y-2">
                     <Button variant="outline" size="sm" asChild>
                       <Link 
-                        href="/login"
+                        href={getAppPath('/login')}
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         Logowanie
@@ -184,7 +185,7 @@ export function Header() {
                     </Button>
                     <Button size="sm" asChild>
                       <Link 
-                        href="/register"
+                        href={getAppPath('/register')}
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         Rejestracja

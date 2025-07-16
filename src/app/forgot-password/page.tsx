@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
+import { getAppPath } from '@/lib/routeUtils'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -84,7 +85,7 @@ export default function ForgotPasswordPage() {
         </form>
 
         <div className="text-center text-sm">
-          <Link href="/login" className="text-primary hover:underline">
+          <Link href={getAppPath('/login')} className="text-primary hover:underline">
             Back to Login
           </Link>
         </div>

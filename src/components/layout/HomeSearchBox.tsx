@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SchoolFilter } from '@/types/school'
+import { getAppPath } from '@/lib/routeUtils'
 
 export function HomeSearchBox() {
   const router = useRouter()
@@ -34,7 +35,7 @@ export function HomeSearchBox() {
     }
     
     // Navigate to schools page with search parameters
-    router.push(`/schools?${params.toString()}`)
+    router.push(getAppPath(`/schools?${params.toString()}`))
   }
   
   return (

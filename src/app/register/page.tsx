@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
+import { getAppPath } from '@/lib/routeUtils'
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('')
@@ -44,7 +45,7 @@ export default function RegisterPage() {
         )
         // Optionally redirect after a delay
         setTimeout(() => {
-          router.push('/login')
+          router.push(getAppPath('/login'))
         }, 3000)
       }
     } catch (err) {
@@ -125,7 +126,7 @@ export default function RegisterPage() {
 
         <div className="text-center text-sm">
           Already have an account?{' '}
-          <Link href="/login" className="text-primary hover:underline">
+          <Link href={getAppPath('/login')} className="text-primary hover:underline">
             Login
           </Link>
         </div>

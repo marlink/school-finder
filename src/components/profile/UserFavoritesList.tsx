@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { getRatingColor } from '@/utils/mapUtils'
+import { getAppPath } from '@/lib/routeUtils'
 
 interface UserFavoritesListProps {
   favorites: UserFavorite[];
@@ -39,7 +40,7 @@ export function UserFavoritesList({ favorites, onRemoveFavorite }: UserFavorites
         {favorites.length === 0 ? (
           <div className="text-center py-4 md:py-6">
             <p className="text-muted-foreground text-sm md:text-base mb-4">You haven't added any favorite schools yet</p>
-            <Link href="/schools">
+            <Link href={getAppPath('/schools')}>
               <Button className="text-xs sm:text-sm">Browse Schools</Button>
             </Link>
           </div>
@@ -53,7 +54,7 @@ export function UserFavoritesList({ favorites, onRemoveFavorite }: UserFavorites
                 <div key={favorite.id} className="border rounded-lg p-3 sm:p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                     <div className="flex-1">
-                      <Link href={`/schools/${school.id}`}>
+                      <Link href={getAppPath(`/schools/${school.id}`)}>
                         <h3 className="font-medium hover:underline text-sm md:text-base">{school.name}</h3>
                       </Link>
                       <p className="text-xs md:text-sm text-muted-foreground break-words">{school.address}</p>

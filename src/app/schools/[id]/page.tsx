@@ -8,6 +8,7 @@ import SchoolMarker from '@/components/maps/SchoolMarker'
 import { School } from '@/types/school'
 import { getRatingColor, getContrastColor } from '@/utils/mapUtils'
 import { mockSchools } from '@/data/mockSchools'
+import { getAppPath } from '@/lib/routeUtils'
 import {
   Card,
   CardHeader,
@@ -42,7 +43,7 @@ export default function SchoolDetailPage() {
         <div className="text-center">
           <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4">School Not Found</h1>
           <p className="mb-4 text-sm md:text-base">The school you are looking for does not exist or has been removed.</p>
-          <Link href="/schools" className="text-blue-600 hover:underline text-sm md:text-base">
+          <Link href={getAppPath('/schools')} className="text-blue-600 hover:underline text-sm md:text-base">
             Return to Schools Directory
           </Link>
         </div>
@@ -106,7 +107,7 @@ export default function SchoolDetailPage() {
         
         <div className="flex flex-wrap gap-2 w-full md:w-auto mt-4 md:mt-0">
           <Link 
-            href={`/schools/${school?.id}/reviews`}
+            href={getAppPath(`/schools/${school?.id}/reviews`)}
             className="flex-1 md:flex-none text-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-xs md:text-sm"
           >
             Write a Review
@@ -175,7 +176,7 @@ export default function SchoolDetailPage() {
               <div className="text-center py-4 md:py-6">
                 <p className="text-gray-500 mb-3 md:mb-4 text-sm md:text-base">No reviews yet</p>
                 <Link 
-                  href={`/schools/${school?.id}/reviews`}
+                  href={getAppPath(`/schools/${school?.id}/reviews`)}
                   className="text-blue-600 hover:underline text-sm md:text-base inline-block px-4 py-2 bg-blue-50 rounded-lg"
                 >
                   Be the first to write a review

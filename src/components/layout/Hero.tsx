@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { getAppPath } from '@/lib/routeUtils'
 
 export function Hero() {
   return (
@@ -17,9 +18,10 @@ export function Hero() {
           <p className="mt-5"> 
             <Link 
               className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500" 
-              href="/schools"> 
-              Przeglądaj szkoły 
-              <svg className="shrink-0 w-4 h-4 transition ease-in-out group-hover:translate-x-1 group-focus:translate-x-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg> 
+              href={getAppPath('/schools')}
+            >
+              Przeglądaj szkoły
+              <svg className="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </Link> 
           </p> 
         </div> 

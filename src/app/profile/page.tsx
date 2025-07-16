@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { supabase } from '@/lib/supabase'
 import Image from 'next/image'
+import { getAppPath } from '@/lib/routeUtils'
 
 export default function ProfilePage() {
   const { user } = useAuth()
@@ -182,7 +183,7 @@ export default function ProfilePage() {
                 <Button 
                   type="button" 
                   variant="outline" 
-                  onClick={() => router.push('/dashboard')}
+                  onClick={() => router.push(getAppPath('/dashboard'))}
                 >
                   Cancel
                 </Button>

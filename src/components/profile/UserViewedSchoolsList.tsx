@@ -5,6 +5,7 @@ import { School } from '@/types/school'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
 import { getRatingColor } from '@/utils/mapUtils'
+import { getAppPath } from '@/lib/routeUtils'
 
 interface UserViewedSchoolsListProps {
   viewedSchools: UserViewedSchool[];
@@ -35,7 +36,7 @@ export function UserViewedSchoolsList({ viewedSchools }: UserViewedSchoolsListPr
                   <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
                     <div className="flex-1">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
-                        <Link href={`/schools/${school.id}`}>
+                        <Link href={getAppPath(`/schools/${school.id}`)}>
                           <h3 className="font-medium hover:underline text-sm md:text-base">{school.name}</h3>
                         </Link>
                         

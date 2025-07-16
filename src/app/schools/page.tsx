@@ -10,6 +10,7 @@ import { mockSchools } from '@/data/mockSchools'
 import SearchBox from '@/components/maps/SearchBox'
 import FilterControls from '@/components/maps/FilterControls'
 import PaginationControls from '@/components/pagination/PaginationControls'
+import { getAppPath } from '@/lib/routeUtils'
 import {
   Table,
   TableBody,
@@ -198,7 +199,7 @@ export default function SchoolsPage() {
                   <TableCell className="max-w-xs truncate text-xs md:text-sm">{school.address || 'N/A'}</TableCell>
                   <TableCell className="text-right">
                     <Link 
-                      href={`/schools/${school.id}`}
+                      href={getAppPath(`/schools/${school.id}`)}
                       className="text-blue-600 hover:underline text-xs md:text-sm"
                     >
                       View Details
@@ -237,7 +238,7 @@ export default function SchoolsPage() {
                   <p className="text-xs md:text-sm mb-3 line-clamp-2">{school.description || 'No description available.'}</p>
                   <div className="flex justify-end">
                     <Link 
-                      href={`/schools/${school.id}`}
+                      href={getAppPath(`/schools/${school.id}`)}
                       className="text-blue-600 hover:underline text-xs md:text-sm"
                     >
                       View Details

@@ -8,6 +8,7 @@ import { LayoutDashboard, School, Database, BarChart2, LogOut } from 'lucide-rea
 
 // Add this import at the top
 import { supabase } from '@/lib/supabase'
+import { getAppPath } from '@/lib/routeUtils'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, isLoading, signOut } = useAuth()
@@ -17,7 +18,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.push('/login')
+      router.push(getAppPath('/login'))
       return
     }
 
@@ -33,11 +34,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         if (response.ok) {
           setIsAdmin(true)
         } else {
-          router.push('/dashboard')
+          router.push(getAppPath('/dashboard'))
         }
       } catch (error) {
         console.error('Error checking admin status:', error)
-        router.push('/dashboard')
+        router.push(getAppPath('/dashboard'))
       } finally {
         setLoading(false)
       }
@@ -55,7 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const handleSignOut = async () => {
     await signOut()
-    router.push('/login')
+    router.push(getAppPath('/login'))
   }
 
   if (isLoading || loading) {
@@ -78,19 +79,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <h1 className="text-xl font-bold">School Finder Admin</h1>
         </div>
         <nav className="space-y-1 px-3">
-          <Link href="/admin/dashboard" className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+          <Link href={getAppPath('/admin/dashboard')} className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
             <LayoutDashboard className="h-5 w-5" />
             Dashboard
           </Link>
-          <Link href="/admin/schools" className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+          <Link href={getAppPath('/admin/schools')} className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
             <School className="h-5 w-5" />
             Schools
           </Link>
-          <Link href="/admin/scraping" className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+          <Link href={getAppPath('/admin/scraping')} className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
             <Database className="h-5 w-5" />
             Scraping
           </Link>
-          <Link href="/admin/data-quality" className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+          <Link href={getAppPath('/admin/data-quality')} className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
             <BarChart2 className="h-5 w-5" />
             Data Quality
           </Link>

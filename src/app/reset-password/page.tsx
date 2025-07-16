@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
+import { getAppPath } from '@/lib/routeUtils'
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState('')
@@ -24,7 +25,7 @@ export default function ResetPasswordPage() {
       // We don't redirect immediately to allow the auth state to load
       const timer = setTimeout(() => {
         if (!user) {
-          router.push('/login')
+          router.push(getAppPath('/login'))
         }
       }, 1000)
       return () => clearTimeout(timer)
@@ -60,7 +61,7 @@ export default function ResetPasswordPage() {
         
         // Redirect to login after a delay
         setTimeout(() => {
-          router.push('/login')
+          router.push(getAppPath('/login'))
         }, 2000)
       }
     } catch (err) {
@@ -128,7 +129,7 @@ export default function ResetPasswordPage() {
         </form>
 
         <div className="text-center text-sm">
-          <Link href="/login" className="text-primary hover:underline">
+          <Link href={getAppPath('/login')} className="text-primary hover:underline">
             Back to Login
           </Link>
         </div>

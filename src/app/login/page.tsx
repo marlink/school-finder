@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
+import { getAppPath } from '@/lib/routeUtils'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -29,7 +30,7 @@ export default function LoginPage() {
       }
 
       if (success) {
-        router.push('/dashboard')
+        router.push(getAppPath('/dashboard'))
       }
     } catch (err) {
       setError('An unexpected error occurred')
@@ -73,7 +74,7 @@ export default function LoginPage() {
               <label htmlFor="password" className="text-sm font-medium leading-none">
                 Password
               </label>
-              <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+              <Link href={getAppPath('/forgot-password')} className="text-sm text-primary hover:underline">
                 Forgot password?
               </Link>
             </div>
@@ -94,7 +95,7 @@ export default function LoginPage() {
 
         <div className="text-center text-sm">
           Don't have an account?{' '}
-          <Link href="/register" className="text-primary hover:underline">
+          <Link href={getAppPath('/register')} className="text-primary hover:underline">
             Register
           </Link>
         </div>
