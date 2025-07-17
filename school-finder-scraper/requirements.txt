@@ -1,0 +1,14 @@
+# Podstawowe zależności
+supabase==1.0.3
+curl_cffi==0.5.6
+lxml==4.9.3
+
+# Obsługa HTTP
+requests==2.31.0
+
+# Parsowanie danych
+beautifulsoup4==4.12.2
+
+# Narzędzia pomocnicze
+python-dotenv==1.0.0
+tqdm==4.66.1

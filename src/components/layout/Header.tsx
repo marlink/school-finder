@@ -3,14 +3,41 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Menu, X, ChevronDown, School, User } from 'lucide-react'
-import { useState } from 'react'
+import { Menu, X, ChevronDown, School, User, Shield } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { getAppPath } from '@/lib/routeUtils'
+import { supabase } from '@/lib/supabase'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const { user, signOut } = useAuth()
+  
+  useEffect(() => {
+    if (user) {
+      checkAdminStatus()
+    }
+  }, [user])
+  
+  const checkAdminStatus = async () => {
+    try {
+      const { data } = await supabase.auth.getSession()
+      const token = data.session?.access_token || ''
+      
+      const response = await fetch('/api/admin/check', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      
+      if (response.ok) {
+        setIsAdmin(true)
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error)
+    }
+  }
 
   const handleSignOut = async () => {
     await signOut()
@@ -75,6 +102,14 @@ export function Header() {
                 <DropdownMenuItem asChild>
                   <Link href={getAppPath('/favorites')}>Ulubione</Link>
                 </DropdownMenuItem>
+                {isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <Link href={getAppPath('/admin/dashboard')} className="flex items-center">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Panel Admina
+                    </Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem onClick={handleSignOut}>
                   Wyloguj się
                 </DropdownMenuItem>
@@ -166,6 +201,16 @@ export function Header() {
                     >
                       Ulubione
                     </Link>
+                    {isAdmin && (
+                      <Link 
+                        href={getAppPath('/admin/dashboard')}
+                        className="text-sm font-medium p-2 rounded hover:bg-accent flex items-center"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Shield className="h-4 w-4 mr-2" />
+                        Panel Admina
+                      </Link>
+                    )}
                     <button
                       onClick={handleSignOut}
                       className="text-sm font-medium p-2 rounded hover:bg-accent text-left text-destructive"

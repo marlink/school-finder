@@ -1,0 +1,17 @@
+{
+  "name": "school-finder-scraper-admin",
+  "version": "1.0.0",
+  "description": "Panel administracyjny dla scraperów School Finder",
+  "main": "scraper-server.js",
+  "scripts": {
+    "start": "node scraper-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2",
+    "@supabase/supabase-js": "^2.38.4"
+  },
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Finder - Panel Administracyjny Scraperów</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .card-title {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .card-content {
+            margin-bottom: 15px;
+        }
+        .card-footer {
+            text-align: right;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .checkbox-group input {
+            margin-right: 10px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .stats-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .stats-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .status-running {
+            background-color: #3498db;
+            color: white;
+        }
+        .status-completed {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .status-failed {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .status-pending {
+            background-color: #f39c12;
+            color: white;
+        }
+        .region-stats, .type-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        #configForm {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>School Finder - Panel Administracyjny Scraperów</h1>
+    
+    <div id="configInfo" class="card">
+        <div class="card-header">
+            <h2 class="card-title">Informacje o konfiguracji</h2>
+        </div>
+        <div class="card-content">
+            <p>Panel administracyjny korzysta z konfiguracji Supabase zdefiniowanej w pliku <code>.env.local</code>.</p>
+            <p>Nie ma potrzeby ręcznego wprowadzania danych konfiguracyjnych.</p>
+            <div class="form-group">
+                <label for="googleApiKey">Google Places API Key (opcjonalnie)</label>
+                <input type="text" id="googleApiKey" placeholder="AIzaSyA...">
+                <button id="saveGoogleApiKey" class="btn-small">Zapisz</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="statusAlert" style="display: none;" class="alert"></div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Liczba szkół</h3>
+            </div>
+            <div class="card-content">
+                <div class="stats-value" id="totalSchools">-</div>
+                <div class="stats-label">Wszystkie szkoły</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Status scrapera</h3>
+            </div>
+            <div class="card-content">
+                <div id="scrapingStatus">-</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Ostatnia aktualizacja</h3>
+            </div>
+            <div class="card-content">
+                <div class="stats-value" id="lastUpdated">-</div>
+                <div class="stats-label">Data i czas</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Szkoły według regionów</h3>
+            </div>
+            <div class="card-content" id="schoolsByRegion">
+                <div class="region-stats">
+                    <span>Ładowanie...</span>
+                    <span>-</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Szkoły według typów</h3>
+            </div>
+            <div class="card-content" id="schoolsByType">
+                <div class="type-stats">
+                    <span>Ładowanie...</span>
+                    <span>-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Uruchom scraper</h2>
+        </div>
+        <div class="card-content">
+            <div class="form-group">
+                <label for="region">Region</label>
+                <select id="region">
+                    <option value="all">Wszystkie regiony</option>
+                    <!-- Regiony będą dodane dynamicznie -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="schoolType">Typ szkoły</label>
+                <select id="schoolType">
+                    <option value="all">Wszystkie typy</option>
+                    <option value="schools">Szkoły podstawowe i średnie</option>
+                    <option value="universities">Uczelnie wyższe</option>
+                </select>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="fullScrape">
+                <label for="fullScrape">Pełne scrapowanie (nadpisuje istniejące dane)</label>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button id="startScraping">Uruchom scraper</button>
+        </div>
+    </div>
+
+    <script>
+        // Zapisywanie konfiguracji Google API Key w localStorage
+        document.getElementById('saveGoogleApiKey').addEventListener('click', function() {
+            const config = {
+                googleApiKey: document.getElementById('googleApiKey').value
+            };
+            
+            localStorage.setItem('scraperConfig', JSON.stringify(config));
+            showAlert('Konfiguracja Google API Key została zapisana.', 'success');
+        });
+
+        // Ładowanie konfiguracji z localStorage
+        function loadConfig() {
+            const config = JSON.parse(localStorage.getItem('scraperConfig') || '{}');
+            if (config.googleApiKey) document.getElementById('googleApiKey').value = config.googleApiKey;
+            return config;
+        }
+
+        // Wyświetlanie alertów
+        function showAlert(message, type) {
+            const alert = document.getElementById('statusAlert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+
+        // Pobieranie statystyk
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/admin/dashboard', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Nie udało się pobrać statystyk');
+                }
+                
+                const data = await response.json();
+                
+                // Aktualizacja UI
+                document.getElementById('totalSchools').textContent = data.totalSchools || 0;
+                document.getElementById('lastUpdated').textContent = data.lastUpdated ? new Date(data.lastUpdated).toLocaleString() : 'Nigdy';
+                
+                // Regiony
+                const regionContainer = document.getElementById('schoolsByRegion');
+                regionContainer.innerHTML = '';
+                const regionSelect = document.getElementById('region');
+                regionSelect.innerHTML = '<option value="all">Wszystkie regiony</option>';
+                
+                if (data.schoolsByRegion) {
+                    Object.entries(data.schoolsByRegion).forEach(([name, value]) => {
+                        const div = document.createElement('div');
+                        div.className = 'region-stats';
+                        div.innerHTML = `<span>${name}</span><span>${value}</span>`;
+                        regionContainer.appendChild(div);
+                        
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        regionSelect.appendChild(option);
+                    });
+                }
+                
+                // Typy szkół
+                const typeContainer = document.getElementById('schoolsByType');
+                typeContainer.innerHTML = '';
+                
+                if (data.schoolsByType) {
+                    Object.entries(data.schoolsByType).forEach(([name, value]) => {
+                        const div = document.createElement('div');
+                        div.className = 'type-stats';
+                        div.innerHTML = `<span>${name}</span><span>${value}</span>`;
+                        typeContainer.appendChild(div);
+                    });
+                }
+                
+                checkScrapingStatus();
+            } catch (error) {
+                showAlert(`Błąd: ${error.message}`, 'danger');
+            }
+        }
+
+        // Sprawdzanie statusu scrapera
+        async function checkScrapingStatus() {
+            try {
+                const response = await fetch('/api/admin/scraping/status', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Nie udało się sprawdzić statusu scrapera');
+                }
+                
+                const status = await response.json();
+                const statusElement = document.getElementById('scrapingStatus');
+                const startButton = document.getElementById('startScraping');
+                
+                let statusText = '';
+                let statusClass = '';
+                
+                switch(status.status) {
+                    case 'running':
+                        statusText = 'Uruchomiony';
+                        statusClass = 'status-running';
+                        startButton.disabled = true;
+                        setTimeout(checkScrapingStatus, 5000); // Sprawdź ponownie za 5 sekund
+                        break;
+                    case 'completed':
+                        statusText = 'Zakończony';
+                        statusClass = 'status-completed';
+                        startButton.disabled = false;
+                        break;
+                    case 'failed':
+                        statusText = 'Błąd';
+                        statusClass = 'status-failed';
+                        startButton.disabled = false;
+                        break;
+                    default:
+                        statusText = 'Oczekujący';
+                        statusClass = 'status-pending';
+                        startButton.disabled = false;
+                }
+                
+                statusElement.innerHTML = `<span class="status-badge ${statusClass}">${statusText}</span>`;
+                
+                if (status.details) {
+                    const details = document.createElement('div');
+                    details.style.marginTop = '10px';
+                    details.innerHTML = `
+                        <div><strong>Rozpoczęto:</strong> ${status.details.startedAt ? new Date(status.details.startedAt).toLocaleString() : 'N/A'}</div>
+                        ${status.details.completedAt ? `<div><strong>Zakończono:</strong> ${new Date(status.details.completedAt).toLocaleString()}</div>` : ''}
+                        ${status.details.schoolsScraped ? `<div><strong>Pobrano szkół:</strong> ${status.details.schoolsScraped}</div>` : ''}
+                        ${status.details.error ? `<div><strong>Błąd:</strong> ${status.details.error}</div>` : ''}
+                    `;
+                    statusElement.appendChild(details);
+                }
+            } catch (error) {
+                console.error('Błąd sprawdzania statusu:', error);
+            }
+        }
+
+        // Uruchamianie scrapera
+        document.getElementById('startScraping').addEventListener('click', async function() {
+            const region = document.getElementById('region').value;
+            const schoolType = document.getElementById('schoolType').value;
+            const fullScrape = document.getElementById('fullScrape').checked;
+            
+            try {
+                this.disabled = true;
+                this.innerHTML = '<div class="spinner"></div> Uruchamianie...';
+                
+                const response = await fetch('/api/admin/scraping/trigger', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        region,
+                        schoolType,
+                        fullScrape
+                    })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Nie udało się uruchomić scrapera');
+                }
+                
+                showAlert('Scraper został uruchomiony pomyślnie.', 'success');
+                checkScrapingStatus();
+            } catch (error) {
+                showAlert(`Błąd: ${error.message}`, 'danger');
+                this.disabled = false;
+                this.textContent = 'Uruchom scraper';
+            }
+        });
+
+        // Inicjalizacja
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfig();
+            loadStats();
+        });
+    </script>
+</body>
+</html>

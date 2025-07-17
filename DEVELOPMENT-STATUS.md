@@ -83,6 +83,28 @@ Ten dokument przedstawia aktualny stan rozwoju aplikacji School Finder, opisują
 - ⚠️ Brak dokumentacji API
 - ⚠️ Brak dokumentacji dla deweloperów
 
+## Aktualny Status (Maj 2024)
+
+- ✅ Aplikacja Next.js działa na porcie 3000.
+- ✅ Aplikacja Scraper Admin działa na porcie 3500, ale używa symulowanej tabeli in-memory z powodu problemów z uprawnieniami Supabase.
+- ✅ Dodano komentarze do kodu w panelu administracyjnym scrapowania (src/app/admin/scraping/page.tsx).
+
+## Punkty do kontynuacji
+
+1. **Rozwiązanie problemu z uprawnieniami Supabase**
+   - Sprawdzić konfigurację ról i uprawnień w Supabase
+   - Zweryfikować poprawność kluczy API w plikach .env.local
+
+2. **Rozszerzenie funkcjonalności scrapera**
+   - Dodać obsługę większej liczby źródeł danych
+   - Zaimplementować mechanizm walidacji i czyszczenia danych
+   - Dodać możliwość planowania automatycznych aktualizacji danych
+
+3. **Usprawnienia interfejsu użytkownika**
+   - Dodać wizualizację postępu scrapowania
+   - Zaimplementować historię operacji scrapowania
+   - Rozszerzyć panel statystyk o dodatkowe wykresy i metryki
+
 ---
 
 *Ostatnia aktualizacja: Maj 2024*

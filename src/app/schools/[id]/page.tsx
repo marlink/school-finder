@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { mockSchools } from '@/data/mockSchools'
 import Link from 'next/link'
 import Map from '@/components/maps/Map'
 import SchoolMarker from '@/components/maps/SchoolMarker'
 import { School } from '@/types/school'
 import { getRatingColor, getContrastColor } from '@/utils/mapUtils'
-import { mockSchools } from '@/data/mockSchools'
 import { getAppPath } from '@/lib/routeUtils'
 import {
   Card,
@@ -18,23 +18,33 @@ import {
   CardFooter,
 } from '@/components/ui/card'
 
+// Funkcja generateStaticParams jest wymagana dla konfiguracji "output: export"
+export function generateStaticParams() {
+  return mockSchools.map((school) => ({
+    id: school.id,
+  }))
+}
+
 export default function SchoolDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const [school, setSchool] = useState<School | null>(null)
-  const [loading, setLoading] = useState(true)
   
+  // Stan dla ładowania i danych szkoły
+  const [loading, setLoading] = useState(true)
+  const [school, setSchool] = useState<School | undefined>(undefined)
+  
+  // Pobierz dane szkoły na podstawie ID z parametrów
   useEffect(() => {
-    // In a real app, this would be an API call to get the school by ID
-    const schoolId = params.id as string
-    const foundSchool = mockSchools.find(s => s.id === schoolId)
-    
-    if (foundSchool) {
+    if (params?.id) {
+      // Symulacja ładowania danych
+      setLoading(true)
+      
+      // Znajdź szkołę w danych mockowych
+      const foundSchool = mockSchools.find(s => s.id === params.id)
       setSchool(foundSchool)
+      setLoading(false)
     }
-    
-    setLoading(false)
-  }, [params.id])
+  }, [params?.id])
   
   // Handle case where school is not found
   if (!loading && !school) {
