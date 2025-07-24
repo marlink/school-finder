@@ -1,0 +1,70 @@
+<svg width="800" height="1200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="1200" fill="#f8f9fa"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="800" height="80" fill="#ffffff" stroke="#e9ecef" stroke-width="1"/>
+  <text x="30" y="50" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">School Finder</text>
+  
+  <!-- Navigation -->
+  <rect x="500" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="520" y="50" font-family="Arial" font-size="14" fill="#495057">Search</text>
+  
+  <rect x="600" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="620" y="50" font-family="Arial" font-size="14" fill="#495057">Login</text>
+  
+  <rect x="700" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="720" y="50" font-family="Arial" font-size="14" fill="#495057">Profile</text>
+  
+  <!-- Hero Section -->
+  <rect x="50" y="120" width="700" height="300" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="100" y="180" font-family="Arial" font-size="32" font-weight="bold" fill="#212529">Find the Perfect School</text>
+  <text x="100" y="220" font-family="Arial" font-size="18" fill="#6c757d">Browse schools by region, rating, or search directly</text>
+  
+  <!-- Search Bar -->
+  <rect x="100" y="250" width="500" height="50" rx="25" fill="#ffffff" stroke="#ced4da" stroke-width="2"/>
+  <text x="130" y="280" font-family="Arial" font-size="16" fill="#adb5bd">Search for schools...</text>
+  <circle cx="570" cy="275" r="15" fill="#007bff"/>
+  <text x="565" y="280" font-family="Arial" font-size="16" fill="#ffffff">→</text>
+  
+  <!-- Featured Regions -->
+  <text x="50" y="470" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">Browse by Region</text>
+  
+  <!-- Region Cards -->
+  <rect x="50" y="500" width="220" height="180" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <rect x="50" y="500" width="220" height="100" rx="10" fill="#e9ecef"/>
+  <text x="70" y="630" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Warsaw</text>
+  <text x="70" y="655" font-family="Arial" font-size="14" fill="#6c757d">125 schools</text>
+  
+  <rect x="290" y="500" width="220" height="180" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <rect x="290" y="500" width="220" height="100" rx="10" fill="#e9ecef"/>
+  <text x="310" y="630" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Krakow</text>
+  <text x="310" y="655" font-family="Arial" font-size="14" fill="#6c757d">98 schools</text>
+  
+  <rect x="530" y="500" width="220" height="180" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <rect x="530" y="500" width="220" height="100" rx="10" fill="#e9ecef"/>
+  <text x="550" y="630" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Wroclaw</text>
+  <text x="550" y="655" font-family="Arial" font-size="14" fill="#6c757d">76 schools</text>
+  
+  <!-- Top Rated Schools -->
+  <text x="50" y="730" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">Top Rated Schools</text>
+  
+  <!-- School Cards -->
+  <rect x="50" y="760" width="700" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <circle cx="110" cy="820" r="40" fill="#e9ecef"/>
+  <text x="180" y="800" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Warsaw International School</text>
+  <text x="180" y="825" font-family="Arial" font-size="14" fill="#6c757d">Warsaw • International • Rating: 4.8</text>
+  <text x="650" y="820" font-family="Arial" font-size="24" fill="#007bff">→</text>
+  
+  <rect x="50" y="900" width="700" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <circle cx="110" cy="960" r="40" fill="#e9ecef"/>
+  <text x="180" y="940" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Krakow Academy</text>
+  <text x="180" y="965" font-family="Arial" font-size="14" fill="#6c757d">Krakow • Private • Rating: 4.7</text>
+  <text x="650" y="960" font-family="Arial" font-size="24" fill="#007bff">→</text>
+  
+  <rect x="50" y="1040" width="700" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <circle cx="110" cy="1100" r="40" fill="#e9ecef"/>
+  <text x="180" y="1080" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Wroclaw Science School</text>
+  <text x="180" y="1105" font-family="Arial" font-size="14" fill="#6c757d">Wroclaw • Public • Rating: 4.6</text>
+  <text x="650" y="1100" font-family="Arial" font-size="24" fill="#007bff">→</text>
+</svg>

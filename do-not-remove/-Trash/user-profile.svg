@@ -1,0 +1,103 @@
+<svg width="800" height="1200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="1200" fill="#f8f9fa"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="800" height="80" fill="#ffffff" stroke="#e9ecef" stroke-width="1"/>
+  <text x="30" y="50" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">School Finder</text>
+  
+  <!-- Navigation -->
+  <rect x="500" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="520" y="50" font-family="Arial" font-size="14" fill="#495057">Search</text>
+  
+  <rect x="600" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="620" y="50" font-family="Arial" font-size="14" fill="#495057">Home</text>
+  
+  <rect x="700" y="30" width="80" height="30" rx="5" fill="#007bff" stroke="#007bff" stroke-width="1"/>
+  <text x="720" y="50" font-family="Arial" font-size="14" fill="#ffffff">Profile</text>
+  
+  <!-- Profile Header -->
+  <rect x="0" y="80" width="800" height="180" fill="#e9ecef"/>
+  <circle cx="150" cy="160" r="60" fill="#ffffff" stroke="#dee2e6" stroke-width="2"/>
+  <text x="150" y="165" font-family="Arial" font-size="24" fill="#adb5bd" text-anchor="middle">Avatar</text>
+  
+  <text x="280" y="140" font-family="Arial" font-size="32" font-weight="bold" fill="#212529">Jan Kowalski</text>
+  <text x="280" y="180" font-family="Arial" font-size="18" fill="#6c757d">Warsaw, Poland • Member since 2023</text>
+  
+  <!-- Edit Profile Button -->
+  <rect x="650" y="140" width="120" height="40" rx="20" fill="#007bff"/>
+  <text x="670" y="165" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff">Edit Profile</text>
+  
+  <!-- Tabs Navigation -->
+  <rect x="0" y="260" width="800" height="50" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  
+  <rect x="50" y="260" width="140" height="50" fill="#007bff"/>
+  <text x="85" y="290" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff">Saved Schools</text>
+  
+  <rect x="190" y="260" width="140" height="50" fill="#ffffff"/>
+  <text x="225" y="290" font-family="Arial" font-size="16" fill="#495057">Search History</text>
+  
+  <rect x="330" y="260" width="140" height="50" fill="#ffffff"/>
+  <text x="365" y="290" font-family="Arial" font-size="16" fill="#495057">Ratings</text>
+  
+  <rect x="470" y="260" width="140" height="50" fill="#ffffff"/>
+  <text x="505" y="290" font-family="Arial" font-size="16" fill="#495057">Settings</text>
+  
+  <!-- Saved Schools Section -->
+  <text x="50" y="350" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">Your Saved Schools</text>
+  
+  <!-- School Cards -->
+  <rect x="50" y="380" width="700" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <circle cx="110" cy="440" r="40" fill="#e9ecef"/>
+  <text x="180" y="420" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Warsaw International School</text>
+  <text x="180" y="445" font-family="Arial" font-size="14" fill="#6c757d">International • Rating: 4.8</text>
+  <text x="180" y="470" font-family="Arial" font-size="14" fill="#6c757d">Saved on: 15 Oct 2023</text>
+  <text x="650" y="440" font-family="Arial" font-size="24" fill="#007bff">→</text>
+  
+  <rect x="50" y="520" width="700" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <circle cx="110" cy="580" r="40" fill="#e9ecef"/>
+  <text x="180" y="560" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">American School of Warsaw</text>
+  <text x="180" y="585" font-family="Arial" font-size="14" fill="#6c757d">Private • Rating: 4.7</text>
+  <text x="180" y="610" font-family="Arial" font-size="14" fill="#6c757d">Saved on: 10 Oct 2023</text>
+  <text x="650" y="580" font-family="Arial" font-size="24" fill="#007bff">→</text>
+  
+  <rect x="50" y="660" width="700" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <circle cx="110" cy="720" r="40" fill="#e9ecef"/>
+  <text x="180" y="700" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Warsaw Montessori School</text>
+  <text x="180" y="725" font-family="Arial" font-size="14" fill="#6c757d">Private • Rating: 4.6</text>
+  <text x="180" y="750" font-family="Arial" font-size="14" fill="#6c757d">Saved on: 5 Oct 2023</text>
+  <text x="650" y="720" font-family="Arial" font-size="24" fill="#007bff">→</text>
+  
+  <!-- Recent Activity -->
+  <text x="50" y="820" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">Recent Activity</text>
+  
+  <!-- Activity Timeline -->
+  <rect x="50" y="850" width="700" height="300" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  
+  <!-- Activity 1 -->
+  <circle cx="80" cy="890" r="10" fill="#007bff"/>
+  <line x1="80" y1="900" x2="80" y2="950" stroke="#dee2e6" stroke-width="2"/>
+  <text x="100" y="895" font-family="Arial" font-size="16" font-weight="bold" fill="#212529">Rated Warsaw International School</text>
+  <text x="100" y="920" font-family="Arial" font-size="14" fill="#6c757d">You gave a 5-star rating</text>
+  <text x="600" y="895" font-family="Arial" font-size="14" fill="#6c757d">2 days ago</text>
+  
+  <!-- Activity 2 -->
+  <circle cx="80" cy="970" r="10" fill="#28a745"/>
+  <line x1="80" y1="980" x2="80" y2="1030" stroke="#dee2e6" stroke-width="2"/>
+  <text x="100" y="975" font-family="Arial" font-size="16" font-weight="bold" fill="#212529">Saved American School of Warsaw</text>
+  <text x="100" y="1000" font-family="Arial" font-size="14" fill="#6c757d">Added to your favorites</text>
+  <text x="600" y="975" font-family="Arial" font-size="14" fill="#6c757d">5 days ago</text>
+  
+  <!-- Activity 3 -->
+  <circle cx="80" cy="1050" r="10" fill="#17a2b8"/>
+  <line x1="80" y1="1060" x2="80" y2="1110" stroke="#dee2e6" stroke-width="2"/>
+  <text x="100" y="1055" font-family="Arial" font-size="16" font-weight="bold" fill="#212529">Searched for "International Schools in Warsaw"</text>
+  <text x="100" y="1080" font-family="Arial" font-size="14" fill="#6c757d">Found 15 results</text>
+  <text x="600" y="1055" font-family="Arial" font-size="14" fill="#6c757d">1 week ago</text>
+  
+  <!-- Activity 4 -->
+  <circle cx="80" cy="1130" r="10" fill="#ffc107"/>
+  <text x="100" y="1135" font-family="Arial" font-size="16" font-weight="bold" fill="#212529">Updated profile information</text>
+  <text x="100" y="1160" font-family="Arial" font-size="14" fill="#6c757d">Changed location and preferences</text>
+  <text x="600" y="1135" font-family="Arial" font-size="14" fill="#6c757d">2 weeks ago</text>
+</svg>

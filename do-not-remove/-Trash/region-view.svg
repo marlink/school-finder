@@ -1,0 +1,82 @@
+<svg width="800" height="1200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="1200" fill="#f8f9fa"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="800" height="80" fill="#ffffff" stroke="#e9ecef" stroke-width="1"/>
+  <text x="30" y="50" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">School Finder</text>
+  
+  <!-- Navigation -->
+  <rect x="500" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="520" y="50" font-family="Arial" font-size="14" fill="#495057">Search</text>
+  
+  <rect x="600" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="620" y="50" font-family="Arial" font-size="14" fill="#495057">Login</text>
+  
+  <rect x="700" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="720" y="50" font-family="Arial" font-size="14" fill="#495057">Profile</text>
+  
+  <!-- Region Header -->
+  <rect x="0" y="80" width="800" height="100" fill="#e9ecef"/>
+  <text x="50" y="140" font-family="Arial" font-size="32" font-weight="bold" fill="#212529">Warsaw Schools</text>
+  <text x="50" y="170" font-family="Arial" font-size="16" fill="#6c757d">125 schools found</text>
+  
+  <!-- Filter Section -->
+  <rect x="0" y="180" width="800" height="80" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  
+  <!-- Filter Options -->
+  <rect x="50" y="205" width="120" height="30" rx="15" fill="#ffffff" stroke="#ced4da" stroke-width="1"/>
+  <text x="70" y="225" font-family="Arial" font-size="14" fill="#495057">Type ▼</text>
+  
+  <rect x="190" y="205" width="120" height="30" rx="15" fill="#ffffff" stroke="#ced4da" stroke-width="1"/>
+  <text x="210" y="225" font-family="Arial" font-size="14" fill="#495057">Rating ▼</text>
+  
+  <rect x="330" y="205" width="120" height="30" rx="15" fill="#ffffff" stroke="#ced4da" stroke-width="1"/>
+  <text x="350" y="225" font-family="Arial" font-size="14" fill="#495057">Features ▼</text>
+  
+  <!-- View Toggle -->
+  <rect x="600" y="205" width="70" height="30" rx="5" fill="#e9ecef" stroke="#ced4da" stroke-width="1"/>
+  <text x="615" y="225" font-family="Arial" font-size="14" fill="#495057">List</text>
+  
+  <rect x="670" y="205" width="70" height="30" rx="5" fill="#007bff" stroke="#007bff" stroke-width="1"/>
+  <text x="685" y="225" font-family="Arial" font-size="14" fill="#ffffff">Map</text>
+  
+  <!-- Map View -->
+  <rect x="50" y="280" width="700" height="400" rx="5" fill="#e9ecef" stroke="#ced4da" stroke-width="1"/>
+  <text x="350" y="480" font-family="Arial" font-size="18" fill="#6c757d" text-anchor="middle">Interactive Map</text>
+  
+  <!-- Map Markers (simplified) -->
+  <circle cx="250" cy="380" r="10" fill="#007bff"/>
+  <circle cx="350" cy="420" r="10" fill="#007bff"/>
+  <circle cx="450" cy="350" r="10" fill="#007bff"/>
+  <circle cx="550" cy="400" r="10" fill="#007bff"/>
+  <circle cx="200" cy="450" r="10" fill="#007bff"/>
+  <circle cx="300" cy="500" r="10" fill="#007bff"/>
+  <circle cx="400" cy="550" r="10" fill="#007bff"/>
+  <circle cx="500" cy="480" r="10" fill="#007bff"/>
+  
+  <!-- School List -->
+  <text x="50" y="720" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">Schools in Warsaw</text>
+  
+  <!-- School Cards -->
+  <rect x="50" y="750" width="700" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <circle cx="110" cy="810" r="40" fill="#e9ecef"/>
+  <text x="180" y="790" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Warsaw International School</text>
+  <text x="180" y="815" font-family="Arial" font-size="14" fill="#6c757d">International • Rating: 4.8</text>
+  <text x="180" y="840" font-family="Arial" font-size="14" fill="#6c757d">Mokotów, Warsaw</text>
+  <text x="650" y="810" font-family="Arial" font-size="24" fill="#007bff">→</text>
+  
+  <rect x="50" y="890" width="700" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <circle cx="110" cy="950" r="40" fill="#e9ecef"/>
+  <text x="180" y="930" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">American School of Warsaw</text>
+  <text x="180" y="955" font-family="Arial" font-size="14" fill="#6c757d">Private • Rating: 4.7</text>
+  <text x="180" y="980" font-family="Arial" font-size="14" fill="#6c757d">Konstancin-Jeziorna, Warsaw</text>
+  <text x="650" y="950" font-family="Arial" font-size="24" fill="#007bff">→</text>
+  
+  <rect x="50" y="1030" width="700" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <circle cx="110" cy="1090" r="40" fill="#e9ecef"/>
+  <text x="180" y="1070" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Warsaw Montessori School</text>
+  <text x="180" y="1095" font-family="Arial" font-size="14" fill="#6c757d">Private • Rating: 4.6</text>
+  <text x="180" y="1120" font-family="Arial" font-size="14" fill="#6c757d">Wilanów, Warsaw</text>
+  <text x="650" y="1090" font-family="Arial" font-size="24" fill="#007bff">→</text>
+</svg>
