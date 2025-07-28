@@ -486,9 +486,11 @@ export class DataMonitor {
     const fileName = filePath || `data-monitor-report-${new Date().toISOString().split('T')[0]}.json`;
     
     // In a real implementation, you'd save to filesystem
-    // For now, we'll just log it
-    console.log('Report saved to:', fileName);
-    console.log('Report data:', report);
+    // For now, we'll just log it in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Report saved to:', fileName);
+      console.log('Report data:', report);
+    }
   }
 }
 

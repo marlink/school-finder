@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { createClient } from "@/lib/supabase/client";
 import { 
   Menu, 
   X, 
@@ -17,7 +18,8 @@ import {
   Star,
   TrendingUp,
   Bell,
-  Sparkles
+  Sparkles,
+  Shield
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +36,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
@@ -45,6 +48,25 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      if (session?.user?.id) {
+        const supabase = createClient();
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
+        
+        setIsAdmin(profile?.role === 'admin');
+      } else {
+        setIsAdmin(false);
+      }
+    };
+
+    checkAdminRole();
+  }, [session]);
 
   const navigation = [
     { 
@@ -213,6 +235,17 @@ export function Navbar() {
                       <Settings className="mr-2 h-4 w-4 text-orange-500" />
                       <span>Ustawienia</span>
                     </DropdownMenuItem>
+                    {isAdmin && (
+                      <>
+                        <DropdownMenuSeparator className="bg-orange-100" />
+                        <Link href="/admin">
+                          <DropdownMenuItem className="hover:bg-blue-50 cursor-pointer text-blue-600">
+                            <Shield className="mr-2 h-4 w-4 text-blue-500" />
+                            <span>Panel Administratora</span>
+                          </DropdownMenuItem>
+                        </Link>
+                      </>
+                    )}
                     <DropdownMenuSeparator className="bg-orange-100" />
                     <DropdownMenuItem 
                       className="hover:bg-red-50 cursor-pointer text-red-600"

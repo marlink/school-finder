@@ -1,0 +1,7 @@
+{
+  "command": "npx",
+  "args": ["--yes", "hyperbrowser-mcp"],
+  "env": {
+    "HYPERBROWSER_API_KEY": "hb_711ccf3add176961f17faee0eca6"
+  }
+}

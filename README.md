@@ -98,9 +98,25 @@ For detailed deployment instructions, see the [Next.js deployment documentation]
 
 ## Documentation
 
-- [Development Guidelines](./DEVELOPMENT_GUIDELINES.md) - Technical standards and best practices
-- [Project Guide](./PROJECT_GUIDE.md) - Detailed project documentation
-- [Development Roadmap](./DEVELOPMENT_ROADMAP_UPDATED.md) - Feature roadmap and progress
+For comprehensive project documentation, see the [`docs/`](./docs/) directory:
+
+- **[Development Guidelines](./docs/DEVELOPMENT.md)** - Technical standards and best practices
+- **[TODO List](./docs/TODO.md)** - Current development priorities
+- **[Deployment Guide](./docs/DEPLOYMENT.md)** - Environment setup and deployment instructions
+- **[Scraping System](./docs/SCRAPING_SYSTEM.md)** - Data collection system documentation
+
+## Environment Setup
+
+Use the provided environment switching scripts:
+
+```bash
+npm run env:local      # Switch to local environment
+npm run env:staging    # Switch to staging environment  
+npm run env:production # Switch to production environment
+
+npm run dev:staging    # Run development with staging
+npm run dev:production # Run development with production
+```
 
 ## License
 

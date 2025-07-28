@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { createClient } from '@/lib/supabase/client';
 import { 
   LayoutDashboard, 
   Users, 
@@ -36,7 +37,84 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState<string>('');
+
+  useEffect(() => {
+    const checkAdminAccess = async () => {
+      const supabase = createClient();
+      
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          router.push('/auth/signin');
+          return;
+        }
+
+        // Temporary: Allow access for the specific admin email
+        const adminEmails = ['design.marceli@gmail.com'];
+        if (adminEmails.includes(user.email || '')) {
+          setUserEmail(user.email || '');
+          setIsLoading(false);
+          return;
+        }
+
+        // Try to check profile table, but handle if it doesn't exist
+        try {
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single();
+
+          if (profileError) {
+            // If profiles table doesn't exist (error code 42P01), allow admin emails
+            if (profileError.code === '42P01' && adminEmails.includes(user.email || '')) {
+              console.log('Profiles table not found, allowing admin email access');
+              setUserEmail(user.email || '');
+              setIsLoading(false);
+              return;
+            }
+            throw profileError;
+          }
+
+          if (!profile || profile.role !== 'admin') {
+            router.push('/');
+            return;
+          }
+
+          setUserEmail(user.email || '');
+          setIsLoading(false);
+        } catch (profileError: any) {
+           console.error('Error checking profile:', profileError);
+           // If it's a table not found error and user is admin email, allow access
+           if (profileError?.code === '42P01' && adminEmails.includes(user.email || '')) {
+             console.log('Profiles table not found, allowing admin email access');
+             setUserEmail(user.email || '');
+             setIsLoading(false);
+             return;
+           }
+           router.push('/');
+         }
+      } catch (error) {
+        console.error('Error checking admin access:', error);
+        router.push('/');
+      }
+    };
+
+    checkAdminAccess();
+  }, [router]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -96,11 +174,13 @@ export default function AdminLayout({
           <div className="p-4 border-t">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">A</span>
+                <span className="text-white text-sm font-medium">
+                  {userEmail.charAt(0).toUpperCase()}
+                </span>
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                  Admin User
+                  {userEmail}
                 </p>
                 <p className="text-xs text-gray-500">Administrator</p>
               </div>

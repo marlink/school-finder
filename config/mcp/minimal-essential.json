@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "qdrant": {
+      "command": "uvx",
+      "args": ["mcp-server-qdrant"],
+      "env": {
+        "COLLECTION_NAME": "school_finder_vectors",
+        "EMBEDDING_MODEL": "sentence-transformers/all-MiniLM-L6-v2",
+        "EMBEDDING_PROVIDER": "fastembed",
+        "QDRANT_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwiZXhwIjoxNzg1MjI2MDM3fQ.Sc5YHIIcBA6beGZuOXSBgTNJu520zjvCt1aoZvALFKE",
+        "QDRANT_URL": "https://dd6d18f4-aebe-4ff5-88e1-79990b13e497.eu-central-1-0.aws.cloud.qdrant.io:6333",
+        "QDRANT_LOCAL_PATH": "None"
+      }
+    },
+    "hyperbrowser": {
+      "command": "npx",
+      "args": ["--yes", "hyperbrowser-mcp"],
+      "env": {
+        "HYPERBROWSER_API_KEY": "hb_711ccf3add176961f17faee0eca6"
+      }
+    }
+  }
+}

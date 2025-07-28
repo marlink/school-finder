@@ -88,8 +88,15 @@ export async function POST(request: NextRequest) {
     const { action, jobId } = await request.json();
 
     // Mock job control - in a real app, this would interact with a job queue
-    console.log(`Job ${action} requested for job ${jobId}`);
-
+    if (action === 'start' || action === 'stop' || action === 'restart') {
+      // In a real implementation, you would interact with your scraping service
+      // For now, we'll just log the action
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Job ${action} requested for job ${jobId}`);
+      }
+      
+      return NextResponse.json({ success: true, message: `Job ${action} requested` });
+    }
     return NextResponse.json({ success: true, message: `Job ${action} initiated` });
   } catch (error) {
     console.error('Error controlling scraping job:', error);

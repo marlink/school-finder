@@ -1,6 +1,52 @@
-# 🎯 School Finder Portal - Development To-Do List
+# Development TODO
 
-## Phase 1: Project Setup & Core Infrastructure
+## 🚨 CRITICAL: Environment Setup (Priority 1)
+
+### Environment Separation
+- [ ] **Create staging Supabase project**
+- [ ] **Update .env files for proper environment separation**
+- [ ] **Test local development with staging database**
+- [ ] **Verify no production database pollution**
+
+### Core Infrastructure
+- [ ] **Complete Google Maps API integration**
+- [ ] **Fix NextAuth configuration (Google/GitHub OAuth)**
+- [ ] **Complete Prisma schema and migrations**
+- [ ] **Set up proper seed data**
+
+---
+
+## 🔧 Feature Development (Priority 2)
+
+### Data & Scraping
+- [ ] **Complete Polish schools scraping with Apify**
+- [ ] **Add data validation and duplicate detection**
+- [ ] **Process school images and validate addresses**
+
+### User Features
+- [ ] **Implement rating system (stars + reviews)**
+- [ ] **Add user favorites functionality**
+- [ ] **Implement search history**
+- [ ] **Add school comparison tools**
+
+---
+
+## 🚀 Deployment (Priority 3)
+
+### CI/CD Pipeline
+- [ ] **Set up GitHub Actions for automated deployments**
+- [ ] **Configure staging deployments**
+- [ ] **Set up production deployment process**
+- [ ] **Add database migration automation**
+
+### Monitoring
+- [ ] **Set up error tracking (Sentry)**
+- [ ] **Add performance monitoring**
+- [ ] **Configure user analytics**
+
+---
+
+## Phase 1: Project Setup & Core Infrastructure (COMPLETED)
 - [x] Initialize Next.js project with TypeScript and Tailwind
 - [x] Install core dependencies (NextAuth, Prisma, SWR, Stripe, etc.)
 - [x] Configure Shadcn UI with tangerine theme
@@ -179,15 +225,84 @@
 
 ---
 
-## Current Status: Phase 6 - User Features & Personalization
+## 🚨 CRITICAL: Environment Setup & Infrastructure (IMMEDIATE PRIORITY)
+
+### **PHASE 0: Environment Crisis Resolution** 
+**Status: 🔴 CRITICAL - Must fix before any development**
+
+- [ ] **🚨 URGENT: Create Staging Supabase Project**
+  - [ ] Create new Supabase project for staging
+  - [ ] Copy schema from production to staging
+  - [ ] Configure staging authentication settings
+  - [ ] Disable email confirmations for testing
+
+- [ ] **🚨 URGENT: Environment Separation**
+  - [x] Create `.env.staging.template` file
+  - [x] Create `.env.production.template` file
+  - [x] Create environment switching script (`scripts/switch-env.js`)
+  - [x] Update package.json with environment scripts
+  - [ ] Configure `.env.staging` with staging Supabase credentials
+  - [ ] Update `.env.local` to use staging (not production!)
+  - [ ] Test local development with staging database
+
+- [ ] **🚨 URGENT: Fix Development Workflow**
+  - [ ] Verify local development uses staging database
+  - [ ] Test user creation in staging environment
+  - [ ] Confirm no more production database pollution
+  - [ ] Document environment switching process
+
+### **PHASE 0.5: Google Maps API & Core Infrastructure**
+**Status: 🟡 HIGH PRIORITY - Required for core functionality**
+
+- [ ] **Google Maps API Integration**
+  - [ ] Verify Google Maps API key is working
+  - [ ] Test Maps integration on school details pages
+  - [ ] Add Maps to school search results
+  - [ ] Implement location-based search
+  - [ ] Add distance calculations
+  - [ ] Test Maps performance and quotas
+
+- [ ] **Rating System Foundation**
+  - [ ] Complete user rating functionality (started but incomplete)
+  - [ ] Add Google ratings display integration
+  - [ ] Implement rating aggregation system
+  - [ ] Add rating validation and moderation
+
+### **PHASE 0.75: Data Scraping Completion**
+**Status: 🟡 HIGH PRIORITY - Core data pipeline**
+
+- [ ] **Apify Integration Completion**
+  - [ ] Finish school data scraping workflows
+  - [ ] Implement Google ratings scraping
+  - [ ] Add school contact information scraping
+  - [ ] Create automated data update system
+  - [ ] Add data validation and quality checks
+
+- [ ] **Data Pipeline Setup**
+  - [ ] Create staging → production data flow
+  - [ ] Implement data backup mechanisms
+  - [ ] Add rollback functionality for bad data
+  - [ ] Create data quality monitoring
+
+---
+
+## Current Status: PHASE 0 - Critical Infrastructure Setup
+**PHASE 0: 🔴 CRITICAL SETUP** - 0/12 tasks completed (0%)
 **Phase 1 COMPLETED ✅**
 **Phase 2 COMPLETED ✅**
 **Phase 3 COMPLETED ✅**
 **Phase 4 COMPLETED ✅**
 **Phase 5 COMPLETED ✅** (9/9 tasks completed - 100%)
-**Progress: 1/8 tasks completed (12.5%)**
+**Phase 6 Progress: 1/8 tasks completed (12.5%)**
 
-### Recent Accomplishments (July 18, 2024):
+### 🚀 PRODUCTION DEPLOYMENT ACHIEVED (July 24, 2024):
+- [x] **Vercel Production Deployment** - Successfully deployed to production
+- [x] **Prisma Build Fix** - Resolved critical build issue with `prisma generate && next build`
+- [x] **Environment Configuration** - All production variables configured
+- [x] **Documentation Updates** - Updated all docs with Prisma deployment requirements
+- [x] **Project State Capture** - Comprehensive audit and cleanup completed
+
+### Recent Accomplishments (July 18-24, 2024):
 - [x] **Project Structure Audit & Fixes**
   - [x] Fixed root-level hooks directory issue
   - [x] Moved all hooks to `src/hooks/`
@@ -197,6 +312,11 @@
 - [x] **Google Maps Integration** - Added to school details
 - [x] **Admin Analytics Dashboard** - Implemented with tracking
 - [x] **Custom Analytics System** - User behavior tracking
+- [x] **Production Readiness** - Deployed and operational
+- [x] **Code Cleanup** - Comprehensive cleanup of debugging statements, test artifacts, and code quality improvements
+
+### 🎯 Next Priority: Google API Integration
+Ready to proceed with Google API integration phase.
 
 ### Next Steps:
 1. Implement favorites system

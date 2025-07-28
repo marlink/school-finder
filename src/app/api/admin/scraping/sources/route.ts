@@ -80,9 +80,12 @@ export async function PUT(request: NextRequest) {
     const { sourceId, active } = await request.json();
 
     // Mock source update - in a real app, this would update the configuration
-    console.log(`Source ${sourceId} ${active ? 'activated' : 'deactivated'}`);
-
-    return NextResponse.json({ success: true, message: `Source ${active ? 'activated' : 'deactivated'}` });
+    // ...
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Source ${sourceId} ${active ? 'activated' : 'deactivated'}`);
+    }
+    
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating scraping source:', error);
     return NextResponse.json(

@@ -127,7 +127,9 @@ export default function AdminSettings() {
 
       if (response.ok) {
         // Show success message
-        console.log('Settings saved successfully');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Settings saved successfully');
+        }
       }
     } catch (error) {
       console.error('Error saving settings:', error);
