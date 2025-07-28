@@ -1,0 +1,3156 @@
+{
+  "config": {
+    "configFile": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/playwright.config.ts",
+    "rootDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.1",
+    "workers": 4,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "basic.spec.ts",
+      "file": "basic.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Home Page",
+          "file": "basic.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load the home page successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17534,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:22:38.065Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-77f9f50c3a183893223f",
+              "file": "basic.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "should have working navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 17379,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:22:38.210Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-3ac47af6d1cba840ee9d",
+              "file": "basic.spec.ts",
+              "line": 17,
+              "column": 7
+            },
+            {
+              "title": "should be responsive",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 17820,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:22:38.084Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-67e49971d95a45c17da5",
+              "file": "basic.spec.ts",
+              "line": 33,
+              "column": 7
+            },
+            {
+              "title": "should load the home page successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 14886,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:23.120Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-2e1872f060385299febf",
+              "file": "basic.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "should have working navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 11066,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:22.663Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-441bbeecab4adaba0755",
+              "file": "basic.spec.ts",
+              "line": 17,
+              "column": 7
+            },
+            {
+              "title": "should be responsive",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 23509,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:27.439Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-4d9cbb75a4359daaea9f",
+              "file": "basic.spec.ts",
+              "line": 33,
+              "column": 7
+            },
+            {
+              "title": "should load the home page successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 42467,
+                      "error": {
+                        "message": "\u001b[31mTearing down \"context\" exceeded the test timeout of 30000ms.\u001b[39m",
+                        "stack": "\u001b[31mTearing down \"context\" exceeded the test timeout of 30000ms.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTearing down \"context\" exceeded the test timeout of 30000ms.\u001b[39m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:27.404Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-load-the-home-page-successfully-webkit/test-failed-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-34136be9f2623c14b5c2",
+              "file": "basic.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "should have working navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 40110,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:39.140Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-b55c940d86a68693a66a",
+              "file": "basic.spec.ts",
+              "line": 17,
+              "column": 7
+            },
+            {
+              "title": "should be responsive",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 18158,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:55.023Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-978a2932731283e8e275",
+              "file": "basic.spec.ts",
+              "line": 33,
+              "column": 7
+            },
+            {
+              "title": "should load the home page successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 18,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 8504,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav')\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav')\u001b[22m\n\u001b[2m    9 × locator resolved to <nav data-tour=\"navigation\" class=\"hidden md:flex items-center space-x-6\">…</nav>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav')\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav')\u001b[22m\n\u001b[2m    9 × locator resolved to <nav data-tour=\"navigation\" class=\"hidden md:flex items-center space-x-6\">…</nav>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:11:39",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 39,
+                          "line": 11
+                        },
+                        "snippet": "\u001b[0m \u001b[90m  9 |\u001b[39m     \n \u001b[90m 10 |\u001b[39m     \u001b[90m// Check for main navigation elements\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 11 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'nav'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 12 |\u001b[39m     \n \u001b[90m 13 |\u001b[39m     \u001b[90m// Check for search functionality\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[type=\"search\"], input[placeholder*=\"search\" i]'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 39,
+                            "line": 11
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav')\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav')\u001b[22m\n\u001b[2m    9 × locator resolved to <nav data-tour=\"navigation\" class=\"hidden md:flex items-center space-x-6\">…</nav>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  9 |\u001b[39m     \n \u001b[90m 10 |\u001b[39m     \u001b[90m// Check for main navigation elements\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 11 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'nav'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 12 |\u001b[39m     \n \u001b[90m 13 |\u001b[39m     \u001b[90m// Check for search functionality\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[type=\"search\"], input[placeholder*=\"search\" i]'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:11:39\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:08.685Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-load-the-home-page-successfully-Mobile-Chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-load-the-home-page-successfully-Mobile-Chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-load-the-home-page-successfully-Mobile-Chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 39,
+                        "line": 11
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-a280dd68d874e3dc6eec",
+              "file": "basic.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "should have working navigation",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 19,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 8309,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav a').first()\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a').first()\u001b[22m\n\u001b[2m    9 × locator resolved to <a href=\"/search\" class=\"text-sm font-medium hover:text-primary transition-colors\">Wyszukaj</a>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav a').first()\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a').first()\u001b[22m\n\u001b[2m    9 × locator resolved to <a href=\"/search\" class=\"text-sm font-medium hover:text-primary transition-colors\">Wyszukaj</a>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:29:26",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 26,
+                          "line": 29
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(linkCount\u001b[33m,\u001b[39m \u001b[35m3\u001b[39m)\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) {\n \u001b[90m 28 |\u001b[39m       \u001b[36mconst\u001b[39m link \u001b[33m=\u001b[39m navLinks\u001b[33m.\u001b[39mnth(i)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 29 |\u001b[39m       \u001b[36mawait\u001b[39m expect(link)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 30 |\u001b[39m     }\n \u001b[90m 31 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 32 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 26,
+                            "line": 29
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav a').first()\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a').first()\u001b[22m\n\u001b[2m    9 × locator resolved to <a href=\"/search\" class=\"text-sm font-medium hover:text-primary transition-colors\">Wyszukaj</a>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 27 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(linkCount\u001b[33m,\u001b[39m \u001b[35m3\u001b[39m)\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) {\n \u001b[90m 28 |\u001b[39m       \u001b[36mconst\u001b[39m link \u001b[33m=\u001b[39m navLinks\u001b[33m.\u001b[39mnth(i)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 29 |\u001b[39m       \u001b[36mawait\u001b[39m expect(link)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 30 |\u001b[39m     }\n \u001b[90m 31 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 32 |\u001b[39m\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:29:26\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:11.409Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-have-working-navigation-Mobile-Chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-have-working-navigation-Mobile-Chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-have-working-navigation-Mobile-Chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 26,
+                        "line": 29
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-912a9359cb65d512a755",
+              "file": "basic.spec.ts",
+              "line": 17,
+              "column": 7
+            },
+            {
+              "title": "should be responsive",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 10020,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:14.586Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-5603fb7e8005f8ffff59",
+              "file": "basic.spec.ts",
+              "line": 33,
+              "column": 7
+            },
+            {
+              "title": "should load the home page successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 25,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 14579,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav')\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav')\u001b[22m\n\u001b[2m    8 × locator resolved to <nav data-tour=\"navigation\" class=\"hidden md:flex items-center space-x-6\">…</nav>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav')\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav')\u001b[22m\n\u001b[2m    8 × locator resolved to <nav data-tour=\"navigation\" class=\"hidden md:flex items-center space-x-6\">…</nav>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:11:39",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 39,
+                          "line": 11
+                        },
+                        "snippet": "\u001b[0m \u001b[90m  9 |\u001b[39m     \n \u001b[90m 10 |\u001b[39m     \u001b[90m// Check for main navigation elements\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 11 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'nav'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 12 |\u001b[39m     \n \u001b[90m 13 |\u001b[39m     \u001b[90m// Check for search functionality\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[type=\"search\"], input[placeholder*=\"search\" i]'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 39,
+                            "line": 11
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav')\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav')\u001b[22m\n\u001b[2m    8 × locator resolved to <nav data-tour=\"navigation\" class=\"hidden md:flex items-center space-x-6\">…</nav>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n\u001b[0m \u001b[90m  9 |\u001b[39m     \n \u001b[90m 10 |\u001b[39m     \u001b[90m// Check for main navigation elements\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 11 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'nav'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 12 |\u001b[39m     \n \u001b[90m 13 |\u001b[39m     \u001b[90m// Check for search functionality\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'input[type=\"search\"], input[placeholder*=\"search\" i]'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:11:39\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:53.041Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-load-the-home-page-successfully-Mobile-Safari/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-load-the-home-page-successfully-Mobile-Safari/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-load-the-home-page-successfully-Mobile-Safari/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 39,
+                        "line": 11
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-6b49453977d625a348f0",
+              "file": "basic.spec.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "should have working navigation",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 27,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 14043,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav a').first()\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a').first()\u001b[22m\n\u001b[2m    8 × locator resolved to <a href=\"/search\" class=\"text-sm font-medium hover:text-primary transition-colors\">Wyszukaj</a>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav a').first()\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a').first()\u001b[22m\n\u001b[2m    8 × locator resolved to <a href=\"/search\" class=\"text-sm font-medium hover:text-primary transition-colors\">Wyszukaj</a>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:29:26",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 26,
+                          "line": 29
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 27 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(linkCount\u001b[33m,\u001b[39m \u001b[35m3\u001b[39m)\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) {\n \u001b[90m 28 |\u001b[39m       \u001b[36mconst\u001b[39m link \u001b[33m=\u001b[39m navLinks\u001b[33m.\u001b[39mnth(i)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 29 |\u001b[39m       \u001b[36mawait\u001b[39m expect(link)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 30 |\u001b[39m     }\n \u001b[90m 31 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 32 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 26,
+                            "line": 29
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('nav a').first()\nExpected: visible\nReceived: hidden\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('nav a').first()\u001b[22m\n\u001b[2m    8 × locator resolved to <a href=\"/search\" class=\"text-sm font-medium hover:text-primary transition-colors\">Wyszukaj</a>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 27 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mmin(linkCount\u001b[33m,\u001b[39m \u001b[35m3\u001b[39m)\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) {\n \u001b[90m 28 |\u001b[39m       \u001b[36mconst\u001b[39m link \u001b[33m=\u001b[39m navLinks\u001b[33m.\u001b[39mnth(i)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 29 |\u001b[39m       \u001b[36mawait\u001b[39m expect(link)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 30 |\u001b[39m     }\n \u001b[90m 31 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 32 |\u001b[39m\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:29:26\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:52.964Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-have-working-navigation-Mobile-Safari/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-have-working-navigation-Mobile-Safari/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Home-Page-should-have-working-navigation-Mobile-Safari/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 26,
+                        "line": 29
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-37fb290087e7a684d6d0",
+              "file": "basic.spec.ts",
+              "line": 17,
+              "column": 7
+            },
+            {
+              "title": "should be responsive",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 26,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 23556,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:53.030Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-c8e9df5cc4f8ed25e95f",
+              "file": "basic.spec.ts",
+              "line": 33,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Search Functionality",
+          "file": "basic.spec.ts",
+          "line": 50,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should perform basic search",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 15421,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 67
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 67
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n\n\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:22:38.186Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 67
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-1043dde395f0e6f37cab",
+              "file": "basic.spec.ts",
+              "line": 51,
+              "column": 7
+            },
+            {
+              "title": "should show search suggestions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4116,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:00.194Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-7c4b1fdf3240e2c02194",
+              "file": "basic.spec.ts",
+              "line": 70,
+              "column": 7
+            },
+            {
+              "title": "should perform basic search",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 27194,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 67
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 67
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n\n\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:27.444Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-firefox/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-firefox/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-firefox/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 67
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-5229acc1209b8c8a7bf3",
+              "file": "basic.spec.ts",
+              "line": 51,
+              "column": 7
+            },
+            {
+              "title": "should show search suggestions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 17703,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:40.755Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-6154a7958d05a135b60e",
+              "file": "basic.spec.ts",
+              "line": 70,
+              "column": 7
+            },
+            {
+              "title": "should perform basic search",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 29124,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 67
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 67
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n\n\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:02.737Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-webkit/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-webkit/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-webkit/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 67
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-1abc97b2081ee580e0a3",
+              "file": "basic.spec.ts",
+              "line": 51,
+              "column": 7
+            },
+            {
+              "title": "should show search suggestions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 21578,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:14.099Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-183bce6310ed9de2eae5",
+              "file": "basic.spec.ts",
+              "line": 70,
+              "column": 7
+            },
+            {
+              "title": "should perform basic search",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 6403,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 67
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 67
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n\n\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:21.126Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-Mobile-Chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-Mobile-Chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-Mobile-Chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 67
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-64d9ac23f9925c4c48e6",
+              "file": "basic.spec.ts",
+              "line": 51,
+              "column": 7
+            },
+            {
+              "title": "should show search suggestions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4412,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:24.915Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-bee27b0df898bc9575c1",
+              "file": "basic.spec.ts",
+              "line": 70,
+              "column": 7
+            },
+            {
+              "title": "should perform basic search",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 28,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 12468,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 67
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 67
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Warsaw\"\u001b[39m\nReceived string:    \u001b[31m\"http://localhost:3000/\"\u001b[39m\n\n\u001b[0m \u001b[90m 65 |\u001b[39m     \u001b[90m// Check if we're on a results page or have results\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 67 |\u001b[39m     expect(currentUrl)\u001b[33m.\u001b[39mtoContain(\u001b[32m'Warsaw'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 68 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 69 |\u001b[39m\n \u001b[90m 70 |\u001b[39m   test(\u001b[32m'should show search suggestions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:67:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:55.120Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-Mobile-Safari/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-Mobile-Safari/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-Search-Functionality-should-perform-basic-search-Mobile-Safari/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 67
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-d9aef94eed248e190fae",
+              "file": "basic.spec.ts",
+              "line": 51,
+              "column": 7
+            },
+            {
+              "title": "should show search suggestions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 29,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 5918,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:10.208Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-ae2c1039e49c8dfabd3c",
+              "file": "basic.spec.ts",
+              "line": 70,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "School Pages",
+          "file": "basic.spec.ts",
+          "line": 87,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load school listing page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 17411,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 92
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 92
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:22:56.284Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 92
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-bd96031848c1b8decf03",
+              "file": "basic.spec.ts",
+              "line": 88,
+              "column": 7
+            },
+            {
+              "title": "should have working filters",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13101,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:22:56.401Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-8559e1c719486d14db19",
+              "file": "basic.spec.ts",
+              "line": 101,
+              "column": 7
+            },
+            {
+              "title": "should load school listing page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 15258,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    6 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    6 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 92
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 92
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    6 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:46.676Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-firefox/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-firefox/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-firefox/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 92
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-8a87b698bd8bfce7ab23",
+              "file": "basic.spec.ts",
+              "line": 88,
+              "column": 7
+            },
+            {
+              "title": "should have working filters",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 7685,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:58.470Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-010a73712bc51f3585ff",
+              "file": "basic.spec.ts",
+              "line": 101,
+              "column": 7
+            },
+            {
+              "title": "should load school listing page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 32372,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 92
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 92
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:22.220Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-webkit/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-webkit/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-webkit/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 92
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-94e843d53605d6cb431d",
+              "file": "basic.spec.ts",
+              "line": 88,
+              "column": 7
+            },
+            {
+              "title": "should have working filters",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 17623,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:21.129Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-e33168f906b49354b126",
+              "file": "basic.spec.ts",
+              "line": 101,
+              "column": 7
+            },
+            {
+              "title": "should load school listing page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 9965,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 92
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 92
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:34.234Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-Mobile-Chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-Mobile-Chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-Mobile-Chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 92
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-b4395c4d9bcad95af586",
+              "file": "basic.spec.ts",
+              "line": 88,
+              "column": 7
+            },
+            {
+              "title": "should have working filters",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 10075,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:34.469Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-268542bf00bf5f30a85f",
+              "file": "basic.spec.ts",
+              "line": 101,
+              "column": 7
+            },
+            {
+              "title": "should load school listing page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 30,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 8845,
+                      "error": {
+                        "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n",
+                        "stack": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24",
+                        "location": {
+                          "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                          "column": 24,
+                          "line": 92
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                            "column": 24,
+                            "line": 92
+                          },
+                          "message": "Error: \u001b[31mTimed out 5000ms waiting for \u001b[39m\u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/Schools/\u001b[39m\nReceived string:  \u001b[31m\"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[39m\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"School Finder - Znajdź idealną szkołę dla swojego dziecka\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 90 |\u001b[39m     \n \u001b[90m 91 |\u001b[39m     \u001b[90m// Check if page loads\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 92 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Schools/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 93 |\u001b[39m     \n \u001b[90m 94 |\u001b[39m     \u001b[90m// Check for school cards or listings\u001b[39m\n \u001b[90m 95 |\u001b[39m     \u001b[36mconst\u001b[39m schoolElements \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"school-card\"], .school-card, article'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts:92:24\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:11.005Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-Mobile-Safari/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-Mobile-Safari/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/test-results/basic-School-Pages-should-load-school-listing-page-Mobile-Safari/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production/tests/e2e/basic.spec.ts",
+                        "column": 24,
+                        "line": 92
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-2de05003ac5775c68c6a",
+              "file": "basic.spec.ts",
+              "line": 88,
+              "column": 7
+            },
+            {
+              "title": "should have working filters",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 31,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4647,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:10.932Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-0627996b3b464460270d",
+              "file": "basic.spec.ts",
+              "line": 101,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Authentication",
+          "file": "basic.spec.ts",
+          "line": 120,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should navigate to login page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 4026,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:22:56.698Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-a477c21e5c7f21251ffe",
+              "file": "basic.spec.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "should show validation errors for invalid login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 13020,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:00.732Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-23b51988b48c723e7658",
+              "file": "basic.spec.ts",
+              "line": 140,
+              "column": 7
+            },
+            {
+              "title": "should navigate to login page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 7346,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:02.254Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-cb7fb2f06e544112b13e",
+              "file": "basic.spec.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "should show validation errors for invalid login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 5890,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:06.164Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-184b02c02b2315d81eab",
+              "file": "basic.spec.ts",
+              "line": 140,
+              "column": 7
+            },
+            {
+              "title": "should navigate to login page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 25917,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:38.067Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-61929bda6b1f67960106",
+              "file": "basic.spec.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "should show validation errors for invalid login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 14091,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:35.723Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-e736ca0021cf3bb5408a",
+              "file": "basic.spec.ts",
+              "line": 140,
+              "column": 7
+            },
+            {
+              "title": "should navigate to login page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 24,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10241,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:34.456Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-70373deea24977f22012",
+              "file": "basic.spec.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "should show validation errors for invalid login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1914,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:29.335Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-831edbb63d3b83b2b07f",
+              "file": "basic.spec.ts",
+              "line": 140,
+              "column": 7
+            },
+            {
+              "title": "should navigate to login page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 31,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4559,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:16.237Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-c5bfe6bd3e5d86d3d415",
+              "file": "basic.spec.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "should show validation errors for invalid login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 29,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3197,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:16.766Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-b7d5c60875cf113333f1",
+              "file": "basic.spec.ts",
+              "line": 140,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Accessibility",
+          "file": "basic.spec.ts",
+          "line": 161,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should have proper heading structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 8967,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:04.771Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-de3c32f3f2c42ad61225",
+              "file": "basic.spec.ts",
+              "line": 162,
+              "column": 7
+            },
+            {
+              "title": "should have alt text for images",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5505,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:09.517Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-3c7cab77ab86452cc38a",
+              "file": "basic.spec.ts",
+              "line": 175,
+              "column": 7
+            },
+            {
+              "title": "should be keyboard navigable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 7145,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:13.746Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-0bd159f42537946e1147",
+              "file": "basic.spec.ts",
+              "line": 191,
+              "column": 7
+            },
+            {
+              "title": "should have proper heading structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 14514,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:15.619Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-2c7cff8214acf281d51e",
+              "file": "basic.spec.ts",
+              "line": 162,
+              "column": 7
+            },
+            {
+              "title": "should have alt text for images",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 26924,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:15.417Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-d3c1b1a552282f1ee02f",
+              "file": "basic.spec.ts",
+              "line": 175,
+              "column": 7
+            },
+            {
+              "title": "should be keyboard navigable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 8462,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:09.616Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-8c00ae0e3e80aa01e159",
+              "file": "basic.spec.ts",
+              "line": 191,
+              "column": 7
+            },
+            {
+              "title": "should have proper heading structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 25739,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:38.769Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-4e4884de5fc4c13343ca",
+              "file": "basic.spec.ts",
+              "line": 162,
+              "column": 7
+            },
+            {
+              "title": "should have alt text for images",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 9007,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:49.843Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-ae008bde9be5ed012741",
+              "file": "basic.spec.ts",
+              "line": 175,
+              "column": 7
+            },
+            {
+              "title": "should be keyboard navigable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 11691,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:58.214Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-c19c86ee7c88018950a4",
+              "file": "basic.spec.ts",
+              "line": 191,
+              "column": 7
+            },
+            {
+              "title": "should have proper heading structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4535,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:31.259Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-c02044d19a06cdfa4fe2",
+              "file": "basic.spec.ts",
+              "line": 162,
+              "column": 7
+            },
+            {
+              "title": "should have alt text for images",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 9487,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:35.800Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-242c2de07a45bc1be497",
+              "file": "basic.spec.ts",
+              "line": 175,
+              "column": 7
+            },
+            {
+              "title": "should be keyboard navigable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4950,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:45.298Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-004dd5b9489928646f3c",
+              "file": "basic.spec.ts",
+              "line": 191,
+              "column": 7
+            },
+            {
+              "title": "should have proper heading structure",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 26,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 3719,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:17.875Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-3c746d5f0db457e849c4",
+              "file": "basic.spec.ts",
+              "line": 162,
+              "column": 7
+            },
+            {
+              "title": "should have alt text for images",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 29,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3391,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:19.968Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-fcc606c36a1ad484f16e",
+              "file": "basic.spec.ts",
+              "line": 175,
+              "column": 7
+            },
+            {
+              "title": "should be keyboard navigable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 31,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 3483,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:20.808Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-0217760ede43a416629c",
+              "file": "basic.spec.ts",
+              "line": 191,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Performance",
+          "file": "basic.spec.ts",
+          "line": 207,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load within reasonable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2852,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:13.764Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-e55991404e0c31e1f0c8",
+              "file": "basic.spec.ts",
+              "line": 208,
+              "column": 7
+            },
+            {
+              "title": "should not have console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8162,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:23:15.029Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-2898f7b28fcc7768c585",
+              "file": "basic.spec.ts",
+              "line": 219,
+              "column": 7
+            },
+            {
+              "title": "should load within reasonable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 6684,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:12.059Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-81fcddb48eef056c67ae",
+              "file": "basic.spec.ts",
+              "line": 208,
+              "column": 7
+            },
+            {
+              "title": "should not have console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 7489,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:24:18.086Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-55de6017dd3357c6e29f",
+              "file": "basic.spec.ts",
+              "line": 219,
+              "column": 7
+            },
+            {
+              "title": "should load within reasonable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 8431,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:25:58.869Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-15317cce38d7b94c6f61",
+              "file": "basic.spec.ts",
+              "line": 208,
+              "column": 7
+            },
+            {
+              "title": "should not have console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 11093,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:04.538Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-8640231d26be01e80df6",
+              "file": "basic.spec.ts",
+              "line": 219,
+              "column": 7
+            },
+            {
+              "title": "should load within reasonable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 24,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4420,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:45.308Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-daa1fea04caabaf51cd1",
+              "file": "basic.spec.ts",
+              "line": 208,
+              "column": 7
+            },
+            {
+              "title": "should not have console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 6518,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:26:45.498Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-cb35ea0187b664a1dd03",
+              "file": "basic.spec.ts",
+              "line": 219,
+              "column": 7
+            },
+            {
+              "title": "should load within reasonable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 32,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3207,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:23.693Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-8606c156008356c31c9c",
+              "file": "basic.spec.ts",
+              "line": 208,
+              "column": 7
+            },
+            {
+              "title": "should not have console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 26,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 5643,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-24T07:27:21.601Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8946741c555a0c4515d8-a70f14217457d4fe7952",
+              "file": "basic.spec.ts",
+              "line": 219,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-07-24T07:22:14.402Z",
+    "duration": 313613.96,
+    "expected": 55,
+    "skipped": 0,
+    "unexpected": 15,
+    "flaky": 0
+  }
+}

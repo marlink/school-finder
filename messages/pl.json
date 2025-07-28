@@ -1,0 +1,41 @@
+{
+  "common": {
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd",
+    "retry": "Ponów",
+    "cancel": "Anuluj",
+    "save": "Zapisz",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "close": "Zamknij",
+    "back": "Wstecz",
+    "next": "Dalej",
+    "previous": "Poprzedni",
+    "search": "Szukaj",
+    "filter": "Filtruj",
+    "clear": "Wyczyść",
+    "apply": "Zastosuj",
+    "submit": "Wyślij",
+    "reset": "Resetuj"
+  },
+  "navigation": {
+    "home": "Strona główna",
+    "schools": "Szkoły",
+    "regions": "Regiony",
+    "about": "O nas",
+    "contact": "Kontakt",
+    "login": "Zaloguj",
+    "register": "Zarejestruj",
+    "profile": "Profil",
+    "logout": "Wyloguj",
+    "admin": "Admin"
+  },
+  "home": {
+    "title": "Znajdź idealną szkołę",
+    "subtitle": "Odkryj i porównaj szkoły w Twojej okolicy",
+    "searchPlaceholder": "Szukaj szkół, miast lub regionów...",
+    "featuredSchools": "Polecane szkoły",
+    "popularRegions": "Popularne regiony",
+    "recentReviews": "Najnowsze opinie"
+  }
+}

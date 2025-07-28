@@ -1,0 +1,153 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "apply": "Apply",
+    "submit": "Submit",
+    "reset": "Reset"
+  },
+  "navigation": {
+    "home": "Home",
+    "schools": "Schools",
+    "regions": "Regions",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "logout": "Logout",
+    "admin": "Admin"
+  },
+  "home": {
+    "title": "Find the Perfect School",
+    "subtitle": "Discover and compare schools in your area",
+    "searchPlaceholder": "Search for schools, cities, or regions...",
+    "featuredSchools": "Featured Schools",
+    "popularRegions": "Popular Regions",
+    "recentReviews": "Recent Reviews"
+  },
+  "search": {
+    "title": "Search Results",
+    "noResults": "No schools found matching your criteria",
+    "resultsCount": "{count} schools found",
+    "filters": {
+      "title": "Filters",
+      "schoolType": "School Type",
+      "rating": "Minimum Rating",
+      "distance": "Distance",
+      "region": "Region",
+      "city": "City"
+    },
+    "sorting": {
+      "title": "Sort by",
+      "relevance": "Relevance",
+      "rating": "Rating",
+      "distance": "Distance",
+      "name": "Name"
+    }
+  },
+  "school": {
+    "details": "School Details",
+    "overview": "Overview",
+    "reviews": "Reviews",
+    "photos": "Photos",
+    "contact": "Contact Information",
+    "location": "Location",
+    "facilities": "Facilities",
+    "programs": "Programs",
+    "admissions": "Admissions",
+    "rating": "Rating",
+    "writeReview": "Write a Review",
+    "viewAllReviews": "View All Reviews",
+    "noReviews": "No reviews yet",
+    "beFirstReview": "Be the first to review this school"
+  },
+  "auth": {
+    "login": {
+      "title": "Login to Your Account",
+      "email": "Email Address",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up here",
+      "loginButton": "Login"
+    },
+    "register": {
+      "title": "Create Your Account",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "acceptTerms": "I accept the Terms and Conditions",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in here",
+      "registerButton": "Create Account"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password",
+      "emailExists": "An account with this email already exists",
+      "passwordMismatch": "Passwords do not match",
+      "weakPassword": "Password is too weak",
+      "invalidEmail": "Please enter a valid email address",
+      "termsRequired": "You must accept the terms and conditions"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "personalInfo": "Personal Information",
+    "preferences": "Preferences",
+    "reviews": "My Reviews",
+    "favorites": "Favorite Schools",
+    "settings": "Account Settings",
+    "changePassword": "Change Password",
+    "deleteAccount": "Delete Account",
+    "notifications": "Notification Settings"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "users": "User Management",
+    "schools": "School Management",
+    "reviews": "Review Management",
+    "analytics": "Analytics",
+    "settings": "System Settings",
+    "reports": "Reports"
+  },
+  "errors": {
+    "404": {
+      "title": "Page Not Found",
+      "message": "The page you're looking for doesn't exist.",
+      "goHome": "Go to Homepage"
+    },
+    "500": {
+      "title": "Server Error",
+      "message": "Something went wrong on our end.",
+      "tryAgain": "Try Again"
+    },
+    "network": {
+      "title": "Connection Error",
+      "message": "Please check your internet connection and try again."
+    }
+  },
+  "footer": {
+    "about": "About School Finder",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact Us",
+    "support": "Support",
+    "copyright": "© 2024 School Finder. All rights reserved."
+  }
+}

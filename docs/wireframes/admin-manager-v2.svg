@@ -1,0 +1,283 @@
+<svg width="800" height="1600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="1600" fill="#f8f9fa"/>
+  
+  <!-- Header with Gradient -->
+  <linearGradient id="header-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#f8f9fa;stop-opacity:1" />
+  </linearGradient>
+  <rect x="0" y="0" width="800" height="80" fill="url(#header-gradient)" stroke="#e9ecef" stroke-width="1"/>
+  
+  <!-- Logo -->
+  <circle cx="40" cy="40" r="20" fill="#007bff"/>
+  <text x="70" y="50" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">School Finder</text>
+  
+  <!-- Admin Badge -->
+  <rect x="230" y="35" width="80" height="25" rx="12.5" fill="#dc3545"/>
+  <text x="245" y="52" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">ADMIN</text>
+  
+  <!-- Navigation with Hover Effect -->
+  <rect x="500" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1">
+    <animate attributeName="fill" values="#ffffff;#e9ecef;#ffffff" dur="2s" begin="mouseover" repeatCount="1"/>
+  </rect>
+  <text x="520" y="50" font-family="Arial" font-size="14" fill="#495057">Search</text>
+  
+  <rect x="600" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1">
+    <animate attributeName="fill" values="#ffffff;#e9ecef;#ffffff" dur="2s" begin="mouseover" repeatCount="1"/>
+  </rect>
+  <text x="620" y="50" font-family="Arial" font-size="14" fill="#495057">Home</text>
+  
+  <!-- User Menu -->
+  <circle cx="740" cy="40" r="20" fill="#e9ecef" stroke="#dee2e6" stroke-width="1"/>
+  <text x="740" y="45" font-family="Arial" font-size="14" font-weight="bold" fill="#212529" text-anchor="middle">AD</text>
+  
+  <!-- Dashboard Layout -->
+  <rect x="0" y="80" width="200" height="1220" fill="#212529"/>
+  
+  <!-- Sidebar Navigation -->
+  <text x="100" y="120" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">Admin Panel</text>
+  
+  <!-- Active Menu Item -->
+  <rect x="0" y="140" width="200" height="50" fill="#dc3545"/>
+  <text x="20" y="170" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff">📊 Dashboard</text>
+  
+  <!-- Other Menu Items -->
+  <text x="20" y="230" font-family="Arial" font-size="16" fill="#adb5bd">🏫 Schools</text>
+  <text x="20" y="290" font-family="Arial" font-size="16" fill="#adb5bd">👥 Users</text>
+  <text x="20" y="350" font-family="Arial" font-size="16" fill="#adb5bd">📝 Reviews</text>
+  <text x="20" y="410" font-family="Arial" font-size="16" fill="#adb5bd">🔍 Analytics</text>
+  <text x="20" y="470" font-family="Arial" font-size="16" fill="#adb5bd">⚙️ Settings</text>
+  
+  <!-- Logout Option -->
+  <line x1="20" y1="520" x2="180" y2="520" stroke="#495057" stroke-width="1"/>
+  <text x="20" y="550" font-family="Arial" font-size="16" fill="#adb5bd">🚪 Logout</text>
+  
+  <!-- Main Content Area -->
+  <rect x="200" y="80" width="600" height="1220" fill="#ffffff"/>
+  
+  <!-- Admin Dashboard Title -->
+  <text x="220" y="120" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">Admin Dashboard</text>
+  
+  <!-- Date Range Selector -->
+  <rect x="550" y="100" width="230" height="40" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="570" y="125" font-family="Arial" font-size="14" fill="#6c757d">Last 30 days ▼</text>
+  
+  <!-- Quick Stats -->
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.15"/>
+  </filter>
+  
+  <rect x="220" y="150" width="170" height="100" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  <text x="240" y="180" font-family="Arial" font-size="14" fill="#6c757d">Total Schools</text>
+  <text x="240" y="215" font-family="Arial" font-size="28" font-weight="bold" fill="#0d6efd">1,248</text>
+  <text x="240" y="235" font-family="Arial" font-size="12" fill="#28a745">↑ 12% from last month</text>
+  
+  <rect x="410" y="150" width="170" height="100" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  <text x="430" y="180" font-family="Arial" font-size="14" fill="#6c757d">Active Users</text>
+  <text x="430" y="215" font-family="Arial" font-size="28" font-weight="bold" fill="#0d6efd">10,547</text>
+  <text x="430" y="235" font-family="Arial" font-size="12" fill="#28a745">↑ 8% from last month</text>
+  
+  <rect x="600" y="150" width="170" height="100" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  <text x="620" y="180" font-family="Arial" font-size="14" fill="#6c757d">Reviews</text>
+  <text x="620" y="215" font-family="Arial" font-size="28" font-weight="bold" fill="#0d6efd">4,872</text>
+  <text x="620" y="235" font-family="Arial" font-size="12" fill="#28a745">↑ 15% from last month</text>
+  
+  <!-- Analytics Graph -->
+  <text x="220" y="290" font-family="Arial" font-size="20" font-weight="bold" fill="#212529">User Activity</text>
+  
+  <rect x="220" y="310" width="550" height="250" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  
+  <!-- Graph Axes -->
+  <line x1="250" y1="520" x2="750" y2="520" stroke="#dee2e6" stroke-width="1"/>
+  <line x1="250" y1="520" x2="250" y2="330" stroke="#dee2e6" stroke-width="1"/>
+  
+  <!-- Graph Labels -->
+  <text x="250" y="540" font-family="Arial" font-size="10" fill="#6c757d">Jan</text>
+  <text x="300" y="540" font-family="Arial" font-size="10" fill="#6c757d">Feb</text>
+  <text x="350" y="540" font-family="Arial" font-size="10" fill="#6c757d">Mar</text>
+  <text x="400" y="540" font-family="Arial" font-size="10" fill="#6c757d">Apr</text>
+  <text x="450" y="540" font-family="Arial" font-size="10" fill="#6c757d">May</text>
+  <text x="500" y="540" font-family="Arial" font-size="10" fill="#6c757d">Jun</text>
+  <text x="550" y="540" font-family="Arial" font-size="10" fill="#6c757d">Jul</text>
+  <text x="600" y="540" font-family="Arial" font-size="10" fill="#6c757d">Aug</text>
+  <text x="650" y="540" font-family="Arial" font-size="10" fill="#6c757d">Sep</text>
+  <text x="700" y="540" font-family="Arial" font-size="10" fill="#6c757d">Oct</text>
+  
+  <!-- Graph Data - Searches -->
+  <polyline points="250,480 300,470 350,450 400,460 450,430 500,410 550,390 600,370 650,350 700,330" 
+           fill="none" stroke="#0d6efd" stroke-width="3"/>
+  <circle cx="250" cy="480" r="4" fill="#0d6efd"/>
+  <circle cx="300" cy="470" r="4" fill="#0d6efd"/>
+  <circle cx="350" cy="450" r="4" fill="#0d6efd"/>
+  <circle cx="400" cy="460" r="4" fill="#0d6efd"/>
+  <circle cx="450" cy="430" r="4" fill="#0d6efd"/>
+  <circle cx="500" cy="410" r="4" fill="#0d6efd"/>
+  <circle cx="550" cy="390" r="4" fill="#0d6efd"/>
+  <circle cx="600" cy="370" r="4" fill="#0d6efd"/>
+  <circle cx="650" cy="350" r="4" fill="#0d6efd"/>
+  <circle cx="700" cy="330" r="4" fill="#0d6efd"/>
+  
+  <!-- Graph Data - Registrations -->
+  <polyline points="250,500 300,490 350,485 400,480 450,470 500,460 550,450 600,440 650,420 700,410" 
+           fill="none" stroke="#28a745" stroke-width="3"/>
+  <circle cx="250" cy="500" r="4" fill="#28a745"/>
+  <circle cx="300" cy="490" r="4" fill="#28a745"/>
+  <circle cx="350" cy="485" r="4" fill="#28a745"/>
+  <circle cx="400" cy="480" r="4" fill="#28a745"/>
+  <circle cx="450" cy="470" r="4" fill="#28a745"/>
+  <circle cx="500" cy="460" r="4" fill="#28a745"/>
+  <circle cx="550" cy="450" r="4" fill="#28a745"/>
+  <circle cx="600" cy="440" r="4" fill="#28a745"/>
+  <circle cx="650" cy="420" r="4" fill="#28a745"/>
+  <circle cx="700" cy="410" r="4" fill="#28a745"/>
+  
+  <!-- Graph Legend -->
+  <circle cx="640" cy="350" r="4" fill="#0d6efd"/>
+  <text x="650" y="355" font-family="Arial" font-size="12" fill="#6c757d">Searches</text>
+  
+  <circle cx="640" cy="370" r="4" fill="#28a745"/>
+  <text x="650" y="375" font-family="Arial" font-size="12" fill="#6c757d">Registrations</text>
+  
+  <!-- Recent Schools Added -->
+  <text x="220" y="590" font-family="Arial" font-size="20" font-weight="bold" fill="#212529">Recently Added Schools</text>
+  
+  <!-- Table Header -->
+  <rect x="220" y="610" width="550" height="40" rx="5" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="635" font-family="Arial" font-size="14" font-weight="bold" fill="#495057">School Name</text>
+  <text x="450" y="635" font-family="Arial" font-size="14" font-weight="bold" fill="#495057">Location</text>
+  <text x="550" y="635" font-family="Arial" font-size="14" font-weight="bold" fill="#495057">Rating</text>
+  <text x="650" y="635" font-family="Arial" font-size="14" font-weight="bold" fill="#495057">Status</text>
+  
+  <!-- Table Rows -->
+  <rect x="220" y="650" width="550" height="50" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="680" font-family="Arial" font-size="14" fill="#212529">Warsaw International School</text>
+  <text x="450" y="680" font-family="Arial" font-size="14" fill="#6c757d">Warsaw</text>
+  <!-- Rating Stars -->
+  <rect x="550" y="665" width="70" height="25" rx="12.5" fill="#28a745"/>
+  <text x="560" y="682" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">★★★★★ 4.8</text>
+  <!-- Status Badge -->
+  <rect x="650" y="665" width="70" height="25" rx="12.5" fill="#28a745"/>
+  <text x="665" y="682" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">Active</text>
+  
+  <rect x="220" y="700" width="550" height="50" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="730" font-family="Arial" font-size="14" fill="#212529">Krakow Academy</text>
+  <text x="450" y="730" font-family="Arial" font-size="14" fill="#6c757d">Krakow</text>
+  <!-- Rating Stars -->
+  <rect x="550" y="715" width="70" height="25" rx="12.5" fill="#28a745"/>
+  <text x="560" y="732" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">★★★★☆ 4.5</text>
+  <!-- Status Badge -->
+  <rect x="650" y="715" width="70" height="25" rx="12.5" fill="#28a745"/>
+  <text x="665" y="732" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">Active</text>
+  
+  <rect x="220" y="750" width="550" height="50" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="780" font-family="Arial" font-size="14" fill="#212529">Gdansk Private Academy</text>
+  <text x="450" y="780" font-family="Arial" font-size="14" fill="#6c757d">Gdansk</text>
+  <!-- Rating Stars -->
+  <rect x="550" y="765" width="70" height="25" rx="12.5" fill="#28a745"/>
+  <text x="560" y="782" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">★★★★☆ 4.6</text>
+  <!-- Status Badge -->
+  <rect x="650" y="765" width="70" height="25" rx="12.5" fill="#ffc107"/>
+  <text x="660" y="782" font-family="Arial" font-size="12" font-weight="bold" fill="#212529">Pending</text>
+  
+  <rect x="220" y="800" width="550" height="50" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="830" font-family="Arial" font-size="14" fill="#212529">Wroclaw Science School</text>
+  <text x="450" y="830" font-family="Arial" font-size="14" fill="#6c757d">Wroclaw</text>
+  <!-- Rating Stars -->
+  <rect x="550" y="815" width="70" height="25" rx="12.5" fill="#ffc107"/>
+  <text x="560" y="832" font-family="Arial" font-size="12" font-weight="bold" fill="#212529">★★★☆☆ 3.2</text>
+  <!-- Status Badge -->
+  <rect x="650" y="815" width="70" height="25" rx="12.5" fill="#dc3545"/>
+  <text x="655" y="832" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">Review</text>
+  
+  <!-- Pagination -->
+  <rect x="400" y="870" width="30" height="30" rx="5" fill="#0d6efd"/>
+  <text x="415" y="890" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+  
+  <rect x="440" y="870" width="30" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="455" y="890" font-family="Arial" font-size="14" fill="#6c757d" text-anchor="middle">2</text>
+  
+  <rect x="480" y="870" width="30" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="495" y="890" font-family="Arial" font-size="14" fill="#6c757d" text-anchor="middle">3</text>
+  
+  <rect x="520" y="870" width="30" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="535" y="890" font-family="Arial" font-size="14" fill="#6c757d" text-anchor="middle">4</text>
+  
+  <rect x="560" y="870" width="30" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="575" y="890" font-family="Arial" font-size="14" fill="#6c757d" text-anchor="middle">5</text>
+  
+  <!-- Recent User Activity -->
+  <text x="220" y="940" font-family="Arial" font-size="20" font-weight="bold" fill="#212529">Recent User Activity</text>
+  
+  <!-- Activity Log -->
+  <rect x="220" y="960" width="550" height="250" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  
+  <!-- Activity Timeline -->
+  <line x1="250" y1="980" x2="250" y2="1190" stroke="#dee2e6" stroke-width="2"/>
+  
+  <circle cx="250" cy="1000" r="10" fill="#0d6efd"/>
+  <text x="270" y="1005" font-family="Arial" font-size="14" fill="#212529">User John D. registered a new account</text>
+  <text x="650" y="1005" font-family="Arial" font-size="12" fill="#6c757d">10 min ago</text>
+  
+  <circle cx="250" cy="1040" r="10" fill="#28a745"/>
+  <text x="270" y="1045" font-family="Arial" font-size="14" fill="#212529">User Sarah M. rated Warsaw International School (4.8 stars)</text>
+  <text x="650" y="1045" font-family="Arial" font-size="12" fill="#6c757d">25 min ago</text>
+  
+  <circle cx="250" cy="1080" r="10" fill="#ffc107"/>
+  <text x="270" y="1085" font-family="Arial" font-size="14" fill="#212529">User Michael K. reported an issue with school information</text>
+  <text x="650" y="1085" font-family="Arial" font-size="12" fill="#6c757d">1 hour ago</text>
+  
+  <circle cx="250" cy="1120" r="10" fill="#0d6efd"/>
+  <text x="270" y="1125" font-family="Arial" font-size="14" fill="#212529">User Emma L. searched for "International schools in Warsaw"</text>
+  <text x="650" y="1125" font-family="Arial" font-size="12" fill="#6c757d">2 hours ago</text>
+  
+  <circle cx="250" cy="1160" r="10" fill="#28a745"/>
+  <text x="270" y="1165" font-family="Arial" font-size="14" fill="#212529">User David P. added Krakow Academy to favorites</text>
+  <text x="650" y="1165" font-family="Arial" font-size="12" fill="#6c757d">3 hours ago</text>
+  
+  <!-- View All Button -->
+  <rect x="450" y="1230" width="100" height="40" rx="5" fill="#0d6efd"/>
+  <text x="470" y="1255" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">View All</text>
+  
+  <!-- Newsletter/Signup Promo Section -->
+  <rect x="0" y="1300" width="800" height="150" fill="#e9ecef"/>
+  <text x="400" y="1340" font-family="Arial" font-size="24" font-weight="bold" fill="#212529" text-anchor="middle">Stay Updated with School Finder</text>
+  <text x="400" y="1370" font-family="Arial" font-size="16" fill="#6c757d" text-anchor="middle">Get the latest school information and personalized recommendations</text>
+  
+  <!-- Email Signup -->
+  <rect x="200" y="1390" width="300" height="40" rx="5" fill="#ffffff" stroke="#ced4da" stroke-width="1"/>
+  <text x="220" y="1415" font-family="Arial" font-size="14" fill="#adb5bd">Your email address</text>
+  
+  <!-- Subscribe Button -->
+  <rect x="510" y="1390" width="100" height="40" rx="5" fill="#0d6efd"/>
+  <text x="525" y="1415" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">Subscribe</text>
+  
+  <!-- Footer -->
+  <rect x="0" y="1450" width="800" height="150" fill="#343a40"/>
+  
+  <!-- Footer Links -->
+  <text x="50" y="1485" font-family="Arial" font-size="14" fill="#ffffff">About Us</text>
+  <text x="150" y="1485" font-family="Arial" font-size="14" fill="#ffffff">Contact</text>
+  <text x="250" y="1485" font-family="Arial" font-size="14" fill="#ffffff">Privacy Policy</text>
+  <text x="380" y="1485" font-family="Arial" font-size="14" fill="#ffffff">Terms of Service</text>
+  
+  <!-- Social Media Icons -->
+  <circle cx="600" cy="1485" r="15" fill="#ffffff" opacity="0.2"/>
+  <text x="600" y="1490" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">f</text>
+  
+  <circle cx="640" cy="1485" r="15" fill="#ffffff" opacity="0.2"/>
+  <text x="640" y="1490" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">t</text>
+  
+  <circle cx="680" cy="1485" r="15" fill="#ffffff" opacity="0.2"/>
+  <text x="680" y="1490" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">in</text>
+  
+  <!-- Copyright -->
+  <text x="400" y="1520" font-family="Arial" font-size="12" fill="#adb5bd" text-anchor="middle">© 2023 School Finder. All rights reserved.</text>
+  
+  <!-- App Stats -->
+  <text x="400" y="1550" font-family="Arial" font-size="12" fill="#adb5bd" text-anchor="middle">1000+ Schools • 50+ Regions • 10,000+ Users</text>
+  
+  <!-- Back to Top Button -->
+  <circle cx="750" cy="1520" r="20" fill="#495057"/>
+  <text x="750" y="1525" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">↑</text>
+</svg>
