@@ -1,9 +1,4 @@
 /** @type {import('next').NextConfig} */
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
-
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   // Temporarily ignore TypeScript errors during build
   typescript: {
@@ -22,7 +17,20 @@ const nextConfig = {
   },
   // Image optimization configuration
   images: {
-    domains: ['maps.googleapis.com', 'lh3.googleusercontent.com', 'images.unsplash.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'maps.googleapis.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
     formats: ['image/avif', 'image/webp'],
   },
   // Configure redirects for better UX
@@ -59,4 +67,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withBundleAnalyzer(nextConfig);
+module.exports = nextConfig;
