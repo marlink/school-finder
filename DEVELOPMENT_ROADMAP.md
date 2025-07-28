@@ -47,6 +47,29 @@ The School Finder Portal is a comprehensive web application for discovering and 
 
 ## 🎯 **REMAINING 4% - Priority Implementation**
 
+### **🚨 CRITICAL: Focused Session Strategy**
+**New Development Rule**: Break complex tasks into 30-45 minute focused sessions to avoid context limits and maintain quality.
+
+#### **Session Planning Framework:**
+- **Session 1**: Environment separation (staging setup)
+- **Session 2**: MCP integration setup
+- **Session 3**: Google Maps API integration
+- **Session 4**: Real data integration with Apify
+- **Session 5**: Testing infrastructure
+- **Session 6**: Performance optimization
+
+#### **LLM Task Allocation:**
+- **Claude**: Architecture, code reviews, complex debugging
+- **Gemini**: Data processing, API integrations, bulk operations
+- **DeepSeek**: Performance optimization, repetitive code generation
+
+#### **MCP Integration Available:**
+- ✅ **Firecrawl MCP**: Web scraping for school data
+- ✅ **Apify MCP**: Actor management for data collection
+- ✅ **Todoist MCP**: Development task tracking
+- ✅ **Hyperbrowser MCP**: Browser automation and testing
+- ✅ **Direct Supabase**: Database operations and logging
+
 ### **Phase 1: Core Missing Features (Week 1-2)**
 
 #### 1. **Google Maps Integration** 🗺️
@@ -121,13 +144,29 @@ npm run dev                    # http://localhost:3000
 # Database management
 npx prisma studio             # http://localhost:5555
 npx prisma migrate dev        # Apply migrations
-npx prisma generate           # Update client
+npx prisma generate           # Update client (CRITICAL for builds)
 
 # Build and test
-npm run build                 # Production build
+npm run build                 # Production build (includes prisma generate)
 npm run test                  # Run tests
 npm run lint                  # Code quality check
 ```
+
+### **🚨 CRITICAL: Prisma Deployment Requirements**
+**Learned from production deployment issues:**
+```json
+{
+  "scripts": {
+    "build": "prisma generate && next build"
+  },
+  "devDependencies": {
+    "prisma": "^6.12.0"
+  }
+}
+```
+- **Build Script**: MUST include `prisma generate` before `next build`
+- **Vercel Deployment**: Requires Prisma CLI in devDependencies
+- **Error Prevention**: Without this, builds fail with "@prisma/client did not initialize yet"
 
 ### **Environment Variables Checklist**
 ```bash
@@ -147,6 +186,13 @@ STRIPE_PUBLISHABLE_KEY=             # For payments (future)
 ```
 
 ## 📋 **Development Standards**
+
+### **🎯 Focused Session Rules (NEW)**
+- **Session Duration**: 30-45 minutes maximum per focused task
+- **Context Management**: Start each session with clear objectives
+- **LLM Switching**: Use appropriate LLM for task type (Claude/Gemini/DeepSeek)
+- **Progress Tracking**: Document completion status after each session
+- **Handoff Protocol**: Clear summary for next session continuation
 
 ### **Code Quality Requirements**
 - ALL imports MUST use exact case matching
