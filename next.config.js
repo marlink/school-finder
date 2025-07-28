@@ -10,6 +10,9 @@ const nextConfig = {
   },
   // Enable experimental features for App Router and server components
   experimental: {},
+  // Static export configuration (uncomment for static deployment)
+  // output: 'export',
+  // trailingSlash: true,
   // Expose specific environment variables to the client
   // IMPORTANT: Only expose variables that are safe for client-side use
   env: {
