@@ -1,52 +1,61 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Temporarily ignore TypeScript errors during build
+  // Temporarily ignore TypeScript and ESLint errors during build
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Temporarily ignore ESLint errors during build
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Enable experimental features for App Router and server components
-  experimental: {},
-  // Static export configuration (uncomment for static deployment)
-  // output: 'export',
-  // trailingSlash: true,
-  // Expose specific environment variables to the client
-  // IMPORTANT: Only expose variables that are safe for client-side use
+  
+  // Environment variables
   env: {
     NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   },
+  
   // Image optimization configuration
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'maps.googleapis.com',
+        port: '',
+        pathname: '/maps/api/place/photo/**',
       },
       {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+        port: '',
+        pathname: '/**',
       },
     ],
-    formats: ['image/avif', 'image/webp'],
+    unoptimized: false,
   },
-  // Configure redirects for better UX
+  
+  // Redirects
   async redirects() {
     return [
       {
-        source: '/schools',
-        destination: '/search',
+        source: '/admin',
+        destination: '/admin/dashboard',
         permanent: true,
       },
     ];
   },
-  // Configure headers for security
+  
+  // Security headers
   async headers() {
     return [
       {
@@ -62,7 +71,7 @@ const nextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
+            value: 'origin-when-cross-origin',
           },
         ],
       },
