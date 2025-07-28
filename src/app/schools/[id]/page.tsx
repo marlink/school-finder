@@ -3,511 +3,451 @@ import { prisma } from '@/lib/prisma';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 import { 
+  MapPin, 
   Phone, 
   Mail, 
-  MapPin, 
   Globe, 
   Star, 
   Users, 
   Calendar,
-  Clock,
-  Award,
-  BookOpen,
   GraduationCap,
+  Languages,
+  Award,
   Building,
   Heart,
   Share2,
-  ExternalLink,
-  ChevronRight,
-  Target
+  Navigation,
+  Clock,
+  BookOpen,
+  Wifi,
+  Car,
+  Utensils,
+  Activity,
+  Shield,
+  Camera
 } from 'lucide-react';
-import PhotoGallery from '@/components/school/PhotoGallery';
-import SimilarSchools from '@/components/school/SimilarSchools';
-import { GoogleMap } from '@/components/school/GoogleMap';
-import RatingForm from '@/components/school/RatingForm';
-import RatingDisplay from '@/components/school/RatingDisplay';
+import { cn } from '@/lib/utils';
 
-interface SchoolPageProps {
-  params: Promise<{ id: string }>;
-}
-
-async function getSchoolData(id: string) {
-  try {
-    const school = await prisma.school.findUnique({
-      where: { id },
-      include: {
-        images: {
-          orderBy: { displayOrder: 'asc' }
-        },
-        socialMedia: true,
-        userRatings: {
-          include: {
-            user: {
-              select: {
-                name: true,
-                email: true
-              }
-            }
-          },
-          orderBy: { createdAt: 'desc' }
-        },
-        googleRatings: {
-          orderBy: { reviewDate: 'desc' }
-        },
-        publicRatings: {
-          orderBy: { year: 'desc' }
-        },
-        portalRatings: true,
-        _count: {
-          select: {
-            userRatings: true,
-            favorites: true
-          }
-        }
-      }
-    });
-
-    if (!school) {
-      return null;
-    }
-
-    // Calculate average user rating
-    const avgUserRating = school.userRatings.length > 0
-      ? school.userRatings.reduce((sum, rating) => sum + Number(rating.overallRating), 0) / school.userRatings.length
-      : 0;
-
-    // Get latest Google rating
-    const latestGoogleRating = school.googleRatings[0];
-
-    return {
-      ...school,
-      avgUserRating,
-      reviewCount: school._count.userRatings,
-      favoriteCount: school._count.favorites,
-      latestGoogleRating: latestGoogleRating ? Number(latestGoogleRating.rating) : null
-    };
-  } catch (error) {
-    console.error('Error fetching school data:', error);
-    return null;
-  }
-}
-
-export default async function SchoolPage({ params }: SchoolPageProps) {
-  const { id } = await params;
-  const school = await getSchoolData(id);
+export default async function SchoolDetailPage({ params }: { params: { id: string } }) {
+  const school = await prisma.school.findUnique({
+    where: { id: params.id },
+    include: {
+      userRatings: true,
+      googleRatings: true,
+      images: true,
+    },
+  });
 
   if (!school) {
     notFound();
   }
 
+  // Calculate average user rating
+  const avgUserRating = school.userRatings.length > 0 
+    ? school.userRatings.reduce((sum, rating) => sum + Number(rating.overallRating), 0) / school.userRatings.length 
+    : null;
+
+  // Get latest Google rating
+  const latestGoogleRating = school.googleRatings.length > 0 
+    ? Number(school.googleRatings[0].rating) 
+    : null;
+
   // Extract data from JSON fields
   const address = school.address as any;
   const contact = school.contact as any;
-  const location = school.location as any;
-  const facilities = school.facilities as any;
-  const languages = school.languages as any;
-  const specializations = school.specializations as any;
+  const facilitiesArray = school.facilities ? (school.facilities as string[]) : [];
+  const languagesArray = school.languages ? (school.languages as string[]) : [];
+  const specializationsArray = school.specializations ? (school.specializations as string[]) : [];
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: school.name,
-          text: `Check out ${school.name} - ${school.type} school in ${address?.city || 'Poland'}`,
-          url: typeof window !== 'undefined' ? window.location.href : '',
-        });
-      } catch (error) {
-        // Error sharing functionality
-      }
-    } else {
-      // Fallback to copying URL
-      if (typeof window !== 'undefined' && navigator.clipboard) {
-          navigator.clipboard.writeText(window.location.href);
-        }
-    }
+  // Mock data for enhanced features
+  const photos = [
+    { id: 1, url: '/api/placeholder/400/300', alt: 'Budynek główny' },
+    { id: 2, url: '/api/placeholder/400/300', alt: 'Sala gimnastyczna' },
+    { id: 3, url: '/api/placeholder/400/300', alt: 'Biblioteka' },
+    { id: 4, url: '/api/placeholder/400/300', alt: 'Laboratorium' },
+  ];
+
+  const facilityIcons: Record<string, React.ReactNode> = {
+    'Biblioteka': <BookOpen className="h-4 w-4" />,
+    'Sala gimnastyczna': <Activity className="h-4 w-4" />,
+    'Laboratorium komputerowe': <Wifi className="h-4 w-4" />,
+    'Parking': <Car className="h-4 w-4" />,
+    'Stołówka': <Utensils className="h-4 w-4" />,
+    'Boisko sportowe': <Activity className="h-4 w-4" />,
+    'Sala konferencyjna': <Building className="h-4 w-4" />,
+    'Ochrona': <Shield className="h-4 w-4" />,
   };
 
-  // Transform images for PhotoGallery
-  const galleryImages = school.images.map(img => ({
-    id: img.id,
-    url: img.imageUrl,
-    alt: img.altText || `${school.name} - Image`,
-    caption: img.caption || undefined
-  }));
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-blue-50">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Header Section */}
+        <div className="mb-8">
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
             <div className="flex-1">
-              <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{school.name}</h1>
-                <Badge variant={school.type === 'Public' ? 'default' : 'secondary'}>
-                  {school.type}
-                </Badge>
-              </div>
-              
-              <div className="flex flex-wrap items-center gap-4 mb-4">
-                <div className="flex items-center">
-                  <div className="flex items-center">
-                    {Array.from({ length: 5 }, (_, i) => (
-                      <Star 
-                        key={i} 
-                        className={`h-4 w-4 ${i < Math.floor(school.avgUserRating || school.latestGoogleRating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
-                      />
-                    ))}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl text-white">
+                  <GraduationCap className="h-6 w-6" />
+                </div>
+                <div>
+                  <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+                    {school.name}
+                  </h1>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      {school.type}
+                    </Badge>
+                    {school.isPublic !== null && (
+                      <Badge variant={school.isPublic ? "default" : "outline"}>
+                        {school.isPublic ? 'Publiczna' : 'Prywatna'}
+                      </Badge>
+                    )}
                   </div>
-                  <span className="ml-1 text-sm text-gray-600">
-                    {(school.avgUserRating || school.latestGoogleRating || 0).toFixed(1)} ({school.reviewCount} reviews)
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 text-gray-600 mb-4">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  <span className="text-sm">
+                    {school.address}, {school.city}
+                    {school.postalCode && `, ${school.postalCode}`}
                   </span>
                 </div>
-                {address?.district && (
-                  <>
-                    <span className="text-gray-400">•</span>
-                    <span className="text-sm text-gray-600">{address.district}</span>
-                  </>
-                )}
               </div>
-              
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-                <div className="flex items-center">
-                  <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
-                  <span>
-                    {address?.street && `${address.street}, `}
-                    {address?.city && `${address.city}, `}
-                    {address?.voivodeship}
-                  </span>
-                </div>
-                {contact?.phone && (
-                  <div className="flex items-center">
-                    <Phone className="h-4 w-4 mr-1 flex-shrink-0" />
-                    <span>{contact.phone}</span>
+
+              {/* Quick Stats */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {school.studentCount && (
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Users className="h-4 w-4 text-blue-500" />
+                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Uczniowie</span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">{school.studentCount}</p>
                   </div>
                 )}
-                {contact?.website && (
-                  <div className="flex items-center">
-                    <Globe className="h-4 w-4 mr-1 flex-shrink-0" />
-                    <a href={contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                      Visit Website
-                    </a>
+                
+                {school.establishedYear && (
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Calendar className="h-4 w-4 text-green-500" />
+                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Założona</span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">{school.establishedYear}</p>
+                  </div>
+                )}
+
+                {avgUserRating && (
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Star className="h-4 w-4 text-yellow-500" />
+                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Ocena użytkowników</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <p className="text-2xl font-bold text-gray-900">{avgUserRating.toFixed(1)}</p>
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={cn(
+                              "h-4 w-4",
+                              star <= avgUserRating ? "text-yellow-400 fill-current" : "text-gray-300"
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {school.googleRating && (
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Star className="h-4 w-4 text-blue-500" />
+                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Google</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <p className="text-2xl font-bold text-gray-900">{school.googleRating}</p>
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={cn(
+                              "h-4 w-4",
+                              star <= school.googleRating! ? "text-blue-400 fill-current" : "text-gray-300"
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
-              
-              <p className="text-gray-700 max-w-4xl">
-                {school.shortName && `Also known as ${school.shortName}. `}
-                A {school.type.toLowerCase()} school established in {school.establishedYear || 'N/A'}.
-                {school.studentCount && ` Currently serving ${school.studentCount.toLocaleString()} students.`}
-              </p>
             </div>
-            
-            <div className="flex flex-col gap-3 lg:ml-8">
-              <Button size="lg" className="w-full lg:w-auto">
+
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-3 lg:w-48">
+              <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-lg">
                 <Heart className="h-4 w-4 mr-2" />
-                Save School
+                Dodaj do ulubionych
               </Button>
-              <Button size="lg" variant="outline" onClick={handleShare} className="w-full lg:w-auto">
+              <Button variant="outline" className="border-gray-300">
                 <Share2 className="h-4 w-4 mr-2" />
-                Share
+                Udostępnij
               </Button>
-              {contact?.website && (
-                <Button size="lg" variant="outline" asChild className="w-full lg:w-auto">
-                  <a href={contact.website} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Visit Website
-                  </a>
-                </Button>
-              )}
-              {contact?.email && (
-                <Button size="lg" variant="outline" asChild className="w-full lg:w-auto">
-                  <a href={`mailto:${contact.email}`}>
-                    <Mail className="h-4 w-4 mr-2" />
-                    Contact School
-                  </a>
-                </Button>
-              )}
+              <Button variant="outline" className="border-gray-300">
+                <Navigation className="h-4 w-4 mr-2" />
+                Nawigacja
+              </Button>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2">
-            <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="location">Location</TabsTrigger>
-                <TabsTrigger value="photos">Photos</TabsTrigger>
-                <TabsTrigger value="facilities">Facilities</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
-                <TabsTrigger value="rate">Rate</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="overview" className="mt-6">
-                <div className="space-y-6">
-                  {/* Quick Stats */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <Target className="h-5 w-5 mr-2" />
-                        Quick Stats
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {school.studentCount && (
-                          <div className="text-center">
-                            <div className="text-2xl font-bold text-blue-600">{school.studentCount.toLocaleString()}</div>
-                            <div className="text-sm text-gray-600">Students</div>
-                          </div>
-                        )}
-                        {school.establishedYear && (
-                          <div className="text-center">
-                            <div className="text-2xl font-bold text-green-600">{school.establishedYear}</div>
-                            <div className="text-sm text-gray-600">Established</div>
-                          </div>
-                        )}
-                        {school.avgUserRating > 0 && (
-                          <div className="text-center">
-                            <div className="text-2xl font-bold text-purple-600">{school.avgUserRating.toFixed(1)}</div>
-                            <div className="text-sm text-gray-600">User Rating</div>
-                          </div>
-                        )}
-                        {school.latestGoogleRating && (
-                          <div className="text-center">
-                            <div className="text-2xl font-bold text-orange-600">{school.latestGoogleRating.toFixed(1)}</div>
-                            <div className="text-sm text-gray-600">Google Rating</div>
-                          </div>
-                        )}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Photo Gallery */}
+            <Card className="overflow-hidden shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2">
+                  <Camera className="h-5 w-5 text-orange-500" />
+                  Galeria zdjęć
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4">
+                  {photos.map((photo, index) => (
+                    <div 
+                      key={photo.id} 
+                      className={cn(
+                        "relative rounded-lg overflow-hidden group cursor-pointer",
+                        index === 0 ? "col-span-2 aspect-video" : "aspect-square"
+                      )}
+                    >
+                      <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                        <Camera className="h-8 w-8 text-gray-400" />
                       </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Languages & Specializations */}
-                  {(languages || specializations) && (
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex items-center">
-                          <BookOpen className="h-5 w-5 mr-2" />
-                          Academic Focus
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        {languages && Array.isArray(languages) && languages.length > 0 && (
-                          <div>
-                            <h4 className="font-medium mb-2">Languages Offered</h4>
-                            <div className="flex flex-wrap gap-2">
-                              {languages.map((lang: string, index: number) => (
-                                <Badge key={index} variant="outline">{lang}</Badge>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        {specializations && Array.isArray(specializations) && specializations.length > 0 && (
-                          <div>
-                            <h4 className="font-medium mb-2">Specializations</h4>
-                            <div className="flex flex-wrap gap-2">
-                              {specializations.map((spec: string, index: number) => (
-                                <Badge key={index} variant="secondary">{spec}</Badge>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
-              </TabsContent>
-
-              <TabsContent value="location" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <MapPin className="h-5 w-5 mr-2" />
-                      Location & Contact
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <h4 className="font-medium mb-2">Address</h4>
-                      <p className="text-gray-600">
-                        {address?.street && `${address.street}`}<br />
-                        {address?.city && `${address.city} ${address.postal || ''}`}<br />
-                        {address?.voivodeship && `${address.voivodeship}, Poland`}
-                      </p>
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200" />
+                      <div className="absolute bottom-2 left-2 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                        {photo.alt}
+                      </div>
                     </div>
-                    
-                    {(contact?.phone || contact?.email || contact?.website) && (
-                      <div>
-                        <h4 className="font-medium mb-2">Contact Information</h4>
-                        <div className="space-y-2">
-                          {contact?.phone && (
-                            <div className="flex items-center">
-                              <Phone className="h-4 w-4 mr-2" />
-                              <span>{contact.phone}</span>
-                            </div>
-                          )}
-                          {contact?.email && (
-                            <div className="flex items-center">
-                              <Mail className="h-4 w-4 mr-2" />
-                              <a href={`mailto:${contact.email}`} className="text-blue-600 hover:underline">
-                                {contact.email}
-                              </a>
-                            </div>
-                          )}
-                          {contact?.website && (
-                            <div className="flex items-center">
-                              <Globe className="h-4 w-4 mr-2" />
-                              <a href={contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                                Visit Website
-                              </a>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-                    {/* Google Maps Integration */}
-                    <GoogleMap 
-                      address={address || {}}
-                      schoolName={school.name}
-                      className="mt-4"
-                    />
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="photos" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>School Photos</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <PhotoGallery images={galleryImages} schoolName={school.name} />
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="facilities" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Building className="h-5 w-5 mr-2" />
-                      Facilities & Amenities
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {facilities && Array.isArray(facilities) && facilities.length > 0 ? (
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {facilities.map((facility: string, index: number) => (
-                          <div key={index} className="flex items-center p-3 bg-gray-50 rounded-lg">
-                            <Award className="h-4 w-4 mr-2 text-green-600" />
-                            <span className="text-sm">{facility}</span>
-                          </div>
+            {/* Academic Focus */}
+            {(languagesArray.length > 0 || specializationsArray.length > 0) && (
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Award className="h-5 w-5 text-blue-500" />
+                    Profil edukacyjny
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {languagesArray.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <Languages className="h-4 w-4 text-green-500" />
+                        Języki obce
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {languagesArray.map((language, index) => (
+                          <Badge key={index} variant="secondary" className="bg-green-100 text-green-800 border-green-200">
+                            {language}
+                          </Badge>
                         ))}
                       </div>
-                    ) : (
-                      <p className="text-gray-500">No facility information available.</p>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
+                    </div>
+                  )}
 
-              <TabsContent value="reviews" className="mt-6">
-                <RatingDisplay schoolId={school.id} />
-              </TabsContent>
+                  {specializationsArray.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <GraduationCap className="h-4 w-4 text-purple-500" />
+                        Specjalizacje
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {specializationsArray.map((spec, index) => (
+                          <Badge key={index} variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200">
+                            {spec}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
 
-              <TabsContent value="rate" className="mt-6">
-                <RatingForm schoolId={school.id} />
-              </TabsContent>
-            </Tabs>
+            {/* Facilities */}
+            {facilitiesArray.length > 0 && (
+              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building className="h-5 w-5 text-indigo-500" />
+                    Infrastruktura i udogodnienia
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {facilitiesArray.map((facility, index) => (
+                      <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          {facilityIcons[facility] || <Building className="h-4 w-4 text-gray-500" />}
+                        </div>
+                        <span className="text-sm font-medium text-gray-700">{facility}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Reviews Section */}
+            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="h-5 w-5 text-yellow-500" />
+                  Opinie i oceny
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8">
+                  <Star className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 mb-4">Brak opinii użytkowników</p>
+                  <Button variant="outline" className="border-orange-300 text-orange-600 hover:bg-orange-50">
+                    Dodaj pierwszą opinię
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Contact Card */}
-            <Card>
+            {/* Contact Information */}
+            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
+                <CardTitle className="text-lg">Kontakt</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium text-gray-900">Adres</p>
+                    <p className="text-sm text-gray-600">
+                      {school.address}<br />
+                      {school.postalCode} {school.city}
+                    </p>
+                  </div>
+                </div>
+
                 {contact?.phone && (
-                  <Button variant="outline" className="w-full" asChild>
-                    <a href={`tel:${contact.phone}`}>
-                      <Phone className="h-4 w-4 mr-2" />
-                      Call School
-                    </a>
-                  </Button>
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-gray-900">Telefon</p>
+                      <a href={`tel:${contact.phone}`} className="text-sm text-blue-600 hover:text-blue-800">
+                        {contact.phone}
+                      </a>
+                    </div>
+                  </div>
                 )}
+
                 {contact?.email && (
-                  <Button variant="outline" className="w-full" asChild>
-                    <a href={`mailto:${contact.email}`}>
-                      <Mail className="h-4 w-4 mr-2" />
-                      Send Email
-                    </a>
-                  </Button>
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-gray-900">Email</p>
+                      <a href={`mailto:${contact.email}`} className="text-sm text-blue-600 hover:text-blue-800 break-all">
+                        {contact.email}
+                      </a>
+                    </div>
+                  </div>
                 )}
+
                 {contact?.website && (
-                  <Button variant="outline" className="w-full" asChild>
-                    <a href={contact.website} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Visit Website
-                    </a>
-                  </Button>
+                  <div className="flex items-center gap-3">
+                    <Globe className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-gray-900">Strona internetowa</p>
+                      <a 
+                        href={contact.website} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-sm text-blue-600 hover:text-blue-800 break-all"
+                      >
+                        {contact.website.replace(/^https?:\/\//, '')}
+                      </a>
+                    </div>
+                  </div>
                 )}
+
+                <Separator className="my-4" />
+
+                <div className="space-y-3">
+                  {contact?.phone && (
+                    <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white">
+                      <Phone className="h-4 w-4 mr-2" />
+                      Zadzwoń
+                    </Button>
+                  )}
+                  {contact?.email && (
+                    <Button variant="outline" className="w-full border-blue-300 text-blue-600 hover:bg-blue-50">
+                      <Mail className="h-4 w-4 mr-2" />
+                      Wyślij email
+                    </Button>
+                  )}
+                  <Button variant="outline" className="w-full border-gray-300">
+                    <Navigation className="h-4 w-4 mr-2" />
+                    Pokaż na mapie
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 
-            {/* School Info */}
-            <Card>
+            {/* Quick Actions */}
+            <Card className="shadow-lg border-0 bg-gradient-to-br from-orange-50 to-red-50">
               <CardHeader>
-                <CardTitle>School Information</CardTitle>
+                <CardTitle className="text-lg">Szybkie akcje</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Type:</span>
-                  <span className="font-medium">{school.type}</span>
-                </div>
-                {school.establishedYear && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Established:</span>
-                    <span className="font-medium">{school.establishedYear}</span>
-                  </div>
-                )}
-                {school.studentCount && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Students:</span>
-                    <span className="font-medium">{school.studentCount.toLocaleString()}</span>
-                  </div>
-                )}
-                {school.teacherCount && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Teachers:</span>
-                    <span className="font-medium">{school.teacherCount.toLocaleString()}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Status:</span>
-                  <Badge variant={school.status === 'active' ? 'default' : 'secondary'}>
-                    {school.status}
-                  </Badge>
-                </div>
+                <Button variant="outline" className="w-full justify-start border-orange-200 hover:bg-orange-50">
+                  <Clock className="h-4 w-4 mr-2" />
+                  Godziny otwarcia
+                </Button>
+                <Button variant="outline" className="w-full justify-start border-orange-200 hover:bg-orange-50">
+                  <Users className="h-4 w-4 mr-2" />
+                  Porównaj szkoły
+                </Button>
+                <Button variant="outline" className="w-full justify-start border-orange-200 hover:bg-orange-50">
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Program nauczania
+                </Button>
               </CardContent>
             </Card>
 
             {/* Similar Schools */}
-            <SimilarSchools 
-              currentSchoolId={school.id}
-              currentSchoolType={school.type}
-              currentSchoolLocation={address?.city}
-            />
+            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-lg">Podobne szkoły</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-6">
+                  <GraduationCap className="h-8 w-8 text-gray-300 mx-auto mb-3" />
+                  <p className="text-sm text-gray-500 mb-3">Wkrótce pokażemy podobne szkoły w okolicy</p>
+                  <Button variant="outline" size="sm" className="border-gray-300">
+                    Szukaj podobnych
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

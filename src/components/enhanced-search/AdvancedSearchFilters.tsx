@@ -1,17 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Filter, X, MapPin, Star, Users, Calendar, Building, Wifi, Car, Utensils, Dumbbell, Microscope, Music, Palette } from 'lucide-react';
+import { Filter, X, MapPin, Star, Users, Calendar, Building, Languages, Award, Image, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { cn } from '@/lib/utils';
 
 interface SearchFilters {
   type?: string;
@@ -37,168 +38,215 @@ interface SearchFilters {
 interface AdvancedSearchFiltersProps {
   filters: SearchFilters;
   onFiltersChange: (filters: SearchFilters) => void;
-  onApplyFilters: () => void;
   onClearFilters: () => void;
-  isOpen: boolean;
-  onToggle: () => void;
   className?: string;
+  isOpen?: boolean;
+  onToggle?: () => void;
 }
 
-const SCHOOL_TYPES = [
-  { value: 'primary', label: 'Primary School' },
-  { value: 'secondary', label: 'Secondary School' },
-  { value: 'high', label: 'High School' },
-  { value: 'technical', label: 'Technical School' },
-  { value: 'university', label: 'University' },
-  { value: 'college', label: 'College' },
+// Quick filter presets
+const QUICK_FILTERS = [
+  { label: 'Najlepiej oceniane', filters: { minRating: 4.0, sortBy: 'rating' as const, sortOrder: 'desc' as const } },
+  { label: 'Blisko mnie', filters: { maxDistance: 5, sortBy: 'distance' as const, sortOrder: 'asc' as const } },
+  { label: 'Duże szkoły', filters: { minStudents: 500, sortBy: 'students' as const, sortOrder: 'desc' as const } },
+  { label: 'Licea', filters: { type: 'Liceum Ogólnokształcące' } },
+  { label: 'Technika', filters: { type: 'Technikum' } },
+  { label: 'Podstawówki', filters: { type: 'Szkoła Podstawowa' } },
 ];
 
+// Polish voivodeships
 const VOIVODESHIPS = [
-  'Dolnośląskie', 'Kujawsko-pomorskie', 'Lubelskie', 'Lubuskie',
-  'Łódzkie', 'Małopolskie', 'Mazowieckie', 'Opolskie',
-  'Podkarpackie', 'Podlaskie', 'Pomorskie', 'Śląskie',
-  'Świętokrzyskie', 'Warmińsko-mazurskie', 'Wielkopolskie', 'Zachodniopomorskie'
+  'Dolnośląskie', 'Kujawsko-pomorskie', 'Lubelskie', 'Lubuskie', 'Łódzkie',
+  'Małopolskie', 'Mazowieckie', 'Opolskie', 'Podkarpackie', 'Podlaskie',
+  'Pomorskie', 'Śląskie', 'Świętokrzyskie', 'Warmińsko-mazurskie',
+  'Wielkopolskie', 'Zachodniopomorskie'
 ];
 
+// School types
+const SCHOOL_TYPES = [
+  'Szkoła Podstawowa',
+  'Liceum Ogólnokształcące',
+  'Technikum',
+  'Szkoła Branżowa',
+  'Gimnazjum',
+  'Przedszkole'
+];
+
+// Common languages
 const LANGUAGES = [
-  'English', 'German', 'French', 'Spanish', 'Italian', 'Russian', 'Chinese', 'Japanese'
+  'Angielski', 'Niemiecki', 'Francuski', 'Hiszpański', 'Włoski', 'Rosyjski', 'Chiński', 'Japoński'
 ];
 
+// Common specializations
 const SPECIALIZATIONS = [
-  'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science',
-  'Engineering', 'Medicine', 'Law', 'Economics', 'Arts', 'Music', 'Sports'
+  'Informatyka', 'Matematyka', 'Biologia', 'Chemia', 'Fizyka', 'Geografia',
+  'Historia', 'Język polski', 'Języki obce', 'Sztuka', 'Muzyka', 'Sport'
 ];
 
+// Common facilities
 const FACILITIES = [
-  { value: 'library', label: 'Library', icon: Building },
-  { value: 'gym', label: 'Gymnasium', icon: Dumbbell },
-  { value: 'lab', label: 'Laboratory', icon: Microscope },
-  { value: 'cafeteria', label: 'Cafeteria', icon: Utensils },
-  { value: 'parking', label: 'Parking', icon: Car },
-  { value: 'wifi', label: 'WiFi', icon: Wifi },
-  { value: 'music_room', label: 'Music Room', icon: Music },
-  { value: 'art_studio', label: 'Art Studio', icon: Palette },
+  'Biblioteka', 'Sala gimnastyczna', 'Boisko', 'Laboratorium', 'Pracownia komputerowa',
+  'Stołówka', 'Parking', 'Sala konferencyjna', 'Aula', 'Basen'
 ];
 
 export default function AdvancedSearchFilters({
   filters,
   onFiltersChange,
-  onApplyFilters,
   onClearFilters,
-  isOpen,
-  onToggle,
-  className = ""
+  className,
+  isOpen = false,
+  onToggle
 }: AdvancedSearchFiltersProps) {
   const [localFilters, setLocalFilters] = useState<SearchFilters>(filters);
-  const [activeFiltersCount, setActiveFiltersCount] = useState(0);
+  const [expandedSections, setExpandedSections] = useState({
+    location: true,
+    type: true,
+    rating: false,
+    academic: false,
+    facilities: false,
+    other: false
+  });
 
   useEffect(() => {
     setLocalFilters(filters);
   }, [filters]);
 
-  useEffect(() => {
-    // Count active filters
-    const count = Object.entries(localFilters).reduce((acc, [key, value]) => {
-      if (key === 'sortBy' || key === 'sortOrder') return acc;
-      if (Array.isArray(value) && value.length > 0) return acc + 1;
-      if (typeof value === 'string' && value) return acc + 1;
-      if (typeof value === 'number' && value > 0) return acc + 1;
-      if (typeof value === 'boolean' && value) return acc + 1;
-      return acc;
-    }, 0);
-    setActiveFiltersCount(count);
-  }, [localFilters]);
-
   const updateFilter = (key: keyof SearchFilters, value: any) => {
-    const updated = { ...localFilters, [key]: value };
-    setLocalFilters(updated);
+    const newFilters = { ...localFilters, [key]: value };
+    setLocalFilters(newFilters);
+    onFiltersChange(newFilters);
   };
 
-  const handleArrayFilter = (key: keyof SearchFilters, value: string, checked: boolean) => {
-    const currentArray = (localFilters[key] as string[]) || [];
-    const updated = checked
-      ? [...currentArray, value]
-      : currentArray.filter(item => item !== value);
-    updateFilter(key, updated);
+  const toggleArrayFilter = (key: 'languages' | 'specializations' | 'facilities', value: string) => {
+    const currentArray = localFilters[key] || [];
+    const newArray = currentArray.includes(value)
+      ? currentArray.filter(item => item !== value)
+      : [...currentArray, value];
+    updateFilter(key, newArray);
   };
 
-  const handleApplyFilters = () => {
-    onFiltersChange(localFilters);
-    onApplyFilters();
+  const applyQuickFilter = (quickFilter: typeof QUICK_FILTERS[0]) => {
+    const newFilters = { ...localFilters, ...quickFilter.filters };
+    setLocalFilters(newFilters);
+    onFiltersChange(newFilters);
   };
 
-  const handleClearFilters = () => {
+  const clearAllFilters = () => {
     const clearedFilters: SearchFilters = {
-      sortBy: localFilters.sortBy || 'rating',
-      sortOrder: localFilters.sortOrder || 'desc'
+      sortBy: 'rating',
+      sortOrder: 'desc'
     };
     setLocalFilters(clearedFilters);
-    onFiltersChange(clearedFilters);
     onClearFilters();
   };
 
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    if (localFilters.type) count++;
+    if (localFilters.city) count++;
+    if (localFilters.voivodeship) count++;
+    if (localFilters.minRating) count++;
+    if (localFilters.maxDistance) count++;
+    if (localFilters.languages?.length) count++;
+    if (localFilters.specializations?.length) count++;
+    if (localFilters.facilities?.length) count++;
+    if (localFilters.hasImages) count++;
+    if (localFilters.establishedAfter || localFilters.establishedBefore) count++;
+    if (localFilters.minStudents || localFilters.maxStudents) count++;
+    return count;
+  };
+
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
   return (
-    <div className={className}>
-      <Button
-        variant="outline"
-        onClick={onToggle}
-        className="flex items-center gap-2"
-      >
-        <Filter className="h-4 w-4" />
-        Advanced Filters
-        {activeFiltersCount > 0 && (
-          <Badge variant="secondary" className="ml-1">
-            {activeFiltersCount}
-          </Badge>
-        )}
-      </Button>
-
-      {isOpen && (
-        <Card className="mt-4 shadow-lg">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Advanced Search Filters</CardTitle>
-              <Button variant="ghost" size="sm" onClick={onToggle}>
-                <X className="h-4 w-4" />
+    <Card className={cn("w-full", className)}>
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="h-5 w-5 text-orange-500" />
+            Filtry wyszukiwania
+            {getActiveFiltersCount() > 0 && (
+              <Badge variant="secondary" className="ml-2">
+                {getActiveFiltersCount()}
+              </Badge>
+            )}
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            {getActiveFiltersCount() > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearAllFilters}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="h-4 w-4 mr-1" />
+                Wyczyść
               </Button>
-            </div>
-          </CardHeader>
-          
-          <CardContent className="space-y-6">
-            {/* School Type & Location */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label>School Type</Label>
-                <Select
-                  value={localFilters.type || ''}
-                  onValueChange={(value) => updateFilter('type', value || undefined)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Any type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Any type</SelectItem>
-                    {SCHOOL_TYPES.map((type: { value: string; label: string }) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            )}
+            {onToggle && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onToggle}
+                className="lg:hidden"
+              >
+                {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </Button>
+            )}
+          </div>
+        </div>
 
+        {/* Quick Filters */}
+        <div className="space-y-3">
+          <Label className="text-sm font-medium text-gray-700">Szybkie filtry</Label>
+          <div className="flex flex-wrap gap-2">
+            {QUICK_FILTERS.map((quickFilter, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                onClick={() => applyQuickFilter(quickFilter)}
+                className="text-xs hover:bg-orange-50 hover:border-orange-200 hover:text-orange-700"
+              >
+                {quickFilter.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className={cn("space-y-6", !isOpen && "hidden lg:block")}>
+        {/* Location Filters */}
+        <Collapsible
+          open={expandedSections.location}
+          onOpenChange={() => toggleSection('location')}
+        >
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-blue-500" />
+              <span className="font-medium">Lokalizacja</span>
+            </div>
+            {expandedSections.location ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 pt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Voivodeship</Label>
+                <Label htmlFor="voivodeship">Województwo</Label>
                 <Select
                   value={localFilters.voivodeship || ''}
                   onValueChange={(value) => updateFilter('voivodeship', value || undefined)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Any voivodeship" />
+                    <SelectValue placeholder="Wybierz województwo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Any voivodeship</SelectItem>
-                    {VOIVODESHIPS.map((voivodeship: string) => (
+                    <SelectItem value="">Wszystkie</SelectItem>
+                    {VOIVODESHIPS.map(voivodeship => (
                       <SelectItem key={voivodeship} value={voivodeship}>
                         {voivodeship}
                       </SelectItem>
@@ -208,294 +256,255 @@ export default function AdvancedSearchFilters({
               </div>
 
               <div className="space-y-2">
-                <Label>City</Label>
+                <Label htmlFor="city">Miasto</Label>
                 <Input
-                  placeholder="Enter city name"
+                  id="city"
+                  placeholder="Wpisz nazwę miasta"
                   value={localFilters.city || ''}
                   onChange={(e) => updateFilter('city', e.target.value || undefined)}
                 />
               </div>
             </div>
 
-            <Separator />
+            <div className="space-y-2">
+              <Label>Maksymalna odległość: {localFilters.maxDistance || 50} km</Label>
+              <Slider
+                value={[localFilters.maxDistance || 50]}
+                onValueChange={([value]) => updateFilter('maxDistance', value)}
+                max={100}
+                min={1}
+                step={1}
+                className="w-full"
+              />
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
 
-            {/* Rating & Distance */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <Label>Minimum Rating</Label>
-                <div className="px-2">
-                  <Slider
-                    value={[localFilters.minRating || 0]}
-                    onValueChange={([value]) => updateFilter('minRating', value || undefined)}
-                    max={5}
-                    min={0}
-                    step={0.1}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-sm text-gray-500 mt-1">
-                    <span>0</span>
-                    <span className="font-medium">
-                      {localFilters.minRating ? `${localFilters.minRating.toFixed(1)}+` : 'Any'}
-                    </span>
-                    <span>5</span>
-                  </div>
-                </div>
-              </div>
+        <Separator />
 
-              <div className="space-y-3">
-                <Label>Maximum Distance (km)</Label>
-                <div className="px-2">
-                  <Slider
-                    value={[localFilters.maxDistance || 50]}
-                    onValueChange={([value]) => updateFilter('maxDistance', value)}
-                    max={100}
-                    min={1}
-                    step={1}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-sm text-gray-500 mt-1">
-                    <span>1km</span>
-                    <span className="font-medium">
-                      {localFilters.maxDistance || 50}km
-                    </span>
-                    <span>100km</span>
-                  </div>
-                </div>
+        {/* School Type Filters */}
+        <Collapsible
+          open={expandedSections.type}
+          onOpenChange={() => toggleSection('type')}
+        >
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Building className="h-4 w-4 text-green-500" />
+              <span className="font-medium">Typ szkoły</span>
+            </div>
+            {expandedSections.type ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 pt-4">
+            <Select
+              value={localFilters.type || ''}
+              onValueChange={(value) => updateFilter('type', value || undefined)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Wybierz typ szkoły" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Wszystkie typy</SelectItem>
+                {SCHOOL_TYPES.map(type => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Separator />
+
+        {/* Rating & Quality Filters */}
+        <Collapsible
+          open={expandedSections.rating}
+          onOpenChange={() => toggleSection('rating')}
+        >
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Star className="h-4 w-4 text-yellow-500" />
+              <span className="font-medium">Oceny i jakość</span>
+            </div>
+            {expandedSections.rating ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 pt-4">
+            <div className="space-y-2">
+              <Label>Minimalna ocena: {localFilters.minRating || 0}/5</Label>
+              <Slider
+                value={[localFilters.minRating || 0]}
+                onValueChange={([value]) => updateFilter('minRating', value)}
+                max={5}
+                min={0}
+                step={0.1}
+                className="w-full"
+              />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="hasImages"
+                checked={localFilters.hasImages || false}
+                onCheckedChange={(checked) => updateFilter('hasImages', checked || undefined)}
+              />
+              <Label htmlFor="hasImages" className="flex items-center gap-2">
+                <Image className="h-4 w-4" />
+                Tylko szkoły ze zdjęciami
+              </Label>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Separator />
+
+        {/* Academic Filters */}
+        <Collapsible
+          open={expandedSections.academic}
+          onOpenChange={() => toggleSection('academic')}
+        >
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Languages className="h-4 w-4 text-purple-500" />
+              <span className="font-medium">Oferta edukacyjna</span>
+            </div>
+            {expandedSections.academic ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 pt-4">
+            <div className="space-y-3">
+              <Label>Języki obce</Label>
+              <div className="flex flex-wrap gap-2">
+                {LANGUAGES.map(language => (
+                  <Button
+                    key={language}
+                    variant={localFilters.languages?.includes(language) ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => toggleArrayFilter('languages', language)}
+                    className="text-xs"
+                  >
+                    {language}
+                  </Button>
+                ))}
               </div>
             </div>
 
-            <Separator />
-
-            {/* Student Count Range */}
             <div className="space-y-3">
-              <Label>Student Count Range</Label>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Input
-                    type="number"
-                    placeholder="Min students"
-                    value={localFilters.minStudents || ''}
-                    onChange={(e) => updateFilter('minStudents', e.target.value ? parseInt(e.target.value) : undefined)}
-                  />
-                </div>
-                <div>
-                  <Input
-                    type="number"
-                    placeholder="Max students"
-                    value={localFilters.maxStudents || ''}
-                    onChange={(e) => updateFilter('maxStudents', e.target.value ? parseInt(e.target.value) : undefined)}
-                  />
-                </div>
+              <Label>Specjalizacje</Label>
+              <div className="flex flex-wrap gap-2">
+                {SPECIALIZATIONS.map(spec => (
+                  <Button
+                    key={spec}
+                    variant={localFilters.specializations?.includes(spec) ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => toggleArrayFilter('specializations', spec)}
+                    className="text-xs"
+                  >
+                    {spec}
+                  </Button>
+                ))}
               </div>
             </div>
+          </CollapsibleContent>
+        </Collapsible>
 
-            <Separator />
+        <Separator />
 
-            {/* Establishment Year Range */}
+        {/* Facilities Filters */}
+        <Collapsible
+          open={expandedSections.facilities}
+          onOpenChange={() => toggleSection('facilities')}
+        >
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Award className="h-4 w-4 text-orange-500" />
+              <span className="font-medium">Udogodnienia</span>
+            </div>
+            {expandedSections.facilities ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 pt-4">
             <div className="space-y-3">
-              <Label>Establishment Year</Label>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Input
-                    type="number"
-                    placeholder="From year"
-                    value={localFilters.establishedAfter || ''}
-                    onChange={(e) => updateFilter('establishedAfter', e.target.value ? parseInt(e.target.value) : undefined)}
-                  />
-                </div>
-                <div>
-                  <Input
-                    type="number"
-                    placeholder="To year"
-                    value={localFilters.establishedBefore || ''}
-                    onChange={(e) => updateFilter('establishedBefore', e.target.value ? parseInt(e.target.value) : undefined)}
-                  />
-                </div>
+              <Label>Dostępne udogodnienia</Label>
+              <div className="flex flex-wrap gap-2">
+                {FACILITIES.map(facility => (
+                  <Button
+                    key={facility}
+                    variant={localFilters.facilities?.includes(facility) ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => toggleArrayFilter('facilities', facility)}
+                    className="text-xs"
+                  >
+                    {facility}
+                  </Button>
+                ))}
               </div>
             </div>
+          </CollapsibleContent>
+        </Collapsible>
 
-            <Separator />
+        <Separator />
 
-            {/* Languages */}
-            <Collapsible>
-              <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-                  <Label className="cursor-pointer">Languages Offered</Label>
-                  <div className="flex items-center gap-2">
-                    {(localFilters.languages?.length || 0) > 0 && (
-                      <Badge variant="secondary">
-                        {localFilters.languages?.length} selected
-                      </Badge>
-                    )}
-                  </div>
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-3">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {LANGUAGES.map((language: string) => (
-                    <div key={language} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`lang-${language}`}
-                        checked={(localFilters.languages || []).includes(language)}
-                        onCheckedChange={(checked: boolean) => 
-                          handleArrayFilter('languages', language, checked)
-                        }
-                      />
-                      <Label htmlFor={`lang-${language}`} className="text-sm">
-                        {language}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-
-            <Separator />
-
-            {/* Specializations */}
-            <Collapsible>
-              <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-                  <Label className="cursor-pointer">Specializations</Label>
-                  <div className="flex items-center gap-2">
-                    {(localFilters.specializations?.length || 0) > 0 && (
-                      <Badge variant="secondary">
-                        {localFilters.specializations?.length} selected
-                      </Badge>
-                    )}
-                  </div>
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-3">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {SPECIALIZATIONS.map((spec: string) => (
-                    <div key={spec} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`spec-${spec}`}
-                        checked={(localFilters.specializations || []).includes(spec)}
-                        onCheckedChange={(checked: boolean) => 
-                          handleArrayFilter('specializations', spec, checked)
-                        }
-                      />
-                      <Label htmlFor={`spec-${spec}`} className="text-sm">
-                        {spec}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-
-            <Separator />
-
-            {/* Facilities */}
-            <Collapsible>
-              <CollapsibleTrigger asChild>
-                <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-                  <Label className="cursor-pointer">Facilities</Label>
-                  <div className="flex items-center gap-2">
-                    {(localFilters.facilities?.length || 0) > 0 && (
-                      <Badge variant="secondary">
-                        {localFilters.facilities?.length} selected
-                      </Badge>
-                    )}
-                  </div>
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-3">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {FACILITIES.map((facility: { value: string; label: string; icon: any }) => {
-                    const Icon = facility.icon;
-                    return (
-                      <div key={facility.value} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`facility-${facility.value}`}
-                          checked={(localFilters.facilities || []).includes(facility.value)}
-                          onCheckedChange={(checked: boolean) => 
-                            handleArrayFilter('facilities', facility.value, checked)
-                          }
-                        />
-                        <Label htmlFor={`facility-${facility.value}`} className="text-sm flex items-center gap-1">
-                          <Icon className="h-3 w-3" />
-                          {facility.label}
-                        </Label>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
-
-            <Separator />
-
-            {/* Additional Options */}
-            <div className="space-y-3">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="hasImages"
-                  checked={localFilters.hasImages || false}
-                  onCheckedChange={(checked: boolean) => updateFilter('hasImages', checked)}
+        {/* Other Filters */}
+        <Collapsible
+          open={expandedSections.other}
+          onOpenChange={() => toggleSection('other')}
+        >
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-indigo-500" />
+              <span className="font-medium">Inne kryteria</span>
+            </div>
+            {expandedSections.other ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 pt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="establishedAfter">Założona po roku</Label>
+                <Input
+                  id="establishedAfter"
+                  type="number"
+                  placeholder="np. 2000"
+                  value={localFilters.establishedAfter || ''}
+                  onChange={(e) => updateFilter('establishedAfter', e.target.value ? Number(e.target.value) : undefined)}
                 />
-                <Label htmlFor="hasImages">Only schools with photos</Label>
-              </div>
-            </div>
-
-            <Separator />
-
-            {/* Sort Options */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Sort By</Label>
-                <Select
-                  value={localFilters.sortBy || 'rating'}
-                  onValueChange={(value) => updateFilter('sortBy', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="rating">Rating</SelectItem>
-                    <SelectItem value="distance">Distance</SelectItem>
-                    <SelectItem value="name">Name</SelectItem>
-                    <SelectItem value="students">Student Count</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
 
               <div className="space-y-2">
-                <Label>Sort Order</Label>
-                <Select
-                  value={localFilters.sortOrder || 'desc'}
-                  onValueChange={(value) => updateFilter('sortOrder', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="desc">Descending</SelectItem>
-                    <SelectItem value="asc">Ascending</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label htmlFor="establishedBefore">Założona przed rokiem</Label>
+                <Input
+                  id="establishedBefore"
+                  type="number"
+                  placeholder="np. 2020"
+                  value={localFilters.establishedBefore || ''}
+                  onChange={(e) => updateFilter('establishedBefore', e.target.value ? Number(e.target.value) : undefined)}
+                />
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3 pt-4">
-              <Button onClick={handleApplyFilters} className="flex-1">
-                Apply Filters
-                {activeFiltersCount > 0 && (
-                  <Badge variant="secondary" className="ml-2">
-                    {activeFiltersCount}
-                  </Badge>
-                )}
-              </Button>
-              <Button variant="outline" onClick={handleClearFilters}>
-                Clear All
-              </Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="minStudents">Minimalna liczba uczniów</Label>
+                <Input
+                  id="minStudents"
+                  type="number"
+                  placeholder="np. 100"
+                  value={localFilters.minStudents || ''}
+                  onChange={(e) => updateFilter('minStudents', e.target.value ? Number(e.target.value) : undefined)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="maxStudents">Maksymalna liczba uczniów</Label>
+                <Input
+                  id="maxStudents"
+                  type="number"
+                  placeholder="np. 1000"
+                  value={localFilters.maxStudents || ''}
+                  onChange={(e) => updateFilter('maxStudents', e.target.value ? Number(e.target.value) : undefined)}
+                />
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+          </CollapsibleContent>
+        </Collapsible>
+      </CardContent>
+    </Card>
   );
 }

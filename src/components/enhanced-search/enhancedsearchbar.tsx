@@ -1,175 +1,180 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { Search, MapPin, Filter, X, Clock, TrendingUp, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, MapPin, Clock, X, Sparkles, TrendingUp, Filter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface SearchSuggestion {
   id: string;
   text: string;
-  type: "school" | "location" | "category";
+  type: 'school' | 'city' | 'type' | 'recent' | 'trending';
   icon?: React.ReactNode;
+  count?: number;
 }
 
 interface EnhancedSearchBarProps {
+  value: string;
+  onChange: (value: string) => void;
   onSearch: (query: string) => void;
   placeholder?: string;
+  variant?: 'hero' | 'compact' | 'default';
   className?: string;
-  variant?: "default" | "hero" | "compact";
-  showFilters?: boolean;
+  showSuggestions?: boolean;
+  onFilterToggle?: () => void;
+  filterCount?: number;
 }
 
-const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
+// Mock suggestions - in real app, these would come from API
+const TRENDING_SEARCHES = [
+  { id: '1', text: 'Liceum Ogólnokształcące', type: 'type' as const, count: 156 },
+  { id: '2', text: 'Warszawa', type: 'city' as const, count: 89 },
+  { id: '3', text: 'Technikum informatyczne', type: 'type' as const, count: 67 },
+  { id: '4', text: 'Kraków', type: 'city' as const, count: 45 },
+  { id: '5', text: 'Szkoła podstawowa', type: 'type' as const, count: 234 },
+];
+
+const QUICK_SUGGESTIONS = [
+  { id: 'q1', text: 'Najlepiej oceniane szkoły', type: 'trending' as const },
+  { id: 'q2', text: 'Szkoły w mojej okolicy', type: 'trending' as const },
+  { id: 'q3', text: 'Licea z rozszerzonym angielskim', type: 'trending' as const },
+  { id: 'q4', text: 'Technika informatyczne', type: 'trending' as const },
+];
+
+export default function EnhancedSearchBar({
+  value,
+  onChange,
   onSearch,
-  placeholder = "Wyszukaj szkołę, miasto lub województwo...",
+  placeholder = "Szukaj szkół, miast, typów...",
+  variant = 'default',
   className,
-  variant = "default",
-  showFilters = true
-}) => {
-  const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchHistory, setSearchHistory] = useState<string[]>([]);
-  const [showHistory, setShowHistory] = useState(false);
+  showSuggestions = true,
+  onFilterToggle,
+  filterCount = 0
+}: EnhancedSearchBarProps) {
   const [isFocused, setIsFocused] = useState(false);
-  
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Mock suggestions data
-  const mockSuggestions: SearchSuggestion[] = [
-    { id: "1", text: "Liceum Ogólnokształcące", type: "category", icon: <TrendingUp className="w-4 h-4" /> },
-    { id: "2", text: "Warszawa", type: "location", icon: <MapPin className="w-4 h-4" /> },
-    { id: "3", text: "Szkoła Podstawowa nr 15", type: "school", icon: <Sparkles className="w-4 h-4" /> },
-    { id: "4", text: "Kraków", type: "location", icon: <MapPin className="w-4 h-4" /> },
-    { id: "5", text: "Technikum Informatyczne", type: "category", icon: <TrendingUp className="w-4 h-4" /> },
-    { id: "6", text: "Gdańsk", type: "location", icon: <MapPin className="w-4 h-4" /> },
-  ];
-
-  // Debounced search effect
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (query.length > 1) {
-        setIsLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-          const filtered = mockSuggestions.filter(suggestion =>
-            suggestion.text.toLowerCase().includes(query.toLowerCase())
-          );
-          setSuggestions(filtered);
-          setShowSuggestions(true);
-          setIsLoading(false);
-        }, 300);
-      } else {
-        setSuggestions([]);
-        setShowSuggestions(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [query]);
-
-  // Click outside to close suggestions
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false);
-        setShowHistory(false);
-        setIsFocused(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   // Load search history from localStorage
   useEffect(() => {
-    const history = localStorage.getItem("searchHistory");
+    const history = localStorage.getItem('schoolSearchHistory');
     if (history) {
       setSearchHistory(JSON.parse(history));
     }
   }, []);
 
-  const handleSearch = (searchQuery: string = query) => {
-    if (searchQuery.trim()) {
-      // Add to search history
-      const newHistory = [searchQuery, ...searchHistory.filter(h => h !== searchQuery)].slice(0, 5);
-      setSearchHistory(newHistory);
-      localStorage.setItem("searchHistory", JSON.stringify(newHistory));
+  // Generate suggestions based on input
+  useEffect(() => {
+    if (!value.trim()) {
+      // Show trending and quick suggestions when empty
+      const trendingSuggestions = TRENDING_SEARCHES.map(item => ({
+        ...item,
+        icon: item.type === 'city' ? <MapPin className="h-4 w-4" /> : <TrendingUp className="h-4 w-4" />
+      }));
       
-      onSearch(searchQuery);
-      setShowSuggestions(false);
-      setShowHistory(false);
-      setIsFocused(false);
+      const recentSuggestions = searchHistory.slice(0, 3).map((query, index) => ({
+        id: `recent-${index}`,
+        text: query,
+        type: 'recent' as const,
+        icon: <Clock className="h-4 w-4" />
+      }));
+
+      setSuggestions([...recentSuggestions, ...trendingSuggestions]);
+    } else {
+      // Filter suggestions based on input
+      const filtered = TRENDING_SEARCHES
+        .filter(item => item.text.toLowerCase().includes(value.toLowerCase()))
+        .map(item => ({
+          ...item,
+          icon: item.type === 'city' ? <MapPin className="h-4 w-4" /> : <TrendingUp className="h-4 w-4" />
+        }));
+      
+      setSuggestions(filtered);
     }
+  }, [value, searchHistory]);
+
+  // Handle click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+        setIsFocused(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    onChange(newValue);
+    setShowDropdown(true);
   };
 
   const handleInputFocus = () => {
     setIsFocused(true);
-    if (query.length === 0 && searchHistory.length > 0) {
-      setShowHistory(true);
+    setShowDropdown(true);
+  };
+
+  const handleSearch = (query?: string) => {
+    const searchQuery = query || value;
+    if (searchQuery.trim()) {
+      // Add to search history
+      const newHistory = [searchQuery, ...searchHistory.filter(h => h !== searchQuery)].slice(0, 10);
+      setSearchHistory(newHistory);
+      localStorage.setItem('schoolSearchHistory', JSON.stringify(newHistory));
+      
+      onSearch(searchQuery);
+      setShowDropdown(false);
+      inputRef.current?.blur();
     }
   };
 
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
-    setQuery(suggestion.text);
+    onChange(suggestion.text);
     handleSearch(suggestion.text);
   };
 
-  const handleHistoryClick = (historyItem: string) => {
-    setQuery(historyItem);
-    handleSearch(historyItem);
-  };
-
-  const clearQuery = () => {
-    setQuery("");
-    setSuggestions([]);
-    setShowSuggestions(false);
-    setShowHistory(false);
+  const clearSearch = () => {
+    onChange('');
     inputRef.current?.focus();
   };
 
-  const getSuggestionTypeColor = (type: string) => {
-    switch (type) {
-      case "school":
-        return "bg-blue-100 text-blue-700 border-blue-200";
-      case "location":
-        return "bg-green-100 text-green-700 border-green-200";
-      case "category":
-        return "bg-orange-100 text-orange-700 border-orange-200";
-      default:
-        return "bg-gray-100 text-gray-700 border-gray-200";
-    }
+  const clearHistory = () => {
+    setSearchHistory([]);
+    localStorage.removeItem('schoolSearchHistory');
   };
 
   const getVariantStyles = () => {
     switch (variant) {
-      case "hero":
+      case 'hero':
         return {
-          container: "relative w-full",
-          input: "h-16 text-lg pl-16 pr-32 rounded-2xl border-2 border-orange-200 focus:border-orange-400 bg-white/90 backdrop-blur-sm shadow-lg",
-          searchIcon: "absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-orange-500",
-          button: "absolute right-3 top-1/2 transform -translate-y-1/2 h-10 px-6 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl shadow-lg"
+          container: "max-w-2xl mx-auto",
+          input: "h-14 text-lg pl-14 pr-32",
+          icon: "h-6 w-6 left-4",
+          button: "h-10 px-6 right-2 top-2"
         };
-      case "compact":
+      case 'compact':
         return {
-          container: "relative w-full max-w-md",
-          input: "h-10 text-sm pl-10 pr-20 rounded-lg border border-gray-300 focus:border-orange-400",
-          searchIcon: "absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400",
-          button: "absolute right-2 top-1/2 transform -translate-y-1/2 h-6 px-3 text-xs"
+          container: "max-w-md",
+          input: "h-9 text-sm pl-10 pr-24",
+          icon: "h-4 w-4 left-3",
+          button: "h-7 px-3 right-1 top-1 text-xs"
         };
       default:
         return {
-          container: "relative w-full",
-          input: "h-12 text-base pl-12 pr-24 rounded-xl border border-gray-300 focus:border-orange-400 bg-white shadow-sm",
-          searchIcon: "absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400",
-          button: "absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-4"
+          container: "max-w-xl",
+          input: "h-11 pl-12 pr-28",
+          icon: "h-5 w-5 left-3",
+          button: "h-8 px-4 right-1.5 top-1.5"
         };
     }
   };
@@ -177,146 +182,216 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
   const styles = getVariantStyles();
 
   return (
-    <div ref={searchRef} className={cn(styles.container, className)}>
-      {/* Search Input */}
+    <div ref={searchRef} className={cn("relative w-full", styles.container, className)}>
+      {/* Main Search Input */}
       <div className="relative">
-        <Search className={styles.searchIcon} />
+        <Search className={cn("absolute text-gray-400 pointer-events-none", styles.icon)} />
         <Input
           ref={inputRef}
           type="text"
-          placeholder={placeholder}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          value={value}
+          onChange={handleInputChange}
           onFocus={handleInputFocus}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === 'Enter') {
+              e.preventDefault();
               handleSearch();
             }
+            if (e.key === 'Escape') {
+              setShowDropdown(false);
+              inputRef.current?.blur();
+            }
           }}
+          placeholder={placeholder}
           className={cn(
+            "w-full border-2 transition-all duration-200",
             styles.input,
-            isFocused && "ring-2 ring-orange-200 ring-offset-2",
-            "transition-all duration-200"
+            isFocused 
+              ? "border-orange-300 ring-2 ring-orange-100 shadow-lg" 
+              : "border-gray-200 hover:border-gray-300"
           )}
         />
         
         {/* Clear button */}
-        {query && (
-          <button
-            onClick={clearQuery}
-            className="absolute right-20 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+        {value && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearSearch}
+            className="absolute right-20 top-1/2 -translate-y-1/2 h-6 w-6 p-0 hover:bg-gray-100"
           >
-            <X className="w-4 h-4 text-gray-400" />
-          </button>
+            <X className="h-4 w-4" />
+          </Button>
+        )}
+
+        {/* Filter toggle button */}
+        {onFilterToggle && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onFilterToggle}
+            className={cn(
+              "absolute top-1/2 -translate-y-1/2 h-8 px-2 hover:bg-gray-100",
+              variant === 'compact' ? "right-8" : "right-12"
+            )}
+          >
+            <Filter className="h-4 w-4" />
+            {filterCount > 0 && (
+              <Badge variant="secondary" className="ml-1 h-5 min-w-5 text-xs">
+                {filterCount}
+              </Badge>
+            )}
+          </Button>
         )}
         
         {/* Search button */}
         <Button
           onClick={() => handleSearch()}
-          className={styles.button}
-          disabled={!query.trim()}
+          className={cn("absolute", styles.button)}
+          size={variant === 'compact' ? 'sm' : 'default'}
         >
-          {isLoading ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          ) : (
-            "Szukaj"
-          )}
+          {variant === 'compact' ? 'Szukaj' : 'Szukaj'}
         </Button>
       </div>
 
       {/* Suggestions Dropdown */}
-      {(showSuggestions || showHistory) && (
-        <Card className="absolute top-full left-0 right-0 mt-2 z-50 shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
+      {showSuggestions && showDropdown && (
+        <Card className="absolute top-full left-0 right-0 mt-2 shadow-xl border-2 border-gray-100 z-50 max-h-96 overflow-hidden">
           <CardContent className="p-0">
-            {/* Search History */}
-            {showHistory && searchHistory.length > 0 && (
-              <div className="p-4 border-b border-gray-100">
-                <div className="flex items-center space-x-2 mb-3">
-                  <Clock className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm font-medium text-gray-600">Ostatnie wyszukiwania</span>
+            {/* Quick suggestions when empty */}
+            {!value.trim() && (
+              <>
+                {searchHistory.length > 0 && (
+                  <div className="p-4 border-b border-gray-100">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        Ostatnie wyszukiwania
+                      </h4>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={clearHistory}
+                        className="text-xs text-gray-500 hover:text-gray-700"
+                      >
+                        Wyczyść
+                      </Button>
+                    </div>
+                    <div className="space-y-1">
+                      {searchHistory.slice(0, 3).map((query, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleSuggestionClick({ id: `recent-${index}`, text: query, type: 'recent' })}
+                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
+                        >
+                          <Clock className="h-4 w-4 text-gray-400" />
+                          <span className="text-sm">{query}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="p-4 border-b border-gray-100">
+                  <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                    <Sparkles className="h-4 w-4" />
+                    Szybkie wyszukiwania
+                  </h4>
+                  <div className="space-y-1">
+                    {QUICK_SUGGESTIONS.map((suggestion) => (
+                      <button
+                        key={suggestion.id}
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        className="w-full text-left px-3 py-2 rounded-lg hover:bg-orange-50 transition-colors flex items-center gap-3"
+                      >
+                        <Sparkles className="h-4 w-4 text-orange-500" />
+                        <span className="text-sm">{suggestion.text}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  {searchHistory.map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleHistoryClick(item)}
-                      className="flex items-center w-full p-2 text-left hover:bg-gray-50 rounded-lg transition-colors group"
-                    >
-                      <Clock className="w-4 h-4 text-gray-400 mr-3 group-hover:text-orange-500" />
-                      <span className="text-sm text-gray-700 group-hover:text-gray-900">{item}</span>
-                    </button>
-                  ))}
+
+                <div className="p-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4" />
+                    Popularne wyszukiwania
+                  </h4>
+                  <div className="space-y-1">
+                    {TRENDING_SEARCHES.slice(0, 5).map((suggestion) => (
+                      <button
+                        key={suggestion.id}
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        className="w-full text-left px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-between"
+                      >
+                        <div className="flex items-center gap-3">
+                          {suggestion.type === 'city' ? (
+                            <MapPin className="h-4 w-4 text-blue-500" />
+                          ) : (
+                            <TrendingUp className="h-4 w-4 text-green-500" />
+                          )}
+                          <span className="text-sm">{suggestion.text}</span>
+                        </div>
+                        {suggestion.count && (
+                          <Badge variant="secondary" className="text-xs">
+                            {suggestion.count}
+                          </Badge>
+                        )}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </>
             )}
 
-            {/* Suggestions */}
-            {showSuggestions && suggestions.length > 0 && (
+            {/* Filtered suggestions when typing */}
+            {value.trim() && suggestions.length > 0 && (
               <div className="p-4">
-                <div className="flex items-center space-x-2 mb-3">
-                  <Sparkles className="w-4 h-4 text-orange-500" />
-                  <span className="text-sm font-medium text-gray-600">Sugestie</span>
-                </div>
+                <h4 className="text-sm font-medium text-gray-700 mb-3">
+                  Sugestie dla "{value}"
+                </h4>
                 <div className="space-y-1">
                   {suggestions.map((suggestion) => (
                     <button
                       key={suggestion.id}
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className="flex items-center justify-between w-full p-3 text-left hover:bg-orange-50 rounded-lg transition-colors group"
+                      className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-between"
                     >
-                      <div className="flex items-center space-x-3">
-                        <div className="text-orange-500 group-hover:text-orange-600">
-                          {suggestion.icon}
-                        </div>
-                        <span className="text-sm text-gray-700 group-hover:text-gray-900 font-medium">
-                          {suggestion.text}
+                      <div className="flex items-center gap-3">
+                        {suggestion.icon}
+                        <span className="text-sm">
+                          {suggestion.text.split(new RegExp(`(${value})`, 'gi')).map((part, index) =>
+                            part.toLowerCase() === value.toLowerCase() ? (
+                              <mark key={index} className="bg-yellow-200 px-0">
+                                {part}
+                              </mark>
+                            ) : (
+                              part
+                            )
+                          )}
                         </span>
                       </div>
-                      <Badge 
-                        variant="outline" 
-                        className={cn("text-xs", getSuggestionTypeColor(suggestion.type))}
-                      >
-                        {suggestion.type === "school" && "Szkoła"}
-                        {suggestion.type === "location" && "Lokalizacja"}
-                        {suggestion.type === "category" && "Kategoria"}
-                      </Badge>
+                      {suggestion.count && (
+                        <Badge variant="secondary" className="text-xs">
+                          {suggestion.count}
+                        </Badge>
+                      )}
                     </button>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* No results */}
-            {showSuggestions && suggestions.length === 0 && query.length > 1 && !isLoading && (
-              <div className="p-6 text-center">
-                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Search className="w-6 h-6 text-gray-400" />
-                </div>
-                <p className="text-sm text-gray-500">Brak wyników dla "{query}"</p>
-                <p className="text-xs text-gray-400 mt-1">Spróbuj użyć innych słów kluczowych</p>
+            {/* No suggestions */}
+            {value.trim() && suggestions.length === 0 && (
+              <div className="p-4 text-center text-gray-500">
+                <Search className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                <p className="text-sm">Brak sugestii dla "{value}"</p>
+                <p className="text-xs text-gray-400 mt-1">Spróbuj wpisać nazwę szkoły, miasta lub typu</p>
               </div>
             )}
           </CardContent>
         </Card>
       )}
-
-      {/* Filters (if enabled) */}
-      {showFilters && variant !== "compact" && (
-        <div className="flex items-center space-x-2 mt-4">
-          <Button variant="outline" size="sm" className="border-orange-200 hover:bg-orange-50">
-            <Filter className="w-4 h-4 mr-2" />
-            Filtry
-          </Button>
-          <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
-            Wszystkie typy szkół
-          </Badge>
-          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-            Cała Polska
-          </Badge>
-        </div>
-      )}
     </div>
   );
-};
-
-export default EnhancedSearchBar;
+}
