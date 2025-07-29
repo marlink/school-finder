@@ -19,7 +19,8 @@ import {
   TrendingUp,
   Bell,
   Sparkles,
-  Shield
+  Shield,
+  Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -76,9 +77,15 @@ export function Navbar() {
       description: "Znajdź idealną szkołę"
     },
     { 
+      name: "Mapa", 
+      href: "/map", 
+      icon: MapPin,
+      description: "Zobacz szkoły na mapie"
+    },
+    { 
       name: "Regiony", 
       href: "/regions", 
-      icon: MapPin,
+      icon: Globe,
       description: "Przeglądaj według lokalizacji"
     },
     { 

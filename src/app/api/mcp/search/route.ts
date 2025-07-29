@@ -1,5 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mcpService } from '@/lib/mcp/service';
+import { validateRequest, getSecurityHeaders } from '@/lib/security';
+import { z } from 'zod';
+
+// MCP Search validation schema
+const mcpSearchSchema = z.object({
+  query: z.string().min(1, 'Query is required').max(200, 'Query too long'),
+  filters: z.object({
+    schoolType: z.enum(['public', 'private', 'charter', 'all']).optional(),
+    region: z.string().optional(),
+    city: z.string().optional(),
+    minRating: z.number().min(0).max(5).optional(),
+    maxDistance: z.number().min(1).max(100).optional(),
+  }).optional(),
+  limit: z.number().min(1).max(50).default(10),
+});
 
 /**
  * MCP Search API
@@ -8,16 +23,33 @@ import { mcpService } from '@/lib/mcp/service';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Parse request body
-    const body = await request.json();
-    const { query, filters, limit = 10 } = body;
+    // Apply security validation with rate limiting
+    const securityCheck = await validateRequest(request, {
+      allowedMethods: ['POST'],
+      rateLimitConfig: {
+        windowMs: 1 * 60 * 1000, // 1 minute
+        maxRequests: 20, // Max 20 searches per minute per IP
+        message: 'Too many search requests. Please try again later.'
+      }
+    });
 
-    if (!query || typeof query !== 'string') {
+    if (securityCheck) return securityCheck;
+
+    // Parse and validate request body
+    const body = await request.json();
+    const validationResult = mcpSearchSchema.safeParse(body);
+    
+    if (!validationResult.success) {
       return NextResponse.json(
-        { error: 'Query is required and must be a string' },
+        { 
+          error: 'Validation failed', 
+          details: validationResult.error.issues 
+        },
         { status: 400 }
       );
     }
+
+    const { query, filters, limit } = validationResult.data;
 
     // Start timing for performance measurement
     const startTime = performance.now();
@@ -38,12 +70,20 @@ export async function POST(request: NextRequest) {
     const processingTime = Math.round(performance.now() - startTime);
 
     // Return search results
-    return NextResponse.json({
+    const response = NextResponse.json({
       results: searchResults,
       totalResults: searchResults.length,
       processingTime,
       suggestions
     });
+
+    // Add security headers
+    const securityHeaders = getSecurityHeaders();
+    Object.entries(securityHeaders).forEach(([key, value]) => {
+      response.headers.set(key, value);
+    });
+
+    return response;
   } catch (error) {
     console.error('MCP Search API Error:', error);
     return NextResponse.json(
@@ -56,9 +96,21 @@ export async function POST(request: NextRequest) {
 /**
  * Health check endpoint
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    return NextResponse.json({
+    // Apply basic rate limiting for health checks
+    const securityCheck = await validateRequest(request, {
+      allowedMethods: ['GET'],
+      rateLimitConfig: {
+        windowMs: 1 * 60 * 1000, // 1 minute
+        maxRequests: 60, // Max 60 health checks per minute per IP
+        message: 'Too many health check requests.'
+      }
+    });
+
+    if (securityCheck) return securityCheck;
+
+    const response = NextResponse.json({
       status: 'ok',
       message: 'MCP service is healthy',
       timestamp: new Date().toISOString(),
@@ -68,6 +120,14 @@ export async function GET() {
         aiProcessing: true
       }
     });
+
+    // Add security headers
+    const securityHeaders = getSecurityHeaders();
+    Object.entries(securityHeaders).forEach(([key, value]) => {
+      response.headers.set(key, value);
+    });
+
+    return response;
   } catch (error) {
     console.error('MCP Health Check Error:', error);
     return NextResponse.json(

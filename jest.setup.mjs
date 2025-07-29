@@ -1,11 +1,16 @@
-require('@testing-library/jest-dom');
+import '@testing-library/jest-dom';
+import fetch, { Request, Response } from 'node-fetch';
+
+global.fetch = fetch;
+global.Request = Request;
+global.Response = Response;
 
 // Mock the next/image component
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props) => {
-    const React = require('react');
-    return React.createElement('img', props);
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img {...props} />;
   },
 }));
 
@@ -32,9 +37,6 @@ jest.mock('next/navigation', () => ({
   usePathname: () => '/',
   useSearchParams: () => new URLSearchParams(),
 }));
-
-// Mock fetch globally
-global.fetch = jest.fn();
 
 if (typeof window !== 'undefined') {
   // Mock window.matchMedia

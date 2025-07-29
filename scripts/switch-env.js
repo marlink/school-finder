@@ -3,6 +3,7 @@ const path = require('path');
 
 const envFiles = {
   local: '.env.local',
+  testing: '.env.testing',
   staging: '.env.staging', 
   production: '.env.production'
 };
@@ -10,10 +11,11 @@ const envFiles = {
 const targetEnv = process.argv[2];
 
 if (!targetEnv || !envFiles[targetEnv]) {
-  console.log('❌ Usage: node scripts/switch-env.js [local|staging|production]');
+  console.log('❌ Usage: node scripts/switch-env.js [local|testing|staging|production]');
   console.log('');
   console.log('Available environments:');
   console.log('  local      - Local development with staging database');
+  console.log('  testing    - Isolated testing with mocked services');
   console.log('  staging    - Staging environment for testing');
   console.log('  production - Production environment (live users)');
   process.exit(1);

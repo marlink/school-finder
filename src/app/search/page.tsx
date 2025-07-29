@@ -2,54 +2,19 @@
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, X, MapPin, Filter } from 'lucide-react';
+import { Search, X, MapPin, Filter, Grid, List, Map, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import EnhancedSearchBar from '@/components/enhanced-search/enhancedsearchbar';
-import AdvancedSearchFilters from '@/components/enhanced-search/AdvancedSearchFilters';
-import EnhancedSearchResults from '@/components/enhanced-search/EnhancedSearchResults';
-
-interface School {
-  id: string;
-  name: string;
-  type: string;
-  level: string;
-  address: {
-    street?: string;
-    city?: string;
-    district?: string;
-    postalCode?: string;
-    voivodeship?: string;
-  };
-  city: string;
-  voivodeship: string;
-  district?: string;
-  description?: string;
-  website?: string;
-  phone?: string;
-  email?: string;
-  establishedYear?: number;
-  studentCount?: number;
-  averageUserRating?: number;
-  averageGoogleRating?: number;
-  totalRatings?: number;
-  distance?: number;
-  images?: Array<{
-    id: string;
-    imageUrl: string;
-    imageType: string;
-  }>;
-  location?: {
-    latitude: number;
-    longitude: number;
-  };
-  facilities?: string[];
-  languages?: string[];
-  specializations?: string[];
-}
+import ImprovedSearchFilters from '@/components/search/ImprovedSearchFilters';
+import { LocationSearch } from '@/components/search/LocationSearch';
+import EnhancedSearchResults from '@/components/search/EnhancedSearchResults';
+import SchoolsMap from '@/components/search/SchoolsMap';
+import { type SchoolSearchFilters, type School } from '@/types/school';
 
 interface SearchFilters {
   type?: string;
@@ -84,8 +49,11 @@ interface SearchResponse {
   };
   searchInfo: {
     query: string;
-    filters: any;
-    sort: any;
+    filters: SchoolSearchFilters;
+    sort: {
+      sortBy: string;
+      sortOrder: string;
+    };
   };
 }
 
@@ -107,7 +75,7 @@ function SearchPageContent() {
   const router = useRouter();
   
   const [query, setQuery] = useState(searchParams.get('q') || '');
-  const [filters, setFilters] = useState<SearchFilters>({
+  const [filters, setFilters] = useState<SchoolSearchFilters>({
     type: searchParams.get('type') || undefined,
     city: searchParams.get('city') || undefined,
     voivodeship: searchParams.get('voivodeship') || undefined,
@@ -133,7 +101,7 @@ function SearchPageContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
   const [showFilters, setShowFilters] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'map'>('grid');
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   // Get user location
@@ -154,7 +122,7 @@ function SearchPageContent() {
   }, []);
 
   // Update URL when filters change
-  const updateURL = useCallback((newQuery: string, newFilters: SearchFilters, page: number = 1) => {
+  const updateURL = useCallback((newQuery: string, newFilters: SchoolSearchFilters, page: number = 1) => {
     const params = new URLSearchParams();
     
     if (newQuery) params.set('q', newQuery);
@@ -180,7 +148,7 @@ function SearchPageContent() {
   }, [router]);
 
   // Perform search
-  const performSearch = useCallback(async (searchQuery: string, searchFilters: SearchFilters, page: number = 1) => {
+  const performSearch = useCallback(async (searchQuery: string, searchFilters: SchoolSearchFilters, page: number = 1) => {
     setIsLoading(true);
     setError(undefined);
 
@@ -241,7 +209,7 @@ function SearchPageContent() {
   }, [filters, updateURL, performSearch]);
 
   // Handle filter changes
-  const handleFiltersChange = useCallback((newFilters: SearchFilters) => {
+  const handleFiltersChange = useCallback((newFilters: SchoolSearchFilters) => {
     setFilters(newFilters);
     setCurrentPage(1);
     updateURL(query, newFilters, 1);
@@ -297,13 +265,13 @@ function SearchPageContent() {
     if (key === 'languages' || key === 'specializations' || key === 'facilities') {
       newFilters[key] = [];
     } else {
-      delete newFilters[key as keyof SearchFilters];
+      delete newFilters[key as keyof SchoolSearchFilters];
     }
     handleFiltersChange(newFilters);
   };
 
   const clearAllFilters = () => {
-    const clearedFilters: SearchFilters = {
+    const clearedFilters: SchoolSearchFilters = {
       sortBy: 'rating',
       sortOrder: 'desc'
     };
@@ -317,23 +285,87 @@ function SearchPageContent() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Search Schools</h1>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Search Schools</h1>
+              {totalCount > 0 && (
+                <p className="text-gray-600">
+                  Found {totalCount} {totalCount === 1 ? 'school' : 'schools'}
+                  {query && ` for "${query}"`}
+                </p>
+              )}
+            </div>
+            
+            {/* View Mode Toggle */}
+            <div className="flex items-center space-x-2">
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+              >
+                <Grid className="w-4 h-4 mr-1" />
+                Grid
+              </Button>
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+              >
+                <List className="w-4 h-4 mr-1" />
+                List
+              </Button>
+              <Button
+                variant={viewMode === 'map' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('map')}
+              >
+                <Map className="w-4 h-4 mr-1" />
+                Map
+              </Button>
+            </div>
+          </div>
           
           {/* Search Bar */}
           <div className="mb-6" data-tour="search-bar">
             <EnhancedSearchBar
+              value={query}
+              onChange={setQuery}
               onSearch={handleSearch}
               placeholder="Search for schools, locations, or specializations..."
               className="w-full"
             />
           </div>
 
+          {/* Location Search */}
+          <div className="mb-6">
+            <LocationSearch
+              onFiltersChange={(locationFilters) => {
+                const newFilters = { ...filters };
+                if (locationFilters.userLocation) {
+                  newFilters.userLat = locationFilters.userLocation.lat;
+                  newFilters.userLng = locationFilters.userLocation.lng;
+                  newFilters.userLocation = locationFilters.userLocation;
+                }
+                if (locationFilters.maxDistance !== undefined) {
+                  newFilters.maxDistance = locationFilters.maxDistance;
+                }
+                handleFiltersChange(newFilters);
+              }}
+              currentFilters={{
+                userLocation: filters.userLocation || (filters.userLat && filters.userLng ? {
+                  lat: filters.userLat,
+                  lng: filters.userLng
+                } : undefined),
+                maxDistance: filters.maxDistance
+              }}
+            />
+          </div>
+
           {/* Filters Toggle and Active Filters */}
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between" data-tour="filters">
-            <AdvancedSearchFilters
+            <ImprovedSearchFilters
               filters={filters}
               onFiltersChange={handleFiltersChange}
-              onApplyFilters={() => {}}
               onClearFilters={clearAllFilters}
               isOpen={showFilters}
               onToggle={() => setShowFilters(!showFilters)}
@@ -374,21 +406,81 @@ function SearchPageContent() {
 
         {/* Results */}
         <div data-tour="results">
-          <EnhancedSearchResults
-            results={results}
-            totalCount={totalCount}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            isLoading={isLoading}
-            error={error}
-            query={query}
-            onPageChange={handlePageChange}
-            onSortChange={handleSortChange}
-            sortBy={filters.sortBy || 'rating'}
-            sortOrder={filters.sortOrder || 'desc'}
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-          />
+          {viewMode === 'map' ? (
+            <div className="h-[600px] rounded-lg overflow-hidden border shadow-lg">
+              {results.filter(school => school.location?.latitude && school.location?.longitude).length > 0 ? (
+                <SchoolsMap 
+                  schools={results.filter(school => school.location?.latitude && school.location?.longitude).map(school => ({
+                    id: school.id,
+                    name: school.name,
+                    type: school.type,
+                    city: school.city,
+                    voivodeship: school.voivodeship,
+                    address: typeof school.address === 'string' ? school.address : `${school.address?.street || ''}, ${school.city}`.trim(),
+                    rating: school.averageGoogleRating,
+                    reviewCount: school.totalRatings,
+                    studentCount: school.studentCount,
+                    establishedYear: school.establishedYear,
+                    description: school.description,
+                    website: school.website,
+                    latitude: school.location!.latitude,
+                    longitude: school.location!.longitude,
+                    distance: school.distance
+                  }))} 
+                />
+              ) : (
+                <div className="h-full flex items-center justify-center bg-gray-50">
+                  <div className="text-center">
+                    <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      No schools with location data
+                    </h3>
+                    <p className="text-gray-600">
+                      The search results don&apos;t contain schools with geographic coordinates.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <EnhancedSearchResults
+              results={results.map(school => ({
+                id: school.id,
+                name: school.name,
+                type: school.type,
+                city: school.city,
+                voivodeship: school.voivodeship,
+                address: typeof school.address === 'string' ? school.address : `${school.address?.street || ''}, ${school.city}`.trim(),
+                rating: school.averageGoogleRating,
+                reviewCount: school.totalRatings,
+                studentCount: school.studentCount,
+                establishedYear: school.establishedYear,
+                description: school.description,
+                website: school.website,
+                phone: school.phone,
+                email: school.email,
+                languages: school.languages,
+                specializations: school.specializations,
+                facilities: school.facilities,
+                images: school.images?.map(img => img.imageUrl),
+                latitude: school.location?.latitude,
+                longitude: school.location?.longitude,
+                distance: school.distance
+              }))}
+              totalCount={totalCount}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              isLoading={isLoading}
+              error={error}
+              query={query}
+              onPageChange={handlePageChange}
+              onSortChange={handleSortChange}
+              sortBy={filters.sortBy || 'rating'}
+              sortOrder={filters.sortOrder || 'desc'}
+              viewMode={viewMode as 'grid' | 'list'}
+              onViewModeChange={(mode: 'grid' | 'list') => setViewMode(mode)}
+            />
+          )}
         </div>
       </div>
     </div>

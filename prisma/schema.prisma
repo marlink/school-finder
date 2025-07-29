@@ -105,7 +105,6 @@ model SubscriptionLog {
 model School {
   id              String   @id @default(uuid())
   name            String
-  shortName       String?  @map("short_name")
   type            String   // Using the school_type enum values
   address         Json     // { street, city, postal, voivodeship, district }
   contact         Json     // { phone, email, website, fax }

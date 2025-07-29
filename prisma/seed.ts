@@ -9,8 +9,7 @@ async function main() {
   const schools = [
     {
       name: 'Szkoła Podstawowa im. Jana Pawła II',
-      shortName: 'SP im. JP II',
-      type: 'Public',
+      type: 'primary',
       address: {
         street: 'ul. Główna 15',
         city: 'Warszawa',
@@ -37,8 +36,7 @@ async function main() {
     },
     {
       name: 'Liceum Ogólnokształcące im. Marii Curie-Skłodowskiej',
-      shortName: 'LO im. M.C-S',
-      type: 'Public',
+      type: 'high_school',
       address: {
         street: 'ul. Szkolna 8',
         city: 'Kraków',
@@ -65,8 +63,7 @@ async function main() {
     },
     {
       name: 'Technikum Informatyczne im. Alana Turinga',
-      shortName: 'TI im. A.Turinga',
-      type: 'Public',
+      type: 'technical',
       address: {
         street: 'ul. Technologiczna 42',
         city: 'Gdańsk',
@@ -93,8 +90,7 @@ async function main() {
     },
     {
       name: 'Przedszkole Montessori "Słoneczko"',
-      shortName: 'PM Słoneczko',
-      type: 'Private',
+      type: 'kindergarten',
       address: {
         street: 'ul. Kwiatowa 23',
         city: 'Wrocław',
@@ -121,8 +117,7 @@ async function main() {
     },
     {
       name: 'Gimnazjum im. Mikołaja Kopernika',
-      shortName: 'G im. M.Kopernika',
-      type: 'Public',
+      type: 'middle_school',
       address: {
         street: 'ul. Astronomiczna 17',
         city: 'Poznań',

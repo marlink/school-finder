@@ -2,169 +2,158 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { MapPin, Navigation, ExternalLink } from 'lucide-react';
+import { MapPin, Navigation, ExternalLink, Clock, Phone, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { 
+  loadGoogleMapsAPI, 
+  geocodeAddress, 
+  createMap, 
+  createMarker, 
+  createInfoWindow, 
+  getCurrentLocation, 
+  calculateDistance,
+  formatDistance,
+  getDirectionsUrl,
+  type Coordinates 
+} from '@/lib/google-maps';
+import { type SchoolAddress } from '@/types/school';
 
 interface GoogleMapProps {
-  address: {
-    street?: string;
-    city?: string;
-    postalCode?: string;
-    voivodeship?: string;
-  };
+  address: SchoolAddress;
   schoolName: string;
+  location?: Coordinates;
+  placeId?: string;
   className?: string;
 }
 
-declare global {
-  interface Window {
-    google: any;
-    initMap: () => void;
-  }
-}
-
-export function GoogleMap({ address, schoolName, className }: GoogleMapProps) {
+export function GoogleMap({ address, schoolName, location, placeId, className }: GoogleMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [map, setMap] = useState<any>(null);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userLocation, setUserLocation] = useState<Coordinates | null>(null);
+  const [distance, setDistance] = useState<string | null>(null);
 
   const fullAddress = [
     address.street,
     address.city,
     address.postalCode,
-    address.voivodeship
+    address.voivodeship,
+    address.country || 'Poland'
   ].filter(Boolean).join(', ');
 
   useEffect(() => {
-    const loadGoogleMaps = () => {
-      // Check if Google Maps API key is available
-      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-      
-      if (!apiKey) {
-        setError('Google Maps API key not configured');
-        return;
-      }
-
-      // Check if Google Maps is already loaded
-      if (window.google && window.google.maps) {
-        initializeMap();
-        return;
-      }
-
-      // Load Google Maps script
-      if (typeof document !== 'undefined') {
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-        script.async = true;
-        script.defer = true;
-        
-        script.onload = () => {
-          setIsLoaded(true);
-          initializeMap();
-        };
-        
-        script.onerror = () => {
-          setError('Failed to load Google Maps');
-        };
-
-        document.head.appendChild(script);
-
-        return () => {
-          // Cleanup script if component unmounts
-          if (script.parentNode) {
-            script.parentNode.removeChild(script);
-          }
-        };
-      }
-    };
-
-    const initializeMap = () => {
-      if (!mapRef.current || !window.google) return;
-
+    const initializeMap = async () => {
       try {
-        // Create geocoder
-        const geocoder = new window.google.maps.Geocoder();
-        
-        // Geocode the address
-        geocoder.geocode(
-          { address: fullAddress + ', Poland' },
-          (results: any[], status: string) => {
-            if (status === 'OK' && results[0]) {
-              const location = results[0].geometry.location;
-              
-              // Create map
-              const mapInstance = new window.google.maps.Map(mapRef.current, {
-                center: location,
-                zoom: 15,
-                mapTypeControl: false,
-                streetViewControl: true,
-                fullscreenControl: true,
-                zoomControl: true,
-                styles: [
-                  {
-                    featureType: 'poi',
-                    elementType: 'labels',
-                    stylers: [{ visibility: 'off' }]
-                  }
-                ]
-              });
+        setIsLoaded(false);
+        await loadGoogleMapsAPI();
 
-              // Create marker
-              const marker = new window.google.maps.Marker({
-                position: location,
-                map: mapInstance,
-                title: schoolName,
-                icon: {
-                  url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="16" cy="16" r="12" fill="#3B82F6" stroke="white" stroke-width="2"/>
-                      <path d="M16 8L20 12H18V20H14V12H12L16 8Z" fill="white"/>
-                    </svg>
-                  `),
-                  scaledSize: new window.google.maps.Size(32, 32),
-                  anchor: new window.google.maps.Point(16, 16)
-                }
-              });
+        if (!mapRef.current) return;
 
-              // Create info window
-              const infoWindow = new window.google.maps.InfoWindow({
-                content: `
-                  <div style="padding: 8px; max-width: 200px;">
-                    <h3 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600;">${schoolName}</h3>
-                    <p style="margin: 0; font-size: 12px; color: #666;">${fullAddress}</p>
-                  </div>
-                `
-              });
+        let coordinates: Coordinates | null = null;
 
-              // Add click listener to marker
-              marker.addListener('click', () => {
-                infoWindow.open(mapInstance, marker);
-              });
+        // Use provided location or geocode address
+        if (location) {
+          coordinates = location;
+        } else {
+          coordinates = await geocodeAddress(fullAddress);
+        }
 
-              setMap(mapInstance);
-            } else {
-              setError('Could not find location on map');
+        if (!coordinates) {
+          setError('Could not find location on map');
+          return;
+        }
+
+        // Create map instance
+        const mapInstance = createMap(mapRef.current, {
+          center: coordinates,
+          zoom: 15,
+          mapTypeControl: false,
+          streetViewControl: true,
+          fullscreenControl: true,
+          zoomControl: true,
+          styles: [
+            {
+              featureType: 'poi',
+              elementType: 'labels',
+              stylers: [{ visibility: 'off' }]
             }
-          }
-        );
+          ]
+        });
+
+        // Create custom marker icon
+        const markerIcon = {
+          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="12" fill="#3B82F6" stroke="white" stroke-width="2"/>
+              <path d="M16 8L20 12H18V20H14V12H12L16 8Z" fill="white"/>
+            </svg>
+          `),
+          scaledSize: new google.maps.Size(32, 32),
+          anchor: new google.maps.Point(16, 16)
+        };
+
+        // Create marker
+        const marker = createMarker({
+          position: coordinates,
+          map: mapInstance,
+          title: schoolName,
+          icon: markerIcon
+        });
+
+        // Create info window with enhanced content
+        const infoWindow = createInfoWindow({
+          content: `
+            <div style="padding: 12px; max-width: 250px; font-family: system-ui, -apple-system, sans-serif;">
+              <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #1f2937;">${schoolName}</h3>
+              <p style="margin: 0 0 8px 0; font-size: 13px; color: #6b7280; line-height: 1.4;">${fullAddress}</p>
+              ${distance ? `<p style="margin: 0; font-size: 12px; color: #3b82f6; font-weight: 500;">📍 ${distance} od Twojej lokalizacji</p>` : ''}
+            </div>
+          `
+        });
+
+        // Add click listener to marker
+        marker.addListener('click', () => {
+          infoWindow.open(mapInstance, marker);
+        });
+
+        setMap(mapInstance);
+        setIsLoaded(true);
+
+        // Try to get user location for distance calculation
+        try {
+          const userCoords = await getCurrentLocation();
+          setUserLocation(userCoords);
+          
+          const distanceKm = calculateDistance(userCoords, coordinates);
+          setDistance(formatDistance(distanceKm));
+        } catch (err) {
+          // User location not available, continue without it
+          console.log('User location not available:', err);
+        }
+
       } catch (err) {
-        setError('Error initializing map');
+        setError('Error loading map');
         console.error('Map initialization error:', err);
       }
     };
 
-    loadGoogleMaps();
-  }, [fullAddress, schoolName]);
+    initializeMap();
+  }, [fullAddress, schoolName, location]);
 
   const openInGoogleMaps = () => {
-    const encodedAddress = encodeURIComponent(fullAddress + ', Poland');
-    window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+    if (location) {
+      window.open(`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`, '_blank');
+    } else {
+      const encodedAddress = encodeURIComponent(fullAddress);
+      window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
+    }
   };
 
   const getDirections = () => {
-    const encodedAddress = encodeURIComponent(fullAddress + ', Poland');
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`, '_blank');
+    const destination = location ? location : fullAddress;
+    const directionsUrl = getDirectionsUrl('', destination, 'driving');
+    window.open(directionsUrl, '_blank');
   };
 
   if (error) {
@@ -211,7 +200,12 @@ export function GoogleMap({ address, schoolName, className }: GoogleMapProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <MapPin className="h-5 w-5 text-blue-600" />
-            <h3 className="text-lg font-semibold">Lokalizacja</h3>
+            <div>
+              <h3 className="text-lg font-semibold">Lokalizacja</h3>
+              {distance && (
+                <p className="text-sm text-blue-600 font-medium">{distance} od Ciebie</p>
+              )}
+            </div>
           </div>
           <div className="flex gap-2">
             <Button

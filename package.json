@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack -p 3001",
-    "dev:staging": "node scripts/switch-env.js staging && next dev --turbopack -p 3001",
-    "dev:production": "node scripts/switch-env.js production && next dev --turbopack -p 3001",
+    "dev": "next dev -p 3001",
+    "dev:staging": "node scripts/switch-env.js staging && next dev -p 3001",
+    "dev:production": "node scripts/switch-env.js production && next dev -p 3001",
     "build": "prisma generate && next build",
     "build:staging": "node scripts/switch-env.js staging && prisma generate && next build",
     "build:production": "node scripts/switch-env.js production && prisma generate && next build",
@@ -13,7 +13,8 @@
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
     "env:local": "node scripts/switch-env.js local",
-    "env:staging": "node scripts/switch-env.js staging", 
+    "env:testing": "node scripts/switch-env.js testing",
+    "env:staging": "node scripts/switch-env.js staging",
     "env:production": "node scripts/switch-env.js production",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -63,7 +64,7 @@
     "next": "15.4.1",
     "next-auth": "^4.24.11",
     "next-intl": "^4.3.4",
-    "node-fetch": "^3.3.2",
+    "node-fetch": "^2.7.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "sonner": "^2.0.6",
@@ -74,6 +75,10 @@
     "zod": "^4.0.8"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
     "@eslint/eslintrc": "^3",
     "@next/bundle-analyzer": "^15.4.3",
     "@testing-library/jest-dom": "^6.6.3",
@@ -82,11 +87,13 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/testing-library__jest-dom": "^5.14.9",
+    "babel-jest": "^30.0.5",
     "eslint": "^9",
     "eslint-config-next": "15.4.1",
     "jest": "^30.0.5",
     "prisma": "^6.12.0",
     "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

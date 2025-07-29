@@ -29,6 +29,7 @@ import {
   Camera
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { GoogleMap } from '@/components/school/GoogleMap';
 
 export default async function SchoolDetailPage({ params }: { params: { id: string } }) {
   const school = await prisma.school.findUnique({
@@ -49,17 +50,18 @@ export default async function SchoolDetailPage({ params }: { params: { id: strin
     ? school.userRatings.reduce((sum, rating) => sum + Number(rating.overallRating), 0) / school.userRatings.length 
     : null;
 
+  // Extract data from JSON fields
+  const address = school.address as any;
+  const contact = school.contact as any;
+  const location = school.location as any;
+  const facilitiesArray = school.facilities ? (school.facilities as string[]) : [];
+  const languagesArray = school.languages ? (school.languages as string[]) : [];
+  const specializationsArray = school.specializations ? (school.specializations as string[]) : [];
+
   // Get latest Google rating
   const latestGoogleRating = school.googleRatings.length > 0 
     ? Number(school.googleRatings[0].rating) 
     : null;
-
-  // Extract data from JSON fields
-  const address = school.address as any;
-  const contact = school.contact as any;
-  const facilitiesArray = school.facilities ? (school.facilities as string[]) : [];
-  const languagesArray = school.languages ? (school.languages as string[]) : [];
-  const specializationsArray = school.specializations ? (school.specializations as string[]) : [];
 
   // Mock data for enhanced features
   const photos = [
@@ -99,11 +101,9 @@ export default async function SchoolDetailPage({ params }: { params: { id: strin
                     <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                       {school.type}
                     </Badge>
-                    {school.isPublic !== null && (
-                      <Badge variant={school.isPublic ? "default" : "outline"}>
-                        {school.isPublic ? 'Publiczna' : 'Prywatna'}
-                      </Badge>
-                    )}
+                    <Badge variant="outline">
+                      Szkoła publiczna
+                    </Badge>
                   </div>
                 </div>
               </div>
@@ -112,8 +112,8 @@ export default async function SchoolDetailPage({ params }: { params: { id: strin
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" />
                   <span className="text-sm">
-                    {school.address}, {school.city}
-                    {school.postalCode && `, ${school.postalCode}`}
+                    {address?.street}, {address?.city}
+                    {address?.postal && `, ${address.postal}`}
                   </span>
                 </div>
               </div>
@@ -163,21 +163,21 @@ export default async function SchoolDetailPage({ params }: { params: { id: strin
                   </div>
                 )}
 
-                {school.googleRating && (
+                {latestGoogleRating && (
                   <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
                     <div className="flex items-center gap-2 mb-1">
                       <Star className="h-4 w-4 text-blue-500" />
                       <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Google</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <p className="text-2xl font-bold text-gray-900">{school.googleRating}</p>
+                      <p className="text-2xl font-bold text-gray-900">{latestGoogleRating}</p>
                       <div className="flex">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
                             className={cn(
                               "h-4 w-4",
-                              star <= school.googleRating! ? "text-blue-400 fill-current" : "text-gray-300"
+                              star <= latestGoogleRating! ? "text-blue-400 fill-current" : "text-gray-300"
                             )}
                           />
                         ))}
@@ -239,6 +239,18 @@ export default async function SchoolDetailPage({ params }: { params: { id: strin
                 </div>
               </CardContent>
             </Card>
+
+            {/* Google Map */}
+            <GoogleMap 
+              address={{
+                street: address?.street,
+                city: address?.city,
+                postalCode: address?.postal,
+                voivodeship: address?.voivodeship
+              }}
+              schoolName={school.name}
+              className="shadow-lg border-0 bg-white/80 backdrop-blur-sm"
+            />
 
             {/* Academic Focus */}
             {(languagesArray.length > 0 || specializationsArray.length > 0) && (
@@ -342,8 +354,8 @@ export default async function SchoolDetailPage({ params }: { params: { id: strin
                   <div>
                     <p className="font-medium text-gray-900">Adres</p>
                     <p className="text-sm text-gray-600">
-                      {school.address}<br />
-                      {school.postalCode} {school.city}
+                      {address?.street}<br />
+                      {address?.postal} {address?.city}
                     </p>
                   </div>
                 </div>

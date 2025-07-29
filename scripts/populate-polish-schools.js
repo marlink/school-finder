@@ -7,7 +7,6 @@ const prisma = new PrismaClient();
 const polishSchoolsData = [
     {
         name: "Szkoła Podstawowa nr 1 im. Marii Skłodowskiej-Curie",
-        shortName: "SP nr 1",
         type: "primary",
         address: {
             street: "ul. Krakowska 15",
@@ -35,7 +34,6 @@ const polishSchoolsData = [
     },
     {
         name: "Liceum Ogólnokształcące im. Adama Mickiewicza",
-        shortName: "LO Mickiewicz",
         type: "high_school",
         address: {
             street: "ul. Floriańska 3",
@@ -63,7 +61,6 @@ const polishSchoolsData = [
     },
     {
         name: "Przedszkole Publiczne nr 5 'Słoneczko'",
-        shortName: "PP Słoneczko",
         type: "kindergarten",
         address: {
             street: "ul. Gdańska 22",
@@ -91,7 +88,6 @@ const polishSchoolsData = [
     },
     {
         name: "Technikum Informatyczne",
-        shortName: "Technikum IT",
         type: "technical",
         address: {
             street: "ul. Wrocławska 45",
@@ -119,7 +115,6 @@ const polishSchoolsData = [
     },
     {
         name: "Szkoła Podstawowa nr 12",
-        shortName: "SP nr 12",
         type: "primary",
         address: {
             street: "ul. Poznańska 8",
@@ -147,7 +142,6 @@ const polishSchoolsData = [
     },
     {
         name: "Uniwersytet Warszawski",
-        shortName: "UW",
         type: "university",
         address: {
             street: "Krakowskie Przedmieście 26/28",
@@ -192,91 +186,58 @@ async function populateDatabase() {
                 // Create school record
                 const school = await prisma.school.create({
                     data: {
-                        ...schoolData,
+                        name: schoolData.name,
+                        type: schoolData.type,
+                        address: schoolData.address,
+                        contact: schoolData.contact,
+                        location: schoolData.location,
+                        status: schoolData.status,
+                        studentCount: schoolData.studentCount,
+                        teacherCount: schoolData.teacherCount,
+                        establishedYear: schoolData.establishedYear,
+                        languages: schoolData.languages,
+                        specializations: schoolData.specializations,
+                        facilities: schoolData.facilities,
                         createdAt: new Date(),
                         updatedAt: new Date()
                     }
                 });
                 
-                // Add sample images for each school
-                const sampleImages = [
-                    {
-                        imageUrl: `https://picsum.photos/800/600?random=${school.id}1`,
-                        imageType: 'main',
-                        altText: `${school.name} - Main building`,
-                        source: 'admin',
-                        isVerified: true,
-                        displayOrder: 1
-                    },
-                    {
-                        imageUrl: `https://picsum.photos/800/600?random=${school.id}2`,
-                        imageType: 'classroom',
-                        altText: `${school.name} - Classroom`,
-                        source: 'admin',
-                        isVerified: true,
-                        displayOrder: 2
-                    },
-                    {
-                        imageUrl: `https://picsum.photos/800/600?random=${school.id}3`,
-                        imageType: 'playground',
-                        altText: `${school.name} - Playground`,
-                        source: 'admin',
-                        isVerified: true,
-                        displayOrder: 3
-                    }
-                ];
-                
-                for (const imageData of sampleImages) {
-                    await prisma.schoolImage.create({
-                        data: {
-                            schoolId: school.id,
-                            ...imageData,
-                            uploadedAt: new Date()
-                        }
-                    });
-                }
-                
+                console.log(`✅ Added: ${school.name}`);
                 savedCount++;
-                console.log(`✅ Saved school ${savedCount}/${polishSchoolsData.length}: ${school.name}`);
                 
             } catch (error) {
-                console.error(`❌ Error saving school ${schoolData.name}:`, error.message);
+                console.error(`❌ Failed to add school: ${schoolData.name}`, error.message);
             }
         }
         
-        console.log(`🎉 Successfully populated database with ${savedCount} Polish schools!`);
-        
-        // Show summary
+        // Get summary statistics
         const totalSchools = await prisma.school.count();
         const totalImages = await prisma.schoolImage.count();
         
+        // Get unique school types and cities
+        const schools = await prisma.school.findMany({
+            select: {
+                type: true,
+                address: true
+            }
+        });
+        
+        const schoolTypes = [...new Set(schools.map(s => s.type))];
+        const cities = [...new Set(schools.map(s => s.address.city))];
+        
+        console.log(`🎉 Successfully populated database with ${savedCount} Polish schools!`);
         console.log('\n📊 Database Summary:');
         console.log(`   Schools: ${totalSchools}`);
         console.log(`   Images: ${totalImages}`);
-        
-        // Get school types summary
-        const schoolsByType = await prisma.school.findMany({
-            select: { type: true }
-        });
-        const typeCounts = schoolsByType.reduce((acc, school) => {
-            acc[school.type] = (acc[school.type] || 0) + 1;
-            return acc;
-        }, {});
-        console.log(`   School Types: ${Object.entries(typeCounts).map(([type, count]) => `${type}: ${count}`).join(', ')}`);
-        
-        // Get cities summary
-        const schoolsByCity = await prisma.school.findMany({
-            select: { address: true }
-        });
-        const cityCounts = schoolsByCity.reduce((acc, school) => {
-            const city = school.address.city;
-            acc[city] = (acc[city] || 0) + 1;
-            return acc;
-        }, {});
-        console.log(`   Cities: ${Object.entries(cityCounts).map(([city, count]) => `${city}: ${count}`).join(', ')}`);
+        console.log(`   School Types: ${schoolTypes.join(', ')}`);
+        console.log(`   Cities: ${cities.join(', ')}`);
+        console.log('✅ Database population completed successfully!');
+        console.log('🔗 View your data at: http://localhost:5555 (Prisma Studio)');
         
     } catch (error) {
-        console.error('❌ Error populating database:', error);
+        console.error('❌ Database population failed:', error);
+        throw error;
     } finally {
         await prisma.$disconnect();
     }
@@ -284,16 +245,9 @@ async function populateDatabase() {
 
 // Run the population script
 if (require.main === module) {
-    console.log('🎓 School Finder - Database Population');
-    console.log('=====================================');
     populateDatabase()
-        .then(() => {
-            console.log('✅ Database population completed successfully!');
-            console.log('🔗 View your data at: http://localhost:5555 (Prisma Studio)');
-            process.exit(0);
-        })
         .catch((error) => {
-            console.error('❌ Database population failed:', error);
+            console.error('Fatal error:', error);
             process.exit(1);
         });
 }

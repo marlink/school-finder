@@ -79,15 +79,12 @@ export async function GET(request: NextRequest) {
     }
 
     // Build search filters
-    const whereClause: any = {
-      status: 'active'
-    };
+    const whereClause: any = {};
 
     // Text search
     if (query) {
       whereClause.OR = [
         { name: { contains: query, mode: 'insensitive' } },
-        { shortName: { contains: query, mode: 'insensitive' } },
         { address: { path: ['street'], string_contains: query } },
         { address: { path: ['city'], string_contains: query } },
         { address: { path: ['district'], string_contains: query } }
@@ -217,7 +214,6 @@ export async function GET(request: NextRequest) {
         select: {
           id: true,
           name: true,
-          shortName: true,
           type: true,
           address: true,
           contact: true,
@@ -370,8 +366,10 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Search API error:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    console.error('Error message:', error instanceof Error ? error.message : String(error));
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
