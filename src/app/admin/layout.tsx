@@ -17,7 +17,9 @@ import {
   Shield,
   Settings,
   Menu,
-  X
+  X,
+  Activity,
+  HardDrive
 } from 'lucide-react';
 
 const navigation = [
@@ -25,6 +27,8 @@ const navigation = [
   { name: 'User Management', href: '/admin/users', icon: Users },
   { name: 'School Management', href: '/admin/schools', icon: School },
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
+  { name: 'Performance', href: '/admin/performance', icon: Activity },
+  { name: 'Cache Management', href: '/admin/cache', icon: HardDrive },
   { name: 'Feature Flags', href: '/admin/feature-flags', icon: Flag },
   { name: 'Data Scraping', href: '/admin/scraping', icon: Database },
   { name: 'Security', href: '/admin/security', icon: Shield },
@@ -88,10 +92,10 @@ export default function AdminLayout({
 
           setUserEmail(user.email || '');
           setIsLoading(false);
-        } catch (profileError: any) {
+        } catch (profileError: unknown) {
            console.error('Error checking profile:', profileError);
            // If it's a table not found error and user is admin email, allow access
-           if (profileError?.code === '42P01' && adminEmails.includes(user.email || '')) {
+           if ((profileError as { code?: string })?.code === '42P01' && adminEmails.includes(user.email || '')) {
              console.log('Profiles table not found, allowing admin email access');
              setUserEmail(user.email || '');
              setIsLoading(false);

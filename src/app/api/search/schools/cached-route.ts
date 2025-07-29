@@ -2,10 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { withPerformanceTracking } from '@/lib/performance';
-import { withCacheAndRateLimit, defaultCacheConfigs, defaultRateLimitConfigs } from '@/lib/cache-middleware';
+import { cache, cacheKeys, getCachedData, createCachedResponse } from '@/lib/cache';
 
-async function searchHandler(request: NextRequest) {
+// Cache configuration for different types of data
+const CACHE_CONFIG = {
+  search: { ttl: 300, staleWhileRevalidate: 600, tags: ['schools', 'search'] }, // 5 minutes
+  filters: { ttl: 3600, tags: ['schools'] }, // 1 hour
+  stats: { ttl: 1800, tags: ['schools'] }, // 30 minutes
+};
+
+export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
@@ -32,6 +38,21 @@ async function searchHandler(request: NextRequest) {
     const establishedBefore = searchParams.get('establishedBefore') ? parseInt(searchParams.get('establishedBefore')!) : null;
     const minStudents = searchParams.get('minStudents') ? parseInt(searchParams.get('minStudents')!) : null;
     const maxStudents = searchParams.get('maxStudents') ? parseInt(searchParams.get('maxStudents')!) : null;
+
+    // Create cache key for this search
+    const searchCacheKey = cacheKeys.schools.search({
+      query, type, city, voivodeship, district, sortBy, sortOrder,
+      page, limit, minRating, maxDistance, userLat, userLng,
+      languages, specializations, facilities, hasImages,
+      establishedAfter, establishedBefore, minStudents, maxStudents,
+      userId: session?.user?.id || 'anonymous'
+    });
+
+    // Try to get cached result
+    const cachedResult = cache.get(searchCacheKey);
+    if (cachedResult) {
+      return createCachedResponse(cachedResult, CACHE_CONFIG.search, 'HIT');
+    }
 
     // Check rate limiting for non-premium users
     if (session?.user?.email) {
@@ -101,7 +122,7 @@ async function searchHandler(request: NextRequest) {
     // Location filters
     if (city) {
       whereClause.address = {
-        ...(whereClause.address as Record<string, unknown> || {}),
+        ...whereClause.address as Record<string, unknown>,
         path: ['city'],
         string_contains: city
       };
@@ -109,7 +130,7 @@ async function searchHandler(request: NextRequest) {
 
     if (voivodeship) {
       whereClause.address = {
-        ...(whereClause.address as Record<string, unknown> || {}),
+        ...whereClause.address as Record<string, unknown>,
         path: ['voivodeship'],
         string_contains: voivodeship
       };
@@ -117,7 +138,7 @@ async function searchHandler(request: NextRequest) {
 
     if (district) {
       whereClause.address = {
-        ...(whereClause.address as Record<string, unknown> || {}),
+        ...whereClause.address as Record<string, unknown>,
         path: ['district'],
         string_contains: district
       };
@@ -154,14 +175,14 @@ async function searchHandler(request: NextRequest) {
     // Established year filters
     if (establishedAfter) {
       whereClause.establishedYear = {
-        ...(whereClause.establishedYear as Record<string, unknown> || {}),
+        ...whereClause.establishedYear as Record<string, unknown>,
         gte: establishedAfter
       };
     }
 
     if (establishedBefore) {
       whereClause.establishedYear = {
-        ...(whereClause.establishedYear as Record<string, unknown> || {}),
+        ...whereClause.establishedYear as Record<string, unknown>,
         lte: establishedBefore
       };
     }
@@ -169,14 +190,14 @@ async function searchHandler(request: NextRequest) {
     // Student count filters
     if (minStudents) {
       whereClause.studentCount = {
-        ...(whereClause.studentCount as Record<string, unknown> || {}),
+        ...whereClause.studentCount as Record<string, unknown>,
         gte: minStudents
       };
     }
 
     if (maxStudents) {
       whereClause.studentCount = {
-        ...(whereClause.studentCount as Record<string, unknown> || {}),
+        ...whereClause.studentCount as Record<string, unknown>,
         lte: maxStudents
       };
     }
@@ -206,7 +227,7 @@ async function searchHandler(request: NextRequest) {
         orderBy = { name: 'asc' };
     }
 
-    // Execute search query
+    // Execute search query with optimized select
     const [schools, totalCount] = await Promise.all([
       prisma.school.findMany({
         where: whereClause,
@@ -271,9 +292,8 @@ async function searchHandler(request: NextRequest) {
       // Calculate distance if user coordinates provided
       let distance = null;
       if (userLat && userLng && school.location) {
-        const location = school.location as { latitude?: number; longitude?: number };
-        const schoolLat = location.latitude;
-        const schoolLng = location.longitude;
+        const schoolLat = (school.location as { latitude?: number }).latitude;
+        const schoolLng = (school.location as { longitude?: number }).longitude;
         if (schoolLat && schoolLng) {
           distance = calculateDistance(userLat, userLng, schoolLat, schoolLng);
         }
@@ -330,12 +350,12 @@ async function searchHandler(request: NextRequest) {
     const hasNextPage = page < totalPages;
     const hasPreviousPage = page > 1;
 
-    // Track search analytics
+    // Track search analytics (async, don't wait)
     if (query) {
-      await trackSearchAnalytics(query, ratingFilteredSchools.length);
+      trackSearchAnalytics(query, ratingFilteredSchools.length).catch(console.error);
     }
 
-    return NextResponse.json({
+    const result = {
       schools: ratingFilteredSchools,
       pagination: {
         page,
@@ -365,7 +385,12 @@ async function searchHandler(request: NextRequest) {
         },
         sort: { sortBy, sortOrder }
       }
-    });
+    };
+
+    // Cache the result
+    cache.set(searchCacheKey, result, CACHE_CONFIG.search);
+
+    return createCachedResponse(result, CACHE_CONFIG.search, 'MISS');
 
   } catch (error) {
     console.error('Search API error:', error);
@@ -419,41 +444,3 @@ async function trackSearchAnalytics(searchTerm: string, resultCount: number) {
     console.error('Failed to track search analytics:', error);
   }
 }
-
-// Export with performance tracking, caching, and rate limiting
-const cachedSearchHandler = withCacheAndRateLimit(
-  {
-    ...defaultCacheConfigs.search,
-    keyGenerator: (request: NextRequest) => {
-      const { searchParams } = new URL(request.url);
-      // Create cache key excluding user-specific parameters
-      const cacheParams = {
-        q: searchParams.get('q') || '',
-        type: searchParams.get('type') || 'all',
-        city: searchParams.get('city') || '',
-        voivodeship: searchParams.get('voivodeship') || '',
-        district: searchParams.get('district') || '',
-        page: searchParams.get('page') || '1',
-        limit: searchParams.get('limit') || '20',
-        sortBy: searchParams.get('sortBy') || 'name',
-        sortOrder: searchParams.get('sortOrder') || 'asc',
-        minRating: searchParams.get('minRating') || '0',
-        maxDistance: searchParams.get('maxDistance') || '',
-        lat: searchParams.get('lat') || '',
-        lng: searchParams.get('lng') || '',
-        languages: searchParams.get('languages') || '',
-        specializations: searchParams.get('specializations') || '',
-        facilities: searchParams.get('facilities') || '',
-        hasImages: searchParams.get('hasImages') || '',
-        establishedAfter: searchParams.get('establishedAfter') || '',
-        establishedBefore: searchParams.get('establishedBefore') || '',
-        minStudents: searchParams.get('minStudents') || '',
-        maxStudents: searchParams.get('maxStudents') || ''
-      };
-      return `search:schools:${JSON.stringify(cacheParams)}`;
-    }
-  },
-  defaultRateLimitConfigs.search
-)(searchHandler);
-
-export const GET = withPerformanceTracking(cachedSearchHandler);
