@@ -1,31 +1,44 @@
 # 🚀 Quick Start Guide - School Finder Portal
 
-## 🎯 **Project Status: 96% Complete**
+## Current Status
+**Environment:** Staging (Safe Development)  
+**Database:** Supabase Staging with Real Polish Schools  
+**Server Status:** Ready to start  
 
-The School Finder Portal is production-ready with only 4% remaining features needed for full completion.
+## Immediate Startup (30 seconds)
 
-## ⚡ **Instant Setup**
-
-### **1. Start Development Environment**
+### 1. Navigate to Project
 ```bash
-# Clone and start (if not already running)
-npm run dev                    # → http://localhost:3000
-npx prisma studio             # → http://localhost:5555 (database UI)
+cd /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production
 ```
 
-### **2. Environment Variables Status**
+### 2. Start Development Server
 ```bash
-# ✅ CONFIGURED (Ready to use)
-DATABASE_URL=mysql://...
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-SUPABASE_SERVICE_ROLE_KEY=...
-NEXTAUTH_SECRET=...
-NEXTAUTH_URL=http://localhost:3000
+npm run dev
+```
 
-# ⚠️ MISSING (Needed for 100% completion)
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=    # For maps integration
-APIFY_API_TOKEN=                    # For real school data
+### 3. Open Application
+- **URL:** http://localhost:3001
+- **Environment:** Staging (Safe)
+- **Data:** 5 Real Polish Schools
+
+## What's Working
+- ✅ Modern search interface with Polish filters
+- ✅ Enhanced search bar with smart suggestions
+- ✅ Complete school detail page redesign
+- ✅ Mobile responsive design
+- ✅ Polish localization
+- ✅ Real school data integration
+
+## Current Database Status
+```
+📊 Schools count: 5
+📋 Sample schools:
+  1. Niepubliczna Szkoła Podstawowa nr 47 Primus (Warszawa) - 372 students
+  2. Niepubliczna Szkoła Podstawowa nr 47 im. Roberta Schumana (Warszawa) - 508 students
+  3. Szkoła Podstawowa nr 12 (Gdańsk) - 488 students
+  4. Szkoła Podstawowa nr 83 (Gdańsk) - 225 students
+  5. Szkoła Podstawowa nr 27 (Gdańsk) - 389 students
 ```
 
 ## 🎯 **Immediate Next Steps (4% Remaining)**
