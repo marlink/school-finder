@@ -1,15 +1,11 @@
 'use client'
 
-import { SessionProvider as NextAuthSessionProvider } from 'next-auth/react'
-
 interface SessionProviderProps {
   children: React.ReactNode
 }
 
 export function SessionProvider({ children }: SessionProviderProps) {
-  return (
-    <NextAuthSessionProvider>
-      {children}
-    </NextAuthSessionProvider>
-  )
+  // Stack Auth provider is already configured in layout.tsx
+  // This component now just passes through children
+  return <>{children}</>
 }

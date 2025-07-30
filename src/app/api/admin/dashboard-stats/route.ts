@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { stackServerApp } from '@/stack';
 import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await stackServerApp.getUser();
     
-    if (!session?.user || session.user.role !== 'admin') {
+    if (!user || !user.hasPermission('admin')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

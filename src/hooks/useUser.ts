@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useUser as useStackUser } from '@stackframe/stack'
 import { useState, useEffect } from 'react'
 
 interface UserProfile {
@@ -21,17 +21,17 @@ interface UserStats {
 }
 
 export function useUser() {
-  const { data: session, status } = useSession()
+  const stackUser = useStackUser()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [stats, setStats] = useState<UserStats | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const isAuthenticated = status === 'authenticated'
+  const isAuthenticated = !!stackUser
   const isAdmin = profile?.role === 'admin'
   const isPremium = profile?.subscriptionStatus === 'premium'
 
   const fetchProfile = async () => {
-    if (!session?.user?.id) return
+    if (!stackUser?.id) return
 
     setLoading(true)
     try {
@@ -49,7 +49,7 @@ export function useUser() {
   }
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
-    if (!session?.user?.id) return false
+    if (!stackUser?.id) return false
 
     try {
       const response = await fetch('/api/user/profile', {
@@ -72,7 +72,7 @@ export function useUser() {
   }
 
   const deleteAccount = async () => {
-    if (!session?.user?.id) return false
+    if (!stackUser?.id) return false
 
     try {
       const response = await fetch('/api/user/profile', {
@@ -87,13 +87,18 @@ export function useUser() {
   }
 
   useEffect(() => {
-    if (isAuthenticated && session?.user?.id) {
+    if (isAuthenticated && stackUser?.id) {
       fetchProfile()
     }
-  }, [isAuthenticated, session?.user?.id])
+  }, [isAuthenticated, stackUser?.id])
 
   return {
-    user: session?.user,
+    user: stackUser ? {
+      id: stackUser.id,
+      name: stackUser.displayName,
+      email: stackUser.primaryEmail,
+      image: stackUser.profileImageUrl,
+    } : null,
     profile,
     stats,
     loading,

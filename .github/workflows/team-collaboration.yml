@@ -1,0 +1,376 @@
+name: Team Collaboration
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, review_requested]
+  issues:
+    types: [opened, labeled]
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  pr-automation:
+    name: PR Automation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Auto-assign reviewers
+        uses: actions/github-script@v7
+        if: github.event.action == 'opened' || github.event.action == 'ready_for_review'
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            const author = context.payload.pull_request.user.login;
+            
+            // Define team members and their expertise areas
+            const teamMembers = {
+              'frontend': ['ciepolml'], // Add your team members here
+              'backend': ['ciepolml'],
+              'database': ['ciepolml'],
+              'devops': ['ciepolml']
+            };
+            
+            // Determine reviewers based on changed files
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner,
+              repo,
+              pull_number: prNumber
+            });
+            
+            let suggestedReviewers = new Set();
+            
+            files.forEach(file => {
+              if (file.filename.includes('components/') || file.filename.includes('pages/') || file.filename.endsWith('.tsx')) {
+                teamMembers.frontend?.forEach(member => suggestedReviewers.add(member));
+              }
+              if (file.filename.includes('api/') || file.filename.includes('lib/') || file.filename.endsWith('.ts')) {
+                teamMembers.backend?.forEach(member => suggestedReviewers.add(member));
+              }
+              if (file.filename.includes('prisma/') || file.filename.includes('schema')) {
+                teamMembers.database?.forEach(member => suggestedReviewers.add(member));
+              }
+              if (file.filename.includes('.github/') || file.filename.includes('docker') || file.filename.includes('vercel')) {
+                teamMembers.devops?.forEach(member => suggestedReviewers.add(member));
+              }
+            });
+            
+            // Remove the author from reviewers
+            suggestedReviewers.delete(author);
+            
+            if (suggestedReviewers.size > 0) {
+              await github.rest.pulls.requestReviewers({
+                owner,
+                repo,
+                pull_number: prNumber,
+                reviewers: Array.from(suggestedReviewers).slice(0, 2) // Max 2 reviewers
+              });
+            }
+
+      - name: Add PR labels
+        uses: actions/github-script@v7
+        if: github.event.action == 'opened'
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            const title = context.payload.pull_request.title.toLowerCase();
+            const body = context.payload.pull_request.body?.toLowerCase() || '';
+            
+            let labels = [];
+            
+            // Auto-label based on title and content
+            if (title.includes('fix') || title.includes('bug')) {
+              labels.push('bug');
+            }
+            if (title.includes('feat') || title.includes('feature')) {
+              labels.push('enhancement');
+            }
+            if (title.includes('docs') || title.includes('documentation')) {
+              labels.push('documentation');
+            }
+            if (title.includes('test') || title.includes('testing')) {
+              labels.push('testing');
+            }
+            if (title.includes('refactor') || title.includes('cleanup')) {
+              labels.push('refactoring');
+            }
+            if (title.includes('security') || body.includes('security')) {
+              labels.push('security');
+            }
+            if (title.includes('performance') || body.includes('performance')) {
+              labels.push('performance');
+            }
+            
+            // Check file changes for more specific labels
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner,
+              repo,
+              pull_number: prNumber
+            });
+            
+            const hasUIChanges = files.some(file => 
+              file.filename.includes('components/') || 
+              file.filename.includes('styles/') ||
+              file.filename.endsWith('.css')
+            );
+            
+            const hasAPIChanges = files.some(file => 
+              file.filename.includes('api/') ||
+              file.filename.includes('lib/')
+            );
+            
+            const hasDBChanges = files.some(file => 
+              file.filename.includes('prisma/') ||
+              file.filename.includes('schema')
+            );
+            
+            if (hasUIChanges) labels.push('ui');
+            if (hasAPIChanges) labels.push('api');
+            if (hasDBChanges) labels.push('database');
+            
+            // Add size label based on changes
+            const totalChanges = files.reduce((sum, file) => sum + file.changes, 0);
+            if (totalChanges < 50) {
+              labels.push('size/small');
+            } else if (totalChanges < 200) {
+              labels.push('size/medium');
+            } else {
+              labels.push('size/large');
+            }
+            
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: prNumber,
+                labels
+              });
+            }
+
+      - name: PR size warning
+        uses: actions/github-script@v7
+        if: github.event.action == 'opened'
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner,
+              repo,
+              pull_number: prNumber
+            });
+            
+            const totalChanges = files.reduce((sum, file) => sum + file.changes, 0);
+            const fileCount = files.length;
+            
+            if (totalChanges > 500 || fileCount > 20) {
+              const comment = `## 📏 Large PR Warning
+              
+              This PR is quite large with **${totalChanges} changes** across **${fileCount} files**.
+              
+              ### 💡 Suggestions for better review:
+              - Consider breaking this into smaller, focused PRs
+              - Add detailed description of changes
+              - Highlight the most critical changes
+              - Consider pair programming for complex parts
+              
+              ### 🔍 Review Strategy:
+              - Focus on core logic changes first
+              - Review tests and documentation
+              - Check for potential breaking changes
+              `;
+              
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body: comment
+              });
+            }
+
+  issue-automation:
+    name: Issue Automation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues'
+    steps:
+      - name: Auto-assign issues
+        uses: actions/github-script@v7
+        if: github.event.action == 'opened'
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issueNumber = context.payload.issue.number;
+            const title = context.payload.issue.title.toLowerCase();
+            const body = context.payload.issue.body?.toLowerCase() || '';
+            
+            let labels = [];
+            let assignees = [];
+            
+            // Auto-label based on content
+            if (title.includes('bug') || body.includes('error') || body.includes('broken')) {
+              labels.push('bug');
+              labels.push('needs-investigation');
+            }
+            if (title.includes('feature') || title.includes('enhancement')) {
+              labels.push('enhancement');
+              labels.push('needs-discussion');
+            }
+            if (title.includes('question') || title.includes('help')) {
+              labels.push('question');
+            }
+            if (title.includes('docs') || title.includes('documentation')) {
+              labels.push('documentation');
+            }
+            if (title.includes('security') || body.includes('vulnerability')) {
+              labels.push('security');
+              labels.push('urgent');
+            }
+            if (title.includes('performance') || body.includes('slow')) {
+              labels.push('performance');
+            }
+            
+            // Add priority based on keywords
+            if (body.includes('urgent') || body.includes('critical') || body.includes('production')) {
+              labels.push('priority/high');
+            } else if (body.includes('nice to have') || body.includes('low priority')) {
+              labels.push('priority/low');
+            } else {
+              labels.push('priority/medium');
+            }
+            
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: issueNumber,
+                labels
+              });
+            }
+
+      - name: Welcome new contributors
+        uses: actions/github-script@v7
+        if: github.event.action == 'opened'
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issueNumber = context.payload.issue.number;
+            const author = context.payload.issue.user.login;
+            
+            // Check if this is the user's first issue
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              creator: author,
+              state: 'all'
+            });
+            
+            if (issues.length === 1) {
+              const welcomeMessage = `## 👋 Welcome to the Marlink School Finder project!
+              
+              Thank you for opening your first issue! We appreciate your contribution to the project.
+              
+              ### 📋 What happens next?
+              1. Our team will review your issue within 24-48 hours
+              2. We may ask for additional information or clarification
+              3. If it's a bug, we'll investigate and provide updates
+              4. If it's a feature request, we'll discuss feasibility and priority
+              
+              ### 🤝 Want to contribute?
+              - Check out our [Contributing Guide](./docs/DEVELOPMENT.md)
+              - Look for issues labeled \`good first issue\`
+              - Join our discussions in other issues and PRs
+              
+              Thanks again for helping make this project better! 🚀
+              `;
+              
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: issueNumber,
+                body: welcomeMessage
+              });
+            }
+
+  review-automation:
+    name: Review Automation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_review'
+    steps:
+      - name: Thank reviewers
+        uses: actions/github-script@v7
+        if: github.event.review.state == 'approved'
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            const reviewer = context.payload.review.user.login;
+            
+            // Add a reaction to the review
+            await github.rest.reactions.createForPullRequestReview({
+              owner,
+              repo,
+              pull_number: prNumber,
+              review_id: context.payload.review.id,
+              content: '+1'
+            });
+
+      - name: Auto-merge when ready
+        uses: actions/github-script@v7
+        if: github.event.review.state == 'approved'
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            
+            // Check if PR has auto-merge label
+            const { data: pr } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: prNumber
+            });
+            
+            const hasAutoMergeLabel = pr.labels.some(label => label.name === 'auto-merge');
+            
+            if (hasAutoMergeLabel) {
+              // Check if all required checks pass
+              const { data: reviews } = await github.rest.pulls.listReviews({
+                owner,
+                repo,
+                pull_number: prNumber
+              });
+              
+              const approvedReviews = reviews.filter(review => review.state === 'APPROVED');
+              const requestedChanges = reviews.filter(review => review.state === 'CHANGES_REQUESTED');
+              
+              if (approvedReviews.length >= 1 && requestedChanges.length === 0) {
+                try {
+                  await github.rest.pulls.merge({
+                    owner,
+                    repo,
+                    pull_number: prNumber,
+                    merge_method: 'squash'
+                  });
+                  
+                  await github.rest.issues.createComment({
+                    owner,
+                    repo,
+                    issue_number: prNumber,
+                    body: '🎉 Auto-merged after approval! Thanks for the contribution!'
+                  });
+                } catch (error) {
+                  await github.rest.issues.createComment({
+                    owner,
+                    repo,
+                    issue_number: prNumber,
+                    body: `❌ Auto-merge failed: ${error.message}. Please merge manually.`
+                  });
+                }
+              }
+            }

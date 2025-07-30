@@ -1,75 +1,60 @@
-import { createClient } from '@/lib/supabase/server'
+import { stackServerApp } from '@/stack'
 import { redirect } from 'next/navigation'
-import { NextAuthOptions } from 'next-auth'
-
-// Minimal authOptions to satisfy NextAuth imports while using Supabase
-export const authOptions: NextAuthOptions = {
-  providers: [],
-  callbacks: {
-    async session({ session }) {
-      return session
-    },
-    async jwt({ token }) {
-      return token
-    },
-  },
-  pages: {
-    signIn: '/auth/signin',
-  },
-  session: {
-    strategy: 'jwt',
-  },
-  secret: process.env.NEXTAUTH_SECRET || 'fallback-secret-for-development',
-}
 
 export async function getUser() {
-  const supabase = createClient()
-  const { data: { user }, error } = await supabase.auth.getUser()
-  
-  if (error || !user) {
-    return null
-  }
-  
+  const user = await stackServerApp.getUser()
   return user
 }
 
 export async function getUserProfile() {
-  const supabase = createClient()
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  const user = await stackServerApp.getUser()
   
-  if (authError || !user) {
+  if (!user) {
     return null
   }
-  
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
-  
-  if (profileError) {
-    return null
+
+  // Get user profile data from Stack Auth
+  const profile = {
+    id: user.id,
+    email: user.primaryEmail,
+    displayName: user.displayName,
+    profileImageUrl: user.profileImageUrl,
+    role: user.hasPermission('admin') ? 'admin' : 'user',
+    subscriptionStatus: 'free', // TODO: Implement subscription logic with Stack Auth
+    createdAt: user.createdAtMillis ? new Date(user.createdAtMillis) : new Date(),
   }
   
   return { user, profile }
 }
 
 export async function requireAuth() {
-  const user = await getUser()
+  const user = await stackServerApp.getUser()
   
   if (!user) {
-    redirect('/auth/signin')
+    redirect('/handler/signin')
   }
   
   return user
 }
 
 export async function requireAdmin() {
-  const userProfile = await getUserProfile()
+  const user = await stackServerApp.getUser()
   
-  if (!userProfile || userProfile.profile.role !== 'admin') {
-    redirect('/auth/signin')
+  if (!user || !user.hasPermission('admin')) {
+    redirect('/handler/signin')
   }
   
-  return userProfile
+  return user
+}
+
+// Helper function to check if user is authenticated
+export async function isAuthenticated(): Promise<boolean> {
+  const user = await stackServerApp.getUser()
+  return !!user
+}
+
+// Helper function to check if user is admin
+export async function isAdmin(): Promise<boolean> {
+  const user = await stackServerApp.getUser()
+  return !!user && user.hasPermission('admin')
 }

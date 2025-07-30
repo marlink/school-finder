@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
+import { StackProvider, StackTheme } from "@stackframe/stack";
+import { stackServerApp } from "../stack";
 import "./globals.css";
-import { MainLayout } from "@/components/layout/MainLayout";
-import { SessionProvider } from "@/components/providers/SessionProvider";
-import { SWRProvider } from "@/components/providers/SWRProvider";
-import { AnalyticsProvider } from "@/components/providers/AnalyticsProvider";
-import { FeatureFlagProvider } from "@/contexts/FeatureFlagContext";
-import { OnboardingProvider } from "@/contexts/OnboardingContext";
 
 export const metadata: Metadata = {
   title: "School Finder - Znajdź idealną szkołę dla swojego dziecka",
@@ -27,22 +23,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl">
-      <body
-        className="font-sans antialiased"
-      >
-        <AnalyticsProvider>
-          <SessionProvider>
-            <SWRProvider>
-              <FeatureFlagProvider>
-                <OnboardingProvider>
-                  <MainLayout>
-                    {children}
-                  </MainLayout>
-                </OnboardingProvider>
-              </FeatureFlagProvider>
-            </SWRProvider>
-          </SessionProvider>
-        </AnalyticsProvider>
+      <body className="font-sans antialiased">
+        <StackProvider app={stackServerApp}>
+          <StackTheme>
+            {children}
+          </StackTheme>
+        </StackProvider>
       </body>
     </html>
   );

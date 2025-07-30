@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { useUser } from "@/hooks/useUser";
+import { useUser as useStackUser } from "@stackframe/stack";
 import { createClient } from "@/lib/supabase/client";
 import { 
   Menu, 
@@ -39,7 +40,8 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
-  const { data: session, status } = useSession();
+  const { user, loading } = useUser();
+  const stackUser = useStackUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,12 +54,12 @@ export function Navbar() {
 
   useEffect(() => {
     const checkAdminRole = async () => {
-      if (session?.user?.id) {
+      if (user?.id) {
         const supabase = createClient();
         const { data: profile } = await supabase
           .from('profiles')
           .select('role')
-          .eq('id', session.user.id)
+          .eq('id', user.id)
           .single();
         
         setIsAdmin(profile?.role === 'admin');
@@ -67,7 +69,7 @@ export function Navbar() {
     };
 
     checkAdminRole();
-  }, [session]);
+  }, [user]);
 
   const navigation = [
     { 
@@ -108,7 +110,10 @@ export function Navbar() {
   };
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/" });
+    if (stackUser) {
+      await stackUser.signOut();
+      window.location.href = "/";
+    }
   };
 
   return (
@@ -177,9 +182,9 @@ export function Navbar() {
 
           {/* User Menu */}
           <div className="flex items-center space-x-3">
-            {status === "loading" ? (
+            {loading ? (
               <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
-            ) : session ? (
+            ) : user ? (
               <div className="flex items-center space-x-3">
                 {/* Notifications */}
                 <Button
@@ -215,9 +220,9 @@ export function Navbar() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-10 w-10 rounded-xl hover:bg-orange-50">
                       <Avatar className="h-8 w-8 ring-2 ring-orange-200">
-                        <AvatarImage src={session.user?.image || ""} alt={session.user?.name || ""} />
+                        <AvatarImage src={user?.image || ""} alt={user?.name || ""} />
                         <AvatarFallback className="bg-gradient-to-br from-orange-400 to-red-400 text-white text-sm font-medium">
-                          {session.user?.name?.charAt(0) || session.user?.email?.charAt(0) || "U"}
+                          {user?.name?.charAt(0) || user?.email?.charAt(0) || "U"}
                         </AvatarFallback>
                       </Avatar>
                     </Button>
@@ -226,10 +231,10 @@ export function Navbar() {
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none text-gray-900">
-                          {session.user?.name || "Użytkownik"}
+                          {user?.name || "Użytkownik"}
                         </p>
                         <p className="text-xs leading-none text-gray-500">
-                          {session.user?.email}
+                          {user?.email}
                         </p>
                       </div>
                     </DropdownMenuLabel>
@@ -332,7 +337,7 @@ export function Navbar() {
                 );
               })}
               
-              {!session && (
+              {!user && (
                 <div className="pt-4 border-t border-orange-100 space-y-2">
                   <Link href="/auth/signin" onClick={() => setIsOpen(false)}>
                     <Button 

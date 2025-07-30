@@ -1,41 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { stackServerApp } from '@/stack';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await stackServerApp.getUser();
     
-    if (!session?.user?.id) {
+    if (!user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    const userId = session.user.id;
+    const userId = user.id;
     
-    // Get user's subscription status
-    const user = await prisma.user.findUnique({
+    // Get user's subscription status from Stack Auth or default to free
+    const subscriptionStatus = 'free'; // TODO: Implement subscription logic with Stack Auth
+    
+    // Get user from database
+    const dbUser = await prisma.user.findUnique({
       where: { id: userId },
       select: { subscriptionStatus: true }
     });
 
-    if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
+    const userSubscriptionStatus = dbUser?.subscriptionStatus || subscriptionStatus;
 
     // If user is premium or enterprise, return unlimited status
-    if (user.subscriptionStatus === 'premium' || user.subscriptionStatus === 'enterprise') {
+    if (userSubscriptionStatus === 'premium' || userSubscriptionStatus === 'enterprise') {
       return NextResponse.json({
         searchCount: 0,
         maxSearches: -1, // -1 indicates unlimited
         resetTime: new Date().toISOString(),
-        subscriptionStatus: user.subscriptionStatus,
+        subscriptionStatus: userSubscriptionStatus,
         timeUntilReset: 0
       });
     }
@@ -62,7 +59,7 @@ export async function GET(request: NextRequest) {
         searchCount: 0,
         maxSearches: maxSearchesForFree,
         resetTime: today.toISOString(),
-        subscriptionStatus: user.subscriptionStatus,
+        subscriptionStatus: userSubscriptionStatus,
         timeUntilReset: 24 // Reset in 24 hours
       });
     }
@@ -85,7 +82,7 @@ export async function GET(request: NextRequest) {
         searchCount: 0,
         maxSearches: maxSearchesForFree,
         resetTime: today.toISOString(),
-        subscriptionStatus: user.subscriptionStatus,
+        subscriptionStatus: userSubscriptionStatus,
         timeUntilReset: 24
       });
     }
@@ -97,7 +94,7 @@ export async function GET(request: NextRequest) {
       searchCount: searchRecord.searchCount,
       maxSearches: maxSearchesForFree,
       resetTime: lastReset.toISOString(),
-      subscriptionStatus: user.subscriptionStatus,
+      subscriptionStatus: userSubscriptionStatus,
       timeUntilReset: timeUntilReset
     });
 
