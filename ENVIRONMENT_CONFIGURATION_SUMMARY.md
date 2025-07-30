@@ -11,11 +11,75 @@ Our project now has a complete three-tier environment setup:
 
 ### Database Architecture Confirmed
 
-| Environment | Database ID | Supabase Project | Status |
-|-------------|-------------|------------------|--------|
-| **Testing** | `localhost:54321` | Mock/Local | ✅ Ready |
-| **Staging** | `xhcltxeknhsvxzvvcjlp` | Staging Project | ✅ Active with 5 Polish schools |
-| **Production** | `iakvamnayaknanniejjs` | Production Project | ✅ Ready for deployment |
+| Environment | Database ID | Supabase Project | Port | Purpose |
+|-------------|-------------|------------------|------|---------|
+| **Testing** | `localhost:54321` | Mock/Local | 3000 | Unit tests, isolated development |
+| **Staging** | `your-staging-id` | Staging Project | 3002 | Safe testing with real-like data |
+| **Production** | `your-production-id` | Production Project | 3001 | Live users, real data |
+
+## 🔧 Environment Files & Usage
+
+### File Structure
+```
+.env.local      # Currently active environment (copied from target)
+.env.testing    # Testing configuration with mocked services
+.env.staging    # Staging configuration with real-like data
+.env.production # Production configuration
+.env.example    # Template for new setups
+```
+
+### Quick Commands
+```bash
+# Switch environments
+npm run env:testing    # 🧪 For tests and isolated development
+npm run env:staging    # 🔧 For daily development (RECOMMENDED)
+npm run env:production # 🚀 For production builds only
+
+# Start development
+npm run dev            # Runs on port 3001
+
+# Run tests
+npm test              # Uses testing environment automatically
+npm run test:e2e      # End-to-end tests
+```
+
+## 🛡️ Security & Safety
+
+### Environment Separation
+- ✅ **Staging** and **Production** use completely different Supabase projects
+- ✅ **Different database URLs** prevent accidental cross-environment access
+- ✅ **Different API keys** for each environment
+- ✅ **Testing environment** uses mocked services for complete isolation
+
+### Safety Rules
+1. **Daily Development**: Always use `npm run env:staging`
+2. **Testing**: Use `npm run env:testing` for isolated tests
+3. **Production**: Only for CI/CD and final deployment
+4. **Never**: Mix environment credentials
+
+## 🔍 Environment Verification
+
+### Check Current Environment
+```bash
+# View current environment
+cat .env.local | grep NEXT_PUBLIC_SUPABASE_URL
+
+# Expected outputs:
+# Testing:    http://localhost:54321
+# Staging:    https://your-staging-project.supabase.co  
+# Production: https://your-production-project.supabase.co
+```
+
+### Verify Database Connection
+```bash
+# Check staging data
+npm run env:staging
+node scripts/check-staging-data.js
+
+# Check production (careful!)
+npm run env:production  
+node scripts/check-current-data.js
+```
 
 ### Files Created/Updated
 - ✅ `ENVIRONMENT_SETUP_GUIDE.md` - Comprehensive environment documentation
@@ -28,12 +92,12 @@ Our project now has a complete three-tier environment setup:
 
 ### Active Environment
 - **Current**: STAGING (safe for development)
-- **Database**: `xhcltxeknhsvxzvvcjlp.supabase.co`
+- **Database**: Your staging Supabase project
 - **Port**: 3002
-- **Data**: 5 real Polish schools
+- **Data**: Real Polish schools for testing
 
 ### GitHub Synchronization
-- **Repository**: `https://github.com/marlink/school-finder-production.git`
+- **Repository**: Your GitHub repository
 - **Branch**: `production-ready`
 - **Status**: ✅ Connected and authenticated
 - **Credentials**: Using OSX Keychain

@@ -80,7 +80,7 @@ async function createAdminProfile() {
     // Sign in the admin user
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
       email: 'design.marceli@gmail.com',
-      password: 'admin123'
+      password: process.env.ADMIN_PASSWORD || 'defaultPassword123'
     });
     
     if (authError) {

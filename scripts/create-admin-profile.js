@@ -16,9 +16,9 @@ async function createAdminProfile() {
     
     // First, let's sign in as the user to get proper authentication
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-      email: userEmail,
-      password: 'superAdmin',
-    })
+    email: 'admin@schoolfinder.pl',
+    password: process.env.ADMIN_PASSWORD || 'defaultPassword123',
+  });
     
     if (signInError) {
       console.error('❌ Error signing in:', signInError.message)

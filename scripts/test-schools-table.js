@@ -40,7 +40,7 @@ async function createSchoolsTableDirect() {
         // Since we can't use exec_sql, let's create a minimal table structure
         // and then use the Supabase dashboard to add columns
         console.log('\n📋 Manual steps needed:');
-        console.log('1. Go to your Supabase dashboard: https://supabase.com/dashboard/project/xhcltxeknhsvxzvvcjlp');
+        console.log('1. Go to your Supabase dashboard and navigate to SQL Editor');
         console.log('2. Navigate to Table Editor');
         console.log('3. Click "Create a new table"');
         console.log('4. Name it "schools"');

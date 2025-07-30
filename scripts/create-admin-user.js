@@ -19,7 +19,7 @@ async function createAdminUser() {
     // User details
     const userData = {
       email: 'design.marceli@gmail.com',
-      password: 'superAdmin',
+      password: process.env.ADMIN_PASSWORD || 'defaultPassword123',
       name: 'Darth MC',
       role: 'admin'
     }

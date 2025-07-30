@@ -1,5 +1,36 @@
 # Development Guide
 
+## 🚨 CRITICAL PROJECT COLLABORATION RULES
+
+### 📍 Location & Environment Awareness
+- **ALWAYS check current directory**: Run `pwd` before ANY npm commands
+- **ALWAYS verify environment**: Check which environment (.env) is active before commits
+- **ALWAYS confirm Git branch**: Know exactly what branch you're on and where you're pushing (staging/prod/origin)
+
+### 🔒 Security & Data Protection
+- **NEVER EVER expose sensitive data**: No passwords, full URLs, API keys, personal data, or credentials in ANY documentation
+- **ALWAYS assume documents will be committed**: Write documentation as if it will be public
+- **DOUBLE-CHECK before saving**: Review all content for sensitive information
+
+### 📝 Session Management & Continuity
+- **ALWAYS create session handovers**: Document progress and next steps for session continuity
+- **ALWAYS update TODO lists**: Keep track of completed and pending tasks
+- **ALWAYS provide clear status**: Know where we are and what's been completed
+
+### 🚀 Continuous Development Flow
+- **ALWAYS follow TODO list**: Work systematically through prioritized tasks
+- **KEEP MOMENTUM**: Once in the zone, continue coding without unnecessary pauses
+- **AUTO-PROGRESS**: Complete task → brief summary → immediately move to next task
+- **NO PERMISSION NEEDED**: Don't ask "what should we work on next" - just follow the list
+
+### 🤝 Professional Collaboration
+- **ASK when in doubt**: Better to clarify than assume
+- **CHECK after ourselves**: Verify work quality and security
+- **HELP each other**: We're a team working toward the same goal
+- **TAKE RESPONSIBILITY**: Own mistakes and learn from them
+
+---
+
 ## 🚨 Critical Development Rules
 
 ### Terminal Command Rules

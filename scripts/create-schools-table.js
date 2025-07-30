@@ -95,7 +95,7 @@ async function createSchoolsTable() {
         `;
         
         console.log('⚠️ Please run this SQL in your Supabase SQL editor:');
-        console.log('🔗 Go to: https://xhcltxeknhsvxzvvcjlp.supabase.co/project/xhcltxeknhsvxzvvcjlp/sql/new');
+        console.log('🔗 Go to your Supabase dashboard SQL Editor to verify the table creation');
         console.log('\n📋 SQL to execute:');
         console.log('=' .repeat(50));
         console.log(createTableSQL);

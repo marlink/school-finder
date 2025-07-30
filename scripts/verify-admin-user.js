@@ -15,9 +15,9 @@ async function verifyAndUpdateUser() {
     
     // First, let's try to sign in to verify the user exists and is confirmed
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-      email: userEmail,
-      password: 'superAdmin',
-    })
+    email: 'admin@schoolfinder.pl',
+    password: process.env.ADMIN_PASSWORD || 'defaultPassword123',
+  });
     
     if (signInError) {
       console.error('❌ Error signing in:', signInError.message)

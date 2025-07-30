@@ -34,6 +34,15 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# specific env files (extra protection)
+.env
+.env.local
+.env.production
+.env.staging
+.env.testing
+.env.apify
 
 # vercel
 .vercel

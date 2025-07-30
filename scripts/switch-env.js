@@ -43,10 +43,39 @@ if (fs.existsSync(targetFile)) {
 // Copy the target environment file
 fs.copyFileSync(sourceFile, targetFile);
 
-console.log('');
 console.log(`✅ Successfully switched to ${targetEnv.toUpperCase()} environment`);
-console.log(`📁 Copied ${sourceFile} → ${targetFile}`);
-console.log('');
+console.log(`📁 Environment file: ${sourceFile} → ${targetFile}`);
+
+// Clear Next.js cache and TypeScript cache
+console.log('\n🧹 Clearing caches...');
+try {
+  // Clear Next.js cache
+  const { execSync } = require('child_process');
+  if (fs.existsSync('.next')) {
+    execSync('rm -rf .next', { stdio: 'inherit' });
+    console.log('   ✅ Next.js cache cleared');
+  }
+  
+  // Clear TypeScript cache
+  if (fs.existsSync('tsconfig.tsbuildinfo')) {
+    fs.unlinkSync('tsconfig.tsbuildinfo');
+    console.log('   ✅ TypeScript build cache cleared');
+  }
+  
+  // Clear node_modules/.cache if it exists
+  if (fs.existsSync('node_modules/.cache')) {
+    execSync('rm -rf node_modules/.cache', { stdio: 'inherit' });
+    console.log('   ✅ Node modules cache cleared');
+  }
+  
+} catch (error) {
+  console.log('   ⚠️  Cache clearing had some issues (this is usually fine)');
+}
+
+console.log('\n💡 Recommended next steps:');
+console.log('   1. Restart your IDE/editor for TypeScript to pick up changes');
+console.log('   2. Run: npm run dev');
+console.log('   3. If you see TypeScript errors, restart the TypeScript server in your IDE');
 
 // Show current environment info
 try {

@@ -63,7 +63,7 @@ async function verifyAndCreateAdminUser() {
     // Sign in to verify the user exists
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email: userEmail,
-      password: 'superAdmin',
+      password: process.env.ADMIN_PASSWORD || 'defaultPassword123',
     })
     
     if (signInError) {

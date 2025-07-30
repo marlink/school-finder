@@ -3,6 +3,7 @@
 ### **Current Status:**
 ✅ Staging environment configured  
 ✅ Supabase project connected  
+✅ Environment files properly set up
 ❌ Schools table needs to be created  
 
 ### **📋 MANUAL STEPS REQUIRED:**
@@ -10,7 +11,7 @@
 #### **1. Create Schools Table**
 Go to your Supabase dashboard and create the schools table:
 
-🔗 **Dashboard URL:** https://supabase.com/dashboard/project/xhcltxeknhsvxzvvcjlp/editor
+🔗 **Dashboard URL:** Go to your Supabase project dashboard → SQL Editor
 
 **Table Name:** `schools`
 
@@ -42,46 +43,48 @@ CREATE TABLE public.schools (
 );
 ```
 
-**OR manually in Table Editor:**
-- `id` (int8, primary key) - auto-created
-- `name` (text, required)
-- `address` (text)
-- `city` (text)
-- `postal_code` (text)
-- `phone` (text)
-- `email` (text)
-- `website` (text)
-- `latitude` (numeric)
-- `longitude` (numeric)
-- `student_count` (int4)
-- `teacher_count` (int4)
-- `established_year` (int4)
-- `school_type` (text)
-- `languages` (text[])
-- `specializations` (text[])
-- `facilities` (text[])
-- `image_url` (text)
-- `description` (text)
-- `created_at` (timestamptz, default: now())
-- `updated_at` (timestamptz, default: now())
+#### **2. Environment Setup**
+Ensure you have the correct staging environment:
 
-#### **2. After Table Creation**
-Run this command to populate with real school data:
+```bash
+# Switch to staging environment
+npm run env:staging
+
+# Verify environment
+cat .env.local | grep NEXT_PUBLIC_SUPABASE_URL
+# Should show your staging Supabase URL
+```
+
+#### **3. Install Dependencies & Setup**
+```bash
+# Install dependencies
+npm install
+
+# Generate Prisma client (if using Prisma)
+npx prisma generate
+
+# Start development server
+npm run dev
+```
+
+#### **4. Populate Database**
+After table creation, run this command to populate with real school data:
 ```bash
 cd /Users/ciepolml/Projects/school-finder/mc-fullpower-01/school-finder-production
 node scripts/populate-real-schools-only.js
 ```
 
-#### **3. Verify Setup**
+#### **5. Verify Setup**
 ```bash
 node scripts/check-staging-data.js
 ```
 
 ### **🚀 NEXT STEPS AFTER TABLE CREATION:**
-1. Populate with 18 real Polish schools
-2. Test the application with real data
-3. Update schema if needed
-4. Push changes to GitHub
-5. Set up deployment pipeline
+1. ✅ Environment properly configured
+2. ❌ Populate with 18 real Polish schools
+3. ❌ Test the application with real data
+4. ❌ Update schema if needed
+5. ❌ Push changes to GitHub
+6. ❌ Set up deployment pipeline
 
 **Ready to proceed once you've created the schools table!** 🎯
