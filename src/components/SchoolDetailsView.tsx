@@ -45,7 +45,7 @@ import {
   Car,
   Bus,
   Bike,
-  Walking,
+  PersonStanding,
   Info,
   AlertCircle,
   Lightbulb,
@@ -61,7 +61,7 @@ import {
 } from "lucide-react";
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { GoogleMap } from '@/components/GoogleMap';
+import GoogleMap from '@/components/GoogleMap';
 import { SentimentAnalysisDisplay } from '@/components/school/sentiment-analysis-display';
 
 interface SchoolDetailsViewProps {
@@ -254,8 +254,8 @@ const translations = {
     views: 'Views',
     kmAway: 'km away',
     noRatings: 'No ratings yet',
-    reviews: 'reviews',
-    verified: 'Verified',
+    reviewsCount: 'reviews',
+    verifiedBadge: 'Verified',
     premium: 'Premium',
     updated: 'Updated',
     
@@ -344,8 +344,8 @@ const translations = {
     views: 'Wyświetlenia',
     kmAway: 'km stąd',
     noRatings: 'Brak ocen',
-    reviews: 'opinii',
-    verified: 'Zweryfikowane',
+    reviewsCount: 'opinii',
+    verifiedBadge: 'Zweryfikowane',
     premium: 'Premium',
     updated: 'Zaktualizowano',
     
@@ -403,7 +403,7 @@ export default function SchoolDetailsView({
           </span>
         </div>
         <span className="text-sm text-gray-500">
-          ({totalReviews} {t.reviews})
+          ({totalReviews} {t.reviewsCount})
         </span>
       </div>
     );
@@ -505,7 +505,7 @@ export default function SchoolDetailsView({
                         <CheckCircle className="h-6 w-6 text-green-500" />
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{t.verified}</p>
+                        <p>{t.verifiedBadge}</p>
                       </TooltipContent>
                     </Tooltip>
                   )}
@@ -889,7 +889,7 @@ export default function SchoolDetailsView({
                       {renderStars(school.avgUserRating || school.avgGoogleRating || 0)}
                     </div>
                     <div className="text-sm text-gray-600">
-                      {school.userRatingCount + school.googleRatingCount} {t.reviews}
+                      {school.userRatingCount + school.googleRatingCount} {t.reviewsCount}
                     </div>
                   </div>
                   <div className="flex items-center justify-center">
@@ -904,7 +904,7 @@ export default function SchoolDetailsView({
 
             {/* Sentiment Analysis */}
             <SentimentAnalysisDisplay 
-              sentimentData={school.sentimentAnalysis}
+              sentimentData={school.sentimentAnalysis || null}
               showKeywords={true}
               compact={false}
             />

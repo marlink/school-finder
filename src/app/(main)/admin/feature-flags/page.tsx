@@ -17,17 +17,17 @@ import { useUser } from '@/hooks/useUser';
 import { Flag, Settings, Users, BarChart3, AlertTriangle, CheckCircle } from 'lucide-react';
 
 export default function FeatureFlagsPage() {
-  const { user } = useUser();
+  const { user, isAdmin } = useUser();
   const [features, setFeatures] = useState<Record<string, FeatureFlag>>({});
   const [loading, setLoading] = useState(true);
   const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
   const [editingFeature, setEditingFeature] = useState<FeatureFlag | null>(null);
 
   useEffect(() => {
-    if (user?.role === 'admin') {
+    if (isAdmin) {
       loadFeatures();
     }
-  }, [user]);
+  }, [isAdmin]);
 
   const loadFeatures = () => {
     const allFeatures = featureFlagService.getAllFeatures();
@@ -60,13 +60,13 @@ export default function FeatureFlagsPage() {
     }
   };
 
-  if (user?.role !== 'admin') {
+  if (!isAdmin) {
     return (
       <div className="container mx-auto px-4 py-8">
         <Alert>
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
-            You don't have permission to access this page.
+            You don&apos;t have permission to access this page.
           </AlertDescription>
         </Alert>
       </div>
@@ -110,7 +110,7 @@ export default function FeatureFlagsPage() {
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg">{featureName}</CardTitle>
-                      <Badge variant={color as any}>
+                      <Badge variant={color as "default" | "destructive" | "outline" | "secondary"}>
                         {status}
                       </Badge>
                     </div>
@@ -146,7 +146,7 @@ export default function FeatureFlagsPage() {
                         {feature.environments.map((env) => (
                           <Badge
                             key={env}
-                            variant={getEnvironmentBadgeColor(env) as any}
+                            variant={getEnvironmentBadgeColor(env) as "default" | "destructive" | "outline" | "secondary"}
                             className="text-xs"
                           >
                             {env}
@@ -298,7 +298,7 @@ export default function FeatureFlagsPage() {
                   return (
                     <div key={featureName} className="flex items-center justify-between p-3 border rounded-lg">
                       <div className="flex items-center space-x-3">
-                        <Badge variant={color as any}>{status}</Badge>
+                        <Badge variant={color as "default" | "destructive" | "outline" | "secondary"}>{status}</Badge>
                         <div>
                           <p className="font-medium">{featureName}</p>
                           <p className="text-sm text-gray-600">{feature.description}</p>

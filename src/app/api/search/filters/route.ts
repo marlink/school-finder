@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 export async function GET(request: NextRequest) {
   try {
@@ -7,7 +8,7 @@ export async function GET(request: NextRequest) {
     const include = searchParams.get('include')?.split(',') || ['all'];
     const region = searchParams.get('region') || '';
 
-    const filters: any = {};
+    const filters: Record<string, any> = {};
 
     // Get school types
     if (include.includes('all') || include.includes('types')) {
@@ -55,7 +56,7 @@ export async function GET(request: NextRequest) {
       const districts = new Map<string, { count: number, voivodeship: string }>();
 
       for (const school of locations) {
-        const addr = school.address as any;
+        const addr = school.address as Record<string, any>;
         
         // Count voivodeships
         if (addr.voivodeship) {
@@ -114,7 +115,7 @@ export async function GET(request: NextRequest) {
         where: {
           status: 'active',
           languages: {
-            not: null
+            not: Prisma.JsonNull
           }
         },
         select: {
@@ -156,7 +157,7 @@ export async function GET(request: NextRequest) {
         where: {
           status: 'active',
           specializations: {
-            not: null
+            not: Prisma.JsonNull
           }
         },
         select: {
@@ -185,7 +186,7 @@ export async function GET(request: NextRequest) {
         where: {
           status: 'active',
           facilities: {
-            not: null
+            not: Prisma.JsonNull
           }
         },
         select: {

@@ -1,18 +1,20 @@
 import { Suspense } from 'react';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { SchoolsMap } from '@/components/school/SchoolsMap';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MapPin, School, Users, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { type School as SchoolType } from '@/types/school';
 
-async function getSchoolsWithCoordinates() {
+async function getSchoolsWithCoordinates(): Promise<SchoolType[]> {
   try {
     const schools = await prisma.school.findMany({
       where: {
         status: 'active',
         location: {
-          not: null
+          not: Prisma.JsonNull
         }
       },
       include: {
@@ -28,22 +30,60 @@ async function getSchoolsWithCoordinates() {
       }
     });
 
-    return schools;
+    // Convert Prisma data to School type
+    return schools.map(school => {
+      const address = school.address as any;
+      const location = school.location as any;
+      const contact = school.contact as any;
+      
+      return {
+        id: school.id,
+        name: school.name,
+        type: school.type,
+        address: address ? {
+          street: address.street || '',
+          city: address.city || '',
+          voivodeship: address.voivodeship || '',
+          postalCode: address.postal || address.postalCode || '',
+          district: address.district
+        } : {
+          street: '',
+          city: '',
+          voivodeship: '',
+          postalCode: ''
+        },
+        contact: contact ? {
+          phone: contact.phone,
+          email: contact.email,
+          website: contact.website
+        } : undefined,
+        location: location ? {
+          lat: location.lat || location.latitude,
+          lng: location.lng || location.longitude
+        } : undefined,
+        studentCount: school.studentCount,
+        establishedYear: school.establishedYear,
+        ratings: school.googleRatings && school.googleRatings.length > 0 ? {
+          google: Number(school.googleRatings[0].rating)
+        } : undefined,
+        status: school.status as 'active' | 'inactive' | 'pending',
+        createdAt: school.createdAt,
+        updatedAt: school.updatedAt
+      } as SchoolType;
+    });
   } catch (error) {
     console.error('Error fetching schools:', error);
     return [];
   }
 }
 
-function SchoolsList({ schools }: { schools: any[] }) {
+function SchoolsList({ schools }: { schools: SchoolType[] }) {
   return (
     <div className="space-y-4">
       {schools.map((school) => {
-        const address = school.address as any;
-        const location = school.location as any;
-        const googleRating = school.googleRatings && school.googleRatings.length > 0 
-          ? Number(school.googleRatings[0].rating) 
-          : null;
+        const address = school.address;
+        const location = school.location;
+        const googleRating = school.ratings?.google;
 
         return (
           <Card key={school.id} className="hover:shadow-md transition-shadow">
@@ -67,7 +107,7 @@ function SchoolsList({ schools }: { schools: any[] }) {
                       <div className="flex items-center gap-1">
                         <MapPin className="h-3 w-3" />
                         <span>
-                          {[address.street, address.city, address.postal]
+                          {[address.street, address.city, address.postalCode]
                             .filter(Boolean)
                             .join(', ')}
                         </span>
@@ -201,7 +241,7 @@ export default async function MapPage() {
           <CardContent className="p-6 text-center">
             <Star className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
             <div className="text-2xl font-bold text-gray-900">
-              {schools.filter(s => s.googleRatings?.length > 0).length}
+              {schools.filter(s => s.ratings?.google).length}
             </div>
             <div className="text-sm text-gray-600">Szkół z ocenami Google</div>
           </CardContent>

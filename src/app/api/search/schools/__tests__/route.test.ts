@@ -37,6 +37,19 @@ jest.mock('next/server', () => {
       json: jest.fn((body, init) => ({
         json: () => Promise.resolve(body),
         status: init?.status || 200,
+        headers: {
+          set: jest.fn(),
+          get: jest.fn(),
+          has: jest.fn(),
+          delete: jest.fn(),
+          forEach: jest.fn(),
+          entries: jest.fn(),
+          keys: jest.fn(),
+          values: jest.fn(),
+        },
+        clone: jest.fn(() => ({
+          json: () => Promise.resolve(body),
+        })),
       })),
     },
   };
@@ -56,13 +69,9 @@ describe('GET /api/search/schools', () => {
     (prisma.school.findMany as jest.Mock).mockResolvedValue([]);
     (prisma.school.count as jest.Mock).mockResolvedValue(0);
 
-    const request = new NextRequest('http://localhost:3000/api/search/schools?query=nonexistent');
+    const request = new NextRequest('http://localhost:3000/api/search/schools?q=nonexistent');
     const res = await GET(request);
     const data = await res.json();
-
-    if (res.status !== 200) {
-      console.error('Error response:', data);
-    }
 
     expect(res.status).toBe(200);
     expect(data.schools).toEqual([]);
@@ -88,7 +97,7 @@ describe('GET /api/search/schools', () => {
     (prisma.school.findMany as jest.Mock).mockResolvedValue(mockSchools);
     (prisma.school.count as jest.Mock).mockResolvedValue(1);
 
-    const request = new NextRequest('http://localhost:3000/api/search/schools?query=Test');
+    const request = new NextRequest('http://localhost:3000/api/search/schools?q=Test');
     const res = await GET(request);
     const data = await res.json();
 
@@ -116,7 +125,7 @@ describe('GET /api/search/schools', () => {
     (prisma.school.findMany as jest.Mock).mockResolvedValue(mockPublicSchools);
     (prisma.school.count as jest.Mock).mockResolvedValue(1);
 
-    const request = new NextRequest('http://localhost:3000/api/search/schools?type=public');
+    const request = new NextRequest('http://localhost:3000/api/search/schools?q=school&type=public');
     const res = await GET(request);
     const data = await res.json();
 
@@ -147,7 +156,7 @@ describe('GET /api/search/schools', () => {
     (prisma.school.findMany as jest.Mock).mockResolvedValue(mockSchools);
     (prisma.school.count as jest.Mock).mockResolvedValue(10); // Total of 10 schools
 
-    const request = new NextRequest('http://localhost:3000/api/search/schools?page=2&limit=5');
+    const request = new NextRequest('http://localhost:3000/api/search/schools?q=school&page=2&limit=5');
     const res = await GET(request);
     const data = await res.json();
 

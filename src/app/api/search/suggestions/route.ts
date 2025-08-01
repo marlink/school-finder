@@ -32,16 +32,12 @@ export async function GET(request: NextRequest) {
     if (type === 'all' || type === 'schools') {
       const schools = await prisma.school.findMany({
         where: {
-          OR: [
-            { name: { contains: query, mode: 'insensitive' } },
-            { shortName: { contains: query, mode: 'insensitive' } }
-          ],
+          name: { contains: query, mode: 'insensitive' },
           status: 'active'
         },
         select: {
           id: true,
           name: true,
-          shortName: true,
           type: true,
           address: true,
           images: {

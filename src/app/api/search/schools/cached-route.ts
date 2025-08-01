@@ -265,8 +265,8 @@ export async function GET(request: NextRequest) {
               rating: true
             }
           },
-          favorites: session?.user?.id ? {
-            where: { userId: session.user.id },
+          favorites: user?.id ? {
+            where: { userId: user.id },
             select: { id: true }
           } : false
         }
@@ -305,7 +305,7 @@ export async function GET(request: NextRequest) {
         userRatingCount: userRatings.length,
         googleRatingCount: googleRatings.length,
         distance: distance ? Number(distance.toFixed(1)) : null,
-        isFavorite: session?.user?.id ? school.favorites.length > 0 : false,
+        isFavorite: user?.id ? school.favorites.length > 0 : false,
         mainImage: school.images[0]?.imageUrl || null,
         userRatings: undefined, // Remove from response
         googleRatings: undefined, // Remove from response

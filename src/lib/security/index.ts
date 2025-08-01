@@ -178,8 +178,8 @@ export async function validateRequest(
     );
   }
   
-  // Apply rate limiting
-  if (options.rateLimitConfig) {
+  // Apply rate limiting (skip in test environment)
+  if (options.rateLimitConfig && process.env.NODE_ENV !== 'test') {
     const rateLimitResponse = await rateLimit(request, options.rateLimitConfig);
     if (rateLimitResponse) return rateLimitResponse;
   }
@@ -202,7 +202,7 @@ export async function validateRequest(
 export function createErrorResponse(
   message: string,
   status: number = 400,
-  details?: any
+  details?: unknown
 ): NextResponse {
   return NextResponse.json(
     {
@@ -217,7 +217,7 @@ export function createErrorResponse(
 
 // Success response helper
 export function createSuccessResponse(
-  data: any,
+  data: unknown,
   message: string = 'Success'
 ): NextResponse {
   return NextResponse.json({

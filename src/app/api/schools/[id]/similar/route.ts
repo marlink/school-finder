@@ -33,7 +33,7 @@ export async function GET(
           // Add location-based filtering if address data is available
           ...(address?.voivodeship ? [{
             address: {
-              path: 'voivodeship',
+              path: ['voivodeship'],
               equals: address.voivodeship
             }
           }] : [])

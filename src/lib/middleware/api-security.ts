@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUser } from '@/lib/auth';
 import { validateRequest, getSecurityHeaders, sanitizeInput } from '@/lib/security';
+import { withCSRFProtection } from '@/lib/security/csrf';
 import { z } from 'zod';
 
 export interface SecurityConfig {
@@ -15,6 +16,7 @@ export interface SecurityConfig {
   allowedRoles?: string[];
   validateSchema?: z.ZodSchema;
   sanitizeInputs?: boolean;
+  enableCSRF?: boolean;
 }
 
 export interface ApiRequest extends NextRequest {
@@ -30,97 +32,20 @@ export interface ApiRequest extends NextRequest {
  * Comprehensive API security middleware
  * Handles authentication, authorization, validation, rate limiting, and security headers
  */
-export async function withApiSecurity(
+export function withApiSecurity(
   handler: (request: ApiRequest, ...args: any[]) => Promise<NextResponse>,
   config: SecurityConfig = {}
 ) {
   return async (request: NextRequest, ...args: any[]): Promise<NextResponse> => {
     try {
-      // Apply basic security validation
-      const securityCheck = await validateRequest(request, {
-        allowedMethods: config.allowedMethods,
-        requireApiKey: config.requireApiKey,
-        rateLimitConfig: config.rateLimitConfig,
-      });
-
-      if (securityCheck) return securityCheck;
-
-      // Create enhanced request object
-      const apiRequest = request as ApiRequest;
-
-      // Handle authentication if required
-      if (config.requireAuth) {
-        const user = await getUser();
-        
-        if (!user) {
-          return NextResponse.json(
-            { error: 'Authentication required' },
-            { status: 401 }
-          );
-        }
-
-        const isAdmin = await user.hasPermission('admin');
-        
-        apiRequest.user = {
-          id: user.id,
-          email: user.primaryEmail || '',
-          role: isAdmin ? 'admin' : 'user',
-        };
-
-        // Check role-based authorization
-        if (config.allowedRoles && !config.allowedRoles.includes(apiRequest.user.role)) {
-          return NextResponse.json(
-            { error: 'Insufficient permissions' },
-            { status: 403 }
-          );
-        }
+      // Apply CSRF protection if enabled
+      if (config.enableCSRF) {
+        return withCSRFProtection(request, async (protectedRequest) => {
+          return executeSecurityChecks(protectedRequest, config, args, handler);
+        });
       }
 
-      // Validate request body if schema provided
-      if (config.validateSchema && ['POST', 'PUT', 'PATCH'].includes(request.method)) {
-        try {
-          const body = await request.json();
-          
-          // Sanitize inputs if enabled
-          if (config.sanitizeInputs) {
-            const sanitizedBody = sanitizeObjectInputs(body);
-            apiRequest.validatedData = config.validateSchema.parse(sanitizedBody);
-          } else {
-            apiRequest.validatedData = config.validateSchema.parse(body);
-          }
-        } catch (error) {
-          if (error instanceof z.ZodError) {
-            return NextResponse.json(
-              {
-                error: 'Validation failed',
-                details: error.issues,
-              },
-              { status: 400 }
-            );
-          }
-          
-          return NextResponse.json(
-            { error: 'Invalid request body' },
-            { status: 400 }
-          );
-        }
-      }
-
-      // Call the actual handler
-      const response = await handler(apiRequest, ...args);
-
-      // Add security headers to response
-      const securityHeaders = getSecurityHeaders();
-      Object.entries(securityHeaders).forEach(([key, value]) => {
-        response.headers.set(key, value);
-      });
-
-      // Add CORS headers if needed
-      response.headers.set('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGINS || '*');
-      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
-
-      return response;
+      return executeSecurityChecks(request, config, args, handler);
     } catch (error) {
       console.error('API Security Middleware Error:', error);
       
@@ -141,6 +66,102 @@ export async function withApiSecurity(
       return errorResponse;
     }
   };
+}
+
+/**
+ * Execute security checks and handle the request
+ */
+async function executeSecurityChecks(
+  request: NextRequest,
+  config: SecurityConfig,
+  args: any[],
+  handler: (request: ApiRequest, ...args: any[]) => Promise<NextResponse>
+): Promise<NextResponse> {
+  // Apply basic security validation
+  const securityCheck = await validateRequest(request, {
+    allowedMethods: config.allowedMethods,
+    requireApiKey: config.requireApiKey,
+    rateLimitConfig: config.rateLimitConfig,
+  });
+
+  if (securityCheck) return securityCheck;
+
+  // Create enhanced request object
+  const apiRequest = request as ApiRequest;
+
+  // Handle authentication if required
+  if (config.requireAuth) {
+    const user = await getUser();
+    
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    const isAdmin = await user.hasPermission('admin');
+    
+    apiRequest.user = {
+      id: user.id,
+      email: user.primaryEmail || '',
+      role: isAdmin ? 'admin' : 'user',
+    };
+
+    // Check role-based authorization
+    if (config.allowedRoles && !config.allowedRoles.includes(apiRequest.user.role)) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions' },
+        { status: 403 }
+      );
+    }
+  }
+
+  // Validate request body if schema provided
+  if (config.validateSchema && ['POST', 'PUT', 'PATCH'].includes(request.method)) {
+    try {
+      const body = await request.json();
+      
+      // Sanitize inputs if enabled
+      if (config.sanitizeInputs) {
+        const sanitizedBody = sanitizeObjectInputs(body);
+        apiRequest.validatedData = config.validateSchema.parse(sanitizedBody);
+      } else {
+        apiRequest.validatedData = config.validateSchema.parse(body);
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return NextResponse.json(
+          {
+            error: 'Validation failed',
+            details: error.issues,
+          },
+          { status: 400 }
+        );
+      }
+      
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+  }
+
+  // Call the actual handler
+  const response = await handler(apiRequest, ...args);
+
+  // Add security headers to response
+  const securityHeaders = getSecurityHeaders();
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+
+  // Add CORS headers if needed
+  response.headers.set('Access-Control-Allow-Origin', process.env.ALLOWED_ORIGINS || '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
+
+  return response;
 }
 
 /**
@@ -227,6 +248,7 @@ export const SecurityConfigs = {
   // Write operations (more restrictive)
   write: {
     requireAuth: true,
+    enableCSRF: true,
     rateLimitConfig: {
       windowMs: 5 * 60 * 1000, // 5 minutes
       maxRequests: 10,

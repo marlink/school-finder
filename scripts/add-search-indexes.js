@@ -19,7 +19,8 @@ async function addSearchIndexes() {
       const statement = statements[i].trim();
       if (statement) {
         console.log(`Executing statement ${i + 1}/${statements.length}...`);
-        await prisma.$executeRawUnsafe(statement);
+        // Use $executeRaw with template literal for safety
+        await prisma.$executeRaw`${statement}`;
       }
     }
     

@@ -82,12 +82,12 @@ export const isGoogleMapsLoaded = (): boolean => {
 /**
  * Geocode an address to coordinates
  */
-export const geocodeAddress = async (address: string): Promise<Coordinates | null> => {
+export const geocodeAddress = async (address: string): Promise<Coordinates> => {
   if (!isGoogleMapsLoaded()) {
     await loadGoogleMapsAPI();
   }
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const geocoder = new google.maps.Geocoder();
     
     geocoder.geocode({ address }, (results, status) => {
@@ -98,7 +98,7 @@ export const geocodeAddress = async (address: string): Promise<Coordinates | nul
           lng: location.lng()
         });
       } else {
-        resolve(null);
+        reject(new Error(`Geocoding failed: ${status}`));
       }
     });
   });
@@ -209,6 +209,58 @@ export const getDirections = async (
  * Search for places using Google Places API
  */
 export const searchPlaces = async (
+  query: string,
+  options?: {
+    types?: string[];
+    componentRestrictions?: google.maps.places.ComponentRestrictions;
+    location?: Coordinates;
+    radius?: number;
+  }
+): Promise<PlaceResult[]> => {
+  if (!isGoogleMapsLoaded()) {
+    await loadGoogleMapsAPI();
+  }
+
+  return new Promise((resolve) => {
+    const service = new google.maps.places.AutocompleteService();
+    
+    const request: google.maps.places.AutocompletionRequest = {
+      input: query
+    };
+
+    if (options?.types) {
+      request.types = options.types;
+    }
+
+    if (options?.componentRestrictions) {
+      request.componentRestrictions = options.componentRestrictions;
+    }
+
+    if (options?.location) {
+      request.location = new google.maps.LatLng(options.location.lat, options.location.lng);
+      request.radius = options.radius || 50000;
+    }
+
+    service.getPlacePredictions(request, (predictions, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
+        const places: PlaceResult[] = predictions.map(prediction => ({
+          place_id: prediction.place_id,
+          formatted_address: prediction.description,
+          name: prediction.structured_formatting?.main_text,
+          types: prediction.types
+        }));
+        resolve(places);
+      } else {
+        resolve([]);
+      }
+    });
+  });
+};
+
+/**
+ * Search for places using text search (legacy function)
+ */
+export const searchPlacesText = async (
   query: string,
   location?: Coordinates,
   radius?: number

@@ -19,20 +19,20 @@ interface FeatureFlagProviderProps {
 }
 
 export function FeatureFlagProvider({ children }: FeatureFlagProviderProps) {
-  const { user, loading: userLoading } = useUser();
+  const { user, profile, loading: userLoading } = useUser();
   const [loading, setLoading] = useState(true);
   const [enabledFeatures, setEnabledFeatures] = useState<string[]>([]);
 
   const refreshFlags = React.useCallback(() => {
     if (!userLoading) {
-      const userRole = user?.role || 'user';
+      const userRole = profile?.role || 'user';
       const userId = user?.id;
       
       const enabled = featureFlagService.getEnabledFeatures(userRole, userId);
       setEnabledFeatures(enabled);
       setLoading(false);
     }
-  }, [user, userLoading]);
+  }, [user, profile, userLoading]);
 
   useEffect(() => {
     refreshFlags();

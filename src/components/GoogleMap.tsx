@@ -2,10 +2,23 @@
 
 import React, { useCallback, memo } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-import { School } from '@/types/school';
 
 interface GoogleMapComponentProps {
-  school: School;
+  school: {
+    id: string;
+    name: string;
+    address: {
+      street: string;
+      city: string;
+      voivodeship: string;
+      postal?: string;
+      postalCode?: string;
+    };
+    location?: {
+      latitude: number;
+      longitude: number;
+    };
+  };
   width?: string;
   height?: string;
   className?: string;
@@ -104,7 +117,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
                 <h3 className="font-semibold text-sm mb-1">{school.name}</h3>
                 <p className="text-xs text-gray-600">
                   {school.address.street}<br />
-                  {school.address.city} {school.address.postal}<br />
+                  {school.address.city} {school.address.postal || school.address.postalCode}<br />
                   {school.address.voivodeship}
                 </p>
               </div>

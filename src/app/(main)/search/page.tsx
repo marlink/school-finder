@@ -414,19 +414,27 @@ function SearchPageContent() {
                     id: school.id,
                     name: school.name,
                     type: school.type,
-                    city: school.city,
-                    voivodeship: school.voivodeship,
-                    address: typeof school.address === 'string' ? school.address : `${school.address?.street || ''}, ${school.city}`.trim(),
-                    rating: school.averageGoogleRating,
-                    reviewCount: school.totalRatings,
+                    city: school.city || '',
+                    voivodeship: school.voivodeship || '',
+                    address: {
+                      street: typeof school.address === 'string' ? '' : school.address?.street || '',
+                      city: school.city || '',
+                      voivodeship: school.voivodeship || '',
+                      postalCode: typeof school.address === 'string' ? '' : school.address?.postalCode || ''
+                    },
+                    location: {
+                      lat: school.location!.latitude,
+                      lng: school.location!.longitude
+                    },
+                    phone: school.phone,
+                    email: school.email,
+                    website: school.website,
                     studentCount: school.studentCount,
                     establishedYear: school.establishedYear,
-                    description: school.description,
-                    website: school.website,
-                    latitude: school.location!.latitude,
-                    longitude: school.location!.longitude,
-                    distance: school.distance
-                  }))} 
+                    ratings: school.averageGoogleRating ? {
+                      google: school.averageGoogleRating
+                    } : undefined
+                  })) as any} 
                 />
               ) : (
                 <div className="h-full flex items-center justify-center bg-gray-50">
@@ -448,8 +456,8 @@ function SearchPageContent() {
                 id: school.id,
                 name: school.name,
                 type: school.type,
-                city: school.city,
-                voivodeship: school.voivodeship,
+                city: school.city || '',
+                voivodeship: school.voivodeship || '',
                 address: typeof school.address === 'string' ? school.address : `${school.address?.street || ''}, ${school.city}`.trim(),
                 rating: school.averageGoogleRating,
                 reviewCount: school.totalRatings,
@@ -461,8 +469,10 @@ function SearchPageContent() {
                 email: school.email,
                 languages: school.languages,
                 specializations: school.specializations,
-                facilities: school.facilities,
-                images: school.images?.map(img => img.imageUrl),
+                facilities: Array.isArray(school.facilities) 
+                  ? school.facilities.map(f => typeof f === 'string' ? f : f.name)
+                  : school.facilities,
+                images: school.images?.map(img => img.url),
                 latitude: school.location?.latitude,
                 longitude: school.location?.longitude,
                 distance: school.distance

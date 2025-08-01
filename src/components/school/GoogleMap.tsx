@@ -143,7 +143,7 @@ export function GoogleMap({ address, schoolName, location, placeId, className }:
 
   const openInGoogleMaps = () => {
     if (location) {
-      window.open(`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`, '_blank');
+      window.open(`https://www.google.com/maps/place/${location.lat},${location.lng}`, '_blank');
     } else {
       const encodedAddress = encodeURIComponent(fullAddress);
       window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');

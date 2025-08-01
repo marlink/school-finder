@@ -147,7 +147,7 @@ export async function getCachedData<T>(
   // Try to get from cache
   const cachedData = cache.get(key);
   if (cachedData) {
-    return cachedData;
+    return cachedData as T;
   }
 
   // Fetch fresh data

@@ -3,29 +3,57 @@ import { getUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { withPerformanceTracking } from '@/lib/performance';
 import { withCacheAndRateLimit, defaultCacheConfigs, defaultRateLimitConfigs } from '@/lib/cache-middleware';
+import { withApiSecurity, SecurityConfigs, ApiRequest } from '@/lib/middleware/api-security';
+import { searchQuerySchema } from '@/lib/validation/schemas';
 
-async function searchHandler(request: NextRequest) {
+async function searchHandler(request: ApiRequest) {
   try {
     const user = await getUser();
     
-    // Get search parameters
+    // Get search parameters and validate them
     const searchParams = request.nextUrl.searchParams;
-    const query = searchParams.get('q') || '';
+    
+    // Create search parameters object for validation
+    const searchData = {
+      query: searchParams.get('q') || '',
+      latitude: searchParams.get('userLat') ? parseFloat(searchParams.get('userLat')!) : undefined,
+      longitude: searchParams.get('userLng') ? parseFloat(searchParams.get('userLng')!) : undefined,
+      radius: searchParams.get('maxDistance') ? parseFloat(searchParams.get('maxDistance')!) : undefined,
+      filters: {
+        type: searchParams.get('type') ? [searchParams.get('type')!] : undefined,
+        voivodeship: searchParams.get('voivodeship') ? [searchParams.get('voivodeship')!] : undefined,
+        city: searchParams.get('city') ? [searchParams.get('city')!] : undefined,
+      },
+      page: parseInt(searchParams.get('page') || '1'),
+      limit: parseInt(searchParams.get('limit') || '12'),
+    };
+
+    // Validate search parameters
+    const validation = searchQuerySchema.safeParse(searchData);
+    if (!validation.success) {
+      return NextResponse.json(
+        { 
+          error: 'Invalid search parameters',
+          details: validation.error.issues 
+        },
+        { status: 400 }
+      );
+    }
+
+    // Extract validated data and additional parameters
+    const { query, latitude: userLat, longitude: userLng, radius: maxDistance, filters, page, limit } = validation.data;
+    
+    // Get additional parameters (not in schema but needed for functionality)
     const type = searchParams.get('type') || 'all';
     const city = searchParams.get('city') || '';
     const voivodeship = searchParams.get('voivodeship') || '';
     const district = searchParams.get('district') || '';
     const sortBy = searchParams.get('sortBy') || 'name';
     const sortOrder = searchParams.get('sortOrder') || 'asc';
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '12');
     const minRating = parseFloat(searchParams.get('minRating') || '0');
-    const maxDistance = parseFloat(searchParams.get('maxDistance') || '50');
-    const userLat = parseFloat(searchParams.get('userLat') || '0');
-    const userLng = parseFloat(searchParams.get('userLng') || '0');
-    const languages = searchParams.get('languages')?.split(',') || [];
-    const specializations = searchParams.get('specializations')?.split(',') || [];
-    const facilities = searchParams.get('facilities')?.split(',') || [];
+    const languages = searchParams.get('languages')?.split(',').filter(Boolean) || [];
+    const specializations = searchParams.get('specializations')?.split(',').filter(Boolean) || [];
+    const facilities = searchParams.get('facilities')?.split(',').filter(Boolean) || [];
     const hasImages = searchParams.get('hasImages') === 'true';
     const establishedAfter = searchParams.get('establishedAfter') ? parseInt(searchParams.get('establishedAfter')!) : null;
     const establishedBefore = searchParams.get('establishedBefore') ? parseInt(searchParams.get('establishedBefore')!) : null;
@@ -455,4 +483,4 @@ const cachedSearchHandler = withCacheAndRateLimit(
   defaultRateLimitConfigs.search
 )(searchHandler);
 
-export const GET = withPerformanceTracking(cachedSearchHandler);
+export const GET = withApiSecurity(withPerformanceTracking(cachedSearchHandler), SecurityConfigs.search);

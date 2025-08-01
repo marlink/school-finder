@@ -12,7 +12,8 @@ import {
   TrendingUp, 
   Star, 
   MapPin,
-  X 
+  X,
+  Download
 } from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from '@/hooks/useUser';

@@ -280,8 +280,8 @@ export function formatDuration(ms: number): string {
   return `${(ms / 3600000).toFixed(1)}h`;
 }
 
-// Start cleanup interval
-if (typeof window === 'undefined') {
+// Start cleanup interval (only in production, not in tests)
+if (typeof window === 'undefined' && process.env.NODE_ENV !== 'test') {
   setInterval(() => {
     performanceMonitor.cleanup();
   }, 60 * 60 * 1000); // Cleanup every hour

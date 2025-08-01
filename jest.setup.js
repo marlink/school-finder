@@ -91,3 +91,28 @@ global.console = {
   warn: jest.fn(),
   error: jest.fn(),
 };
+
+// Track intervals to clean them up after tests
+const originalSetInterval = global.setInterval;
+const intervals = new Set();
+
+global.setInterval = (...args) => {
+  const id = originalSetInterval(...args);
+  intervals.add(id);
+  return id;
+};
+
+// Clean up intervals after each test
+afterEach(() => {
+  intervals.forEach(id => {
+    clearInterval(id);
+  });
+  intervals.clear();
+});
+
+// Also clean up on process exit
+process.on('exit', () => {
+  intervals.forEach(id => {
+    clearInterval(id);
+  });
+});

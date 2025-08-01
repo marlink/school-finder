@@ -3,6 +3,8 @@
  * Based on browser settings and location
  */
 
+import { useState } from 'react';
+
 export type SupportedLanguage = 'en' | 'pl';
 
 export const DEFAULT_LANGUAGE: SupportedLanguage = 'pl';
@@ -22,7 +24,11 @@ export function detectBrowserLanguage(): SupportedLanguage {
     return DEFAULT_LANGUAGE;
   }
 
-  const browserLanguage = navigator.language || (navigator as any).userLanguage;
+  const browserLanguage = navigator.language || (navigator as Navigator & { userLanguage?: string }).userLanguage;
+  
+  if (!browserLanguage) {
+    return DEFAULT_LANGUAGE;
+  }
   
   // Check if browser language matches supported languages
   if (browserLanguage.startsWith('pl')) {
@@ -156,7 +162,7 @@ export function useLanguageDetection(): {
   language: SupportedLanguage;
   setLanguage: (lang: SupportedLanguage) => void;
 } {
-  const [language, setLanguageState] = React.useState<SupportedLanguage>(
+  const [language, setLanguageState] = useState<SupportedLanguage>(
     getUserPreferredLanguage()
   );
 
@@ -166,10 +172,4 @@ export function useLanguageDetection(): {
   };
 
   return { language, setLanguage };
-}
-
-// Import React only if we're in a client environment
-let React: any;
-if (typeof window !== 'undefined') {
-  React = require('react');
 }

@@ -43,10 +43,12 @@ class RateLimitStore {
 
 const rateLimitStore = new RateLimitStore();
 
-// Clean up rate limit store every 5 minutes
-setInterval(() => {
-  rateLimitStore.cleanup();
-}, 5 * 60 * 1000);
+// Clean up rate limit store every 5 minutes (only in production, not in tests)
+if (process.env.NODE_ENV !== 'test') {
+  setInterval(() => {
+    rateLimitStore.cleanup();
+  }, 5 * 60 * 1000);
+}
 
 // Rate limiting middleware
 export function withRateLimit(config: RateLimitConfig) {

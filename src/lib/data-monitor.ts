@@ -91,7 +91,6 @@ export class DataMonitor {
       select: {
         id: true,
         name: true,
-        shortName: true,
         type: true,
         address: true,
         contact: true,
@@ -112,7 +111,6 @@ export class DataMonitor {
     const totalSchools = schools.length;
     const dataFields = {
       name: { total: totalSchools, filled: 0, missing: 0, percentage: 0 },
-      shortName: { total: totalSchools, filled: 0, missing: 0, percentage: 0 },
       type: { total: totalSchools, filled: 0, missing: 0, percentage: 0 },
       address: { total: totalSchools, filled: 0, missing: 0, percentage: 0 },
       contact: { total: totalSchools, filled: 0, missing: 0, percentage: 0 },
@@ -129,7 +127,7 @@ export class DataMonitor {
 
     schools.forEach(school => {
       // Check each field for completeness
-      Object.keys(dataFields).forEach(field => {
+      (Object.keys(dataFields) as Array<keyof typeof dataFields>).forEach(field => {
         const value = school[field as keyof typeof school];
         if (value !== null && value !== undefined && value !== '') {
           // For JSON fields, check if they have meaningful data
@@ -152,7 +150,7 @@ export class DataMonitor {
     });
 
     // Calculate percentages
-    Object.keys(dataFields).forEach(field => {
+    (Object.keys(dataFields) as Array<keyof typeof dataFields>).forEach(field => {
       dataFields[field].percentage = Math.round(
         (dataFields[field].filled / dataFields[field].total) * 100
       );
@@ -222,7 +220,7 @@ export class DataMonitor {
       : null;
 
     // Calculate success rate (assuming ratings with valid data are successful)
-    const successRate = total > 0 ? Math.round((ratings.filter(r => r.rating > 0).length / total) * 100) : 0;
+    const successRate = total > 0 ? Math.round((ratings.filter(r => parseFloat(r.rating.toString()) > 0).length / total) * 100) : 0;
 
     // Calculate average rating
     const avgRating = total > 0 

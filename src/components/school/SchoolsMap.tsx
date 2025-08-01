@@ -50,7 +50,7 @@ export function SchoolsMap({
 
         // Filter schools with valid coordinates
         const validSchools = schools.filter(school => 
-          school.location?.lat && school.location?.lng
+          school.location?.latitude && school.location?.longitude
         );
 
         if (validSchools.length === 0) {
@@ -83,8 +83,8 @@ export function SchoolsMap({
         validSchools.forEach(school => {
           if (school.location) {
             bounds.extend(new google.maps.LatLng(
-              school.location.lat,
-              school.location.lng
+              school.location.latitude,
+              school.location.longitude
             ));
           }
         });
@@ -115,8 +115,8 @@ export function SchoolsMap({
           if (!school.location) return;
 
           const position: Coordinates = {
-            lat: school.location.lat,
-            lng: school.location.lng
+            lat: school.location.latitude,
+            lng: school.location.longitude
           };
 
           // Create marker with custom icon
@@ -203,7 +203,7 @@ export function SchoolsMap({
     if (schools.length === 1) {
       const school = schools[0];
       if (school.location) {
-        window.open(`https://www.google.com/maps/search/?api=1&query=${school.location.lat},${school.location.lng}`, '_blank');
+        window.open(`https://www.google.com/maps/search/?api=1&query=${school.location.latitude},${school.location.longitude}`, '_blank');
       } else {
         const address = school.address;
         const fullAddress = [

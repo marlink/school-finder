@@ -29,7 +29,11 @@
     "version:major": "npm version major && git push origin --tags",
     "release:staging": "git checkout staging && git pull origin staging",
     "release:production": "git checkout production-ready && git merge staging && git push origin production-ready",
-    "release:live": "git checkout main && git merge production-ready && npm run version:patch && git push origin main"
+    "release:live": "git checkout main && git merge production-ready && npm run version:patch && git push origin main",
+    "security:test": "node scripts/security-tests.js",
+    "security:check": "./scripts/automated-security-check.sh",
+    "security:audit": "npm audit && npm run security:test",
+    "security:full": "npm run security:audit && npm run security:check"
   },
   "dependencies": {
     "@auth/supabase-adapter": "^1.10.0",
@@ -64,14 +68,17 @@
     "autoprefixer": "^10.4.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "critters": "^0.0.23",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.1",
+    "embla-carousel-react": "^8.6.0",
     "intro.js": "^8.3.2",
     "intro.js-react": "^1.0.0",
     "jest-environment-jsdom": "^30.0.5",
     "lucide-react": "^0.525.0",
     "next": "15.4.1",
     "next-intl": "^4.3.4",
+    "next-themes": "^0.4.6",
     "node-fetch": "^2.7.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -80,7 +87,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^4.0.8"
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",

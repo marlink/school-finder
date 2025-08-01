@@ -1,5 +1,4 @@
-import { createClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
+import createSupabaseClient from '@/lib/supabase/client';
 
 export interface OnboardingStatus {
   id: string;
@@ -102,7 +101,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
 ];
 
 export class OnboardingService {
-  private supabase = createClient();
+  private supabase = createSupabaseClient();
 
   async getOnboardingStatus(userId: string): Promise<OnboardingStatus | null> {
     try {

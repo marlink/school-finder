@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { createClient } from '@/lib/supabase/client';
+import { useUser } from '@/hooks/useUser';
 import { 
   LayoutDashboard, 
   Users, 
@@ -46,71 +46,38 @@ export default function AdminLayout({
   const [isLoading, setIsLoading] = useState(true);
   const [userEmail, setUserEmail] = useState<string>('');
 
+  const { user, isAuthenticated, isAdmin, loading: userLoading } = useUser();
+
   useEffect(() => {
     const checkAdminAccess = async () => {
-      const supabase = createClient();
+      if (userLoading) return;
       
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        if (!user) {
-          router.push('/auth/signin');
-          return;
-        }
-
-        // Temporary: Allow access for the specific admin email
-        const adminEmails = ['design.marceli@gmail.com'];
-        if (adminEmails.includes(user.email || '')) {
-          setUserEmail(user.email || '');
-          setIsLoading(false);
-          return;
-        }
-
-        // Try to check profile table, but handle if it doesn't exist
-        try {
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', user.id)
-            .single();
-
-          if (profileError) {
-            // If profiles table doesn't exist (error code 42P01), allow admin emails
-            if (profileError.code === '42P01' && adminEmails.includes(user.email || '')) {
-              console.log('Profiles table not found, allowing admin email access');
-              setUserEmail(user.email || '');
-              setIsLoading(false);
-              return;
-            }
-            throw profileError;
-          }
-
-          if (!profile || profile.role !== 'admin') {
-            router.push('/');
-            return;
-          }
-
-          setUserEmail(user.email || '');
-          setIsLoading(false);
-        } catch (profileError: unknown) {
-           console.error('Error checking profile:', profileError);
-           // If it's a table not found error and user is admin email, allow access
-           if ((profileError as { code?: string })?.code === '42P01' && adminEmails.includes(user.email || '')) {
-             console.log('Profiles table not found, allowing admin email access');
-             setUserEmail(user.email || '');
-             setIsLoading(false);
-             return;
-           }
-           router.push('/');
-         }
-      } catch (error) {
-        console.error('Error checking admin access:', error);
-        router.push('/');
+      if (!isAuthenticated || !user) {
+        router.push('/auth/signin');
+        return;
       }
+
+      // Temporary: Allow access for the specific admin email
+      const adminEmails = ['design.marceli@gmail.com'];
+      if (adminEmails.includes(user.email || '')) {
+        setUserEmail(user.email || '');
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if user is admin via Stack Auth or profile
+      if (isAdmin) {
+        setUserEmail(user.email || '');
+        setIsLoading(false);
+        return;
+      }
+
+      // If not admin, redirect to home
+      router.push('/');
     };
 
     checkAdminAccess();
-  }, [router]);
+  }, [isAuthenticated, user, isAdmin, userLoading, router]);
 
   if (isLoading) {
     return (
