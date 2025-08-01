@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { stackServerApp } from '@/stack';
 import { prisma } from '@/lib/prisma';
 
 export async function DELETE(
@@ -9,9 +8,9 @@ export async function DELETE(
 ) {
   const resolvedParams = await params;
   try {
-    const session = await getServerSession(authOptions);
+    const user = await stackServerApp.getUser();
     
-    if (!session?.user?.id) {
+    if (!user?.id) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
@@ -31,7 +30,7 @@ export async function DELETE(
     const existingEntry = await prisma.searchHistory.findFirst({
       where: {
         id: searchHistoryId,
-        userId: session.user.id
+        userId: user.id
       }
     });
 

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
 import { useUser } from '@/hooks/useUser'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -11,7 +10,6 @@ export const dynamic = 'force-dynamic'
 
 export default function TestAuthPage() {
   const [isClient, setIsClient] = useState(false)
-  const { data: session, status } = useSession()
   const { user, profile, stats, isAuthenticated, isAdmin, isPremium, loading } = useUser()
 
   useEffect(() => {
@@ -35,8 +33,8 @@ export default function TestAuthPage() {
         <CardContent>
           <div className="space-y-2">
             <p><strong>Status:</strong> 
-              <Badge variant={status === 'authenticated' ? 'default' : 'secondary'} className="ml-2">
-                {status}
+              <Badge variant={isAuthenticated ? 'default' : 'secondary'} className="ml-2">
+                {isAuthenticated ? 'authenticated' : 'unauthenticated'}
               </Badge>
             </p>
             <p><strong>Is Authenticated:</strong> {isAuthenticated ? '✅' : '❌'}</p>
@@ -48,7 +46,7 @@ export default function TestAuthPage() {
       </Card>
 
       {/* User Information */}
-      {session?.user && (
+      {user && (
         <Card>
           <CardHeader>
             <CardTitle>User Information</CardTitle>
@@ -56,24 +54,24 @@ export default function TestAuthPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p><strong>ID:</strong> {session.user.id}</p>
-              <p><strong>Name:</strong> {session.user.name || 'Not provided'}</p>
-              <p><strong>Email:</strong> {session.user.email}</p>
+              <p><strong>ID:</strong> {user.id}</p>
+              <p><strong>Name:</strong> {user.name || 'Not provided'}</p>
+              <p><strong>Email:</strong> {user.email}</p>
               <p><strong>Role:</strong> 
-                <Badge variant={session.user.role === 'admin' ? 'destructive' : 'default'} className="ml-2">
-                  {session.user.role}
+                <Badge variant={isAdmin ? 'destructive' : 'default'} className="ml-2">
+                  {isAdmin ? 'admin' : 'user'}
                 </Badge>
               </p>
               <p><strong>Subscription:</strong> 
-                <Badge variant={session.user.subscriptionStatus === 'premium' ? 'default' : 'secondary'} className="ml-2">
-                  {session.user.subscriptionStatus}
+                <Badge variant={isPremium ? 'default' : 'secondary'} className="ml-2">
+                  {isPremium ? 'premium' : 'free'}
                 </Badge>
               </p>
-              {session.user.image && (
+              {user.image && (
                 <div>
                   <strong>Avatar:</strong>
                   <img 
-                    src={session.user.image} 
+                    src={user.image} 
                     alt="User avatar" 
                     className="w-12 h-12 rounded-full ml-2 inline-block"
                   />
@@ -135,7 +133,7 @@ export default function TestAuthPage() {
           </CardHeader>
           <CardContent>
             <Button asChild>
-              <a href="/auth/signin">Sign In</a>
+              <a href="/handler/signin">Sign In</a>
             </Button>
           </CardContent>
         </Card>

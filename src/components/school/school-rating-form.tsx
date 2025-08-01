@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -30,7 +30,7 @@ export function SchoolRatingForm({
   existingRating,
   onRatingSubmitted
 }: SchoolRatingFormProps) {
-  const { data: session } = useSession();
+  const { user, isAuthenticated } = useUser();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -48,7 +48,7 @@ export function SchoolRatingForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!session?.user) {
+    if (!isAuthenticated || !user) {
       setErrorMessage('Please sign in to rate schools');
       setSubmitStatus('error');
       return;
@@ -112,7 +112,7 @@ export function SchoolRatingForm({
     }
   };
 
-  if (!session?.user) {
+  if (!isAuthenticated || !user) {
     return (
       <Card>
         <CardHeader>

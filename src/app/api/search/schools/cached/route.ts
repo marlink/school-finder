@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { getUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { withPerformanceTracking } from '@/lib/performance';
 import { cache, cacheKeys, CacheConfig } from '@/lib/cache';
+import crypto from 'crypto';
 
 async function cachedSearchHandler(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getUser();
     const { searchParams } = new URL(request.url);
 
     // Parse search parameters
@@ -67,11 +67,11 @@ async function cachedSearchHandler(request: NextRequest) {
     
     if (cachedResult) {
       // Add user-specific data to cached results if user is logged in
-      if (session?.user?.id && cachedResult.schools) {
+      if (user?.id && cachedResult.schools) {
         const schoolIds = cachedResult.schools.map((school: { id: string }) => school.id);
         const favorites = await prisma.favorite.findMany({
           where: {
-            userId: session.user.id,
+            userId: user.id,
             schoolId: { in: schoolIds }
           },
           select: { schoolId: true }
@@ -374,11 +374,11 @@ async function cachedSearchHandler(request: NextRequest) {
     cache.set(searchCacheKey, responseData, { ttl: 300 });
 
     // Add user-specific data if user is logged in
-    if (session?.user?.id) {
+    if (user?.id) {
       const schoolIds = ratingFilteredSchools.map(school => school.id);
       const favorites = await prisma.favorite.findMany({
         where: {
-          userId: session.user.id,
+          userId: user.id,
           schoolId: { in: schoolIds }
         },
         select: { schoolId: true }

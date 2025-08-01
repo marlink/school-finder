@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getUser } from '@/lib/auth';
 
 /**
  * API endpoint to track school analytics data
@@ -16,8 +15,8 @@ import { authOptions } from '@/lib/auth';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Get the session to check if user is authenticated
-    const session = await getServerSession(authOptions);
+    // Get the user to check if user is authenticated (optional for analytics)
+    const user = await getUser();
     
     // Extract data from request body
     const body = await request.json();
@@ -94,7 +93,10 @@ export async function POST(request: NextRequest) {
 
           await prisma.schoolAnalytics.update({
             where: {
-              id: analytics.id,
+              schoolId_date: {
+                schoolId,
+                date: today,
+              },
             },
             data: {
               pageViews: { increment: 1 },
@@ -108,7 +110,10 @@ export async function POST(request: NextRequest) {
         if (clickThrough === true) {
           await prisma.schoolAnalytics.update({
             where: {
-              id: analytics.id,
+              schoolId_date: {
+                schoolId,
+                date: today,
+              },
             },
             data: {
               clickThroughRate: { increment: 1 }, // Simplified: just counting clicks

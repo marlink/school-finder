@@ -154,10 +154,10 @@ export function withConditionalCache(
     handler: T
   ): T {
     return (async (request: NextRequest) => {
-      // Check if user is authenticated (simplified check)
+      // Check if user is authenticated using Stack Auth
       const authHeader = request.headers.get('authorization');
-      const sessionCookie = request.cookies.get('next-auth.session-token');
-      const isAuthenticated = !!(authHeader || sessionCookie);
+      const stackAuthCookie = request.cookies.get('stack-auth-session');
+      const isAuthenticated = !!(authHeader || stackAuthCookie);
 
       const config = isAuthenticated ? authenticatedConfig : unauthenticatedConfig;
       const cacheKey = keyGenerator 

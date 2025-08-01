@@ -207,7 +207,7 @@ export function SchoolComparison({
                 <Download className="h-4 w-4 mr-2" />
                 Export
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => alert('Share functionality coming soon!')}>
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
               </Button>
@@ -613,11 +613,11 @@ export function SchoolComparison({
               Comparing {schools.length} schools • Last updated: {new Date().toLocaleDateString()}
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => window.location.href = '/'}>
                 <Eye className="h-4 w-4 mr-2" />
                 View All Details
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => alert('Print functionality coming soon!')}>
                 Print Comparison
               </Button>
             </div>

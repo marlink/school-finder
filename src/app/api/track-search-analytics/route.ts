@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getUser } from '@/lib/auth';
 
 /**
  * API endpoint to track search analytics data
@@ -15,8 +14,8 @@ import { authOptions } from '@/lib/auth';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Get the session to check if user is authenticated (optional)
-    const session = await getServerSession(authOptions);
+    // Get the user to check if user is authenticated (optional)
+    const user = await getUser();
     
     // Extract data from request body
     const body = await request.json();
@@ -60,7 +59,10 @@ export async function POST(request: NextRequest) {
 
       analytics = await prisma.searchAnalytics.update({
         where: {
-          id: analytics.id,
+          date_searchTerm: {
+            date: today,
+            searchTerm: normalizedSearchTerm,
+          },
         },
         data: {
           searchCount: { increment: 1 },
@@ -81,10 +83,10 @@ export async function POST(request: NextRequest) {
     
     // Also track this search in the user_searches table if user is logged in
     // This is for subscription limits tracking
-    if (session?.user?.id) {
+    if (user?.id) {
       // Get the user's search record
       const userSearch = await prisma.userSearches.findUnique({
-        where: { userId: session.user.id },
+        where: { userId: user.id },
       });
       
       // If record exists, check if we need to reset the counter
@@ -96,7 +98,7 @@ export async function POST(request: NextRequest) {
         // Reset counter if it's been more than 24 hours since the last reset
         if (hoursSinceReset >= 24) {
           await prisma.userSearches.update({
-            where: { userId: session.user.id },
+            where: { userId: user.id },
             data: {
               searchCount: 1,
               lastReset: now,
@@ -105,7 +107,7 @@ export async function POST(request: NextRequest) {
         } else {
           // Otherwise, increment the counter
           await prisma.userSearches.update({
-            where: { userId: session.user.id },
+            where: { userId: user.id },
             data: {
               searchCount: { increment: 1 },
             },
@@ -115,7 +117,7 @@ export async function POST(request: NextRequest) {
         // Create a new record if it doesn't exist
         await prisma.userSearches.create({
           data: {
-            userId: session.user.id,
+            userId: user.id,
             searchCount: 1,
             lastReset: new Date(),
           },

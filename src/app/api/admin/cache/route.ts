@@ -1,20 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { requireAdmin } from '@/lib/auth';
 import { cache } from '@/lib/cache';
 import { CacheInvalidator, CacheWarmer, CacheMonitor } from '@/lib/cache-middleware';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    
     // Check if user is admin
-    if (!session?.user?.role || session.user.role !== 'admin') {
-      return NextResponse.json(
-        { error: 'Unauthorized. Admin access required.' },
-        { status: 403 }
-      );
-    }
+    await requireAdmin();
 
     const { searchParams } = new URL(request.url);
     const action = searchParams.get('action');
@@ -83,15 +75,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    
     // Check if user is admin
-    if (!session?.user?.role || session.user.role !== 'admin') {
-      return NextResponse.json(
-        { error: 'Unauthorized. Admin access required.' },
-        { status: 403 }
-      );
-    }
+    await requireAdmin();
 
     const body = await request.json();
     const { action, data } = body;

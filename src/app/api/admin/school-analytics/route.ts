@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { requireAdmin } from '@/lib/auth';
 
 /**
  * API endpoint to fetch school analytics data for admin dashboard
@@ -16,13 +15,8 @@ import { authOptions } from '@/lib/auth';
  */
 export async function GET(request: NextRequest) {
   try {
-    // Get the session to check if user is authenticated and is an admin
-    const session = await getServerSession(authOptions);
-    
     // Check if user is authenticated and is an admin
-    if (!session?.user || session.user.role !== 'admin') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    await requireAdmin();
     
     // Get query parameters
     const { searchParams } = new URL(request.url);

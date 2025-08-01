@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 
 export interface Favorite {
   id: string;
@@ -17,14 +17,14 @@ export interface Favorite {
 }
 
 export function useFavorites() {
-  const { data: session } = useSession();
+  const { user, isAuthenticated } = useUser();
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch user's favorites
   const fetchFavorites = async () => {
-    if (!session?.user?.id) return;
+    if (!isAuthenticated || !user?.id) return;
 
     setLoading(true);
     setError(null);
@@ -46,7 +46,7 @@ export function useFavorites() {
 
   // Add school to favorites
   const addFavorite = async (schoolId: string, notes?: string) => {
-    if (!session?.user?.id) {
+    if (!isAuthenticated || !user?.id) {
       setError('You must be logged in to add favorites');
       return false;
     }
@@ -82,7 +82,7 @@ export function useFavorites() {
 
   // Remove school from favorites
   const removeFavorite = async (schoolId: string) => {
-    if (!session?.user?.id) {
+    if (!isAuthenticated || !user?.id) {
       setError('You must be logged in to remove favorites');
       return false;
     }
@@ -127,12 +127,12 @@ export function useFavorites() {
 
   // Load favorites on session change
   useEffect(() => {
-    if (session?.user?.id) {
+    if (isAuthenticated && user?.id) {
       fetchFavorites();
     } else {
       setFavorites([]);
     }
-  }, [session?.user?.id]);
+  }, [isAuthenticated, user?.id]);
 
   return {
     favorites,

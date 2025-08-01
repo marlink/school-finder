@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { 
   Settings, 
   Save, 
@@ -81,7 +81,7 @@ type SystemSettings = {
 };
 
 export default function AdminSettings() {
-  const { data: session } = useSession();
+  const { user, isAuthenticated, isAdmin } = useUser();
   const [settings, setSettings] = useState<SystemSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -106,10 +106,10 @@ export default function AdminSettings() {
       }
     };
 
-    if (session?.user?.role === 'admin') {
+    if (isAuthenticated && isAdmin) {
       fetchSettings();
     }
-  }, [session]);
+  }, [isAuthenticated, isAdmin]);
 
   const handleSaveSettings = async () => {
     if (!settings) return;
@@ -185,7 +185,7 @@ export default function AdminSettings() {
           <p className="text-gray-600 mt-1">Configure system-wide settings and preferences</p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => alert('Reset functionality coming soon!')}>
             <RefreshCw className="h-4 w-4 mr-2" />
             Reset
           </Button>

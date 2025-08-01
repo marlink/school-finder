@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { schoolReviewSchema } from '@/lib/validations';
 import { validateRequest, getSecurityHeaders } from '@/lib/security';
@@ -35,7 +34,7 @@ export async function POST(
     if (securityCheck) return securityCheck;
 
     // Get user session
-    const session = await getServerSession(authOptions);
+    const user = await getUser();
     
     const { id } = await params;
     
@@ -73,7 +72,7 @@ export async function POST(
     }
 
     // For non-anonymous ratings, require authentication
-    if (!validatedData.isAnonymous && !session?.user?.id) {
+    if (!validatedData.isAnonymous && !user?.id) {
       return NextResponse.json(
         { error: 'Authentication required for non-anonymous ratings' },
         { status: 401 }
@@ -84,7 +83,7 @@ export async function POST(
     const rating = await prisma.ratingsUsers.create({
       data: {
         schoolId: id,
-        userId: validatedData.isAnonymous ? 'anonymous' : (session?.user?.id || 'anonymous'),
+        userId: validatedData.isAnonymous ? 'anonymous' : (user?.id || 'anonymous'),
         overallRating: validatedData.overallRating,
         teachingQuality: validatedData.teachingQuality || null,
         facilities: validatedData.facilities || null,

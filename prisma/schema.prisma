@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,47 +7,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User model with authentication and subscription fields
 model User {
-  id                String           @id @default(uuid())
-  name              String?
-  email             String           @unique
-  emailVerified     DateTime?        @map("email_verified")
-  image             String?
-  role              String           @default("user") // "user", "admin"
-  subscriptionStatus String           @default("free") @map("subscription_status") // "free", "premium"
-  subscriptionId    String?          @map("subscription_id") // Stripe subscription ID
-  createdAt         DateTime         @default(now()) @map("created_at")
-  updatedAt         DateTime         @updatedAt @map("updated_at")
-  
-  // Relations
-  accounts          Account[]
-  sessions          Session[]
-  searches          UserSearches?
-  ratings           RatingsUsers[]
-  favorites         Favorite[]
-  subscriptionLogs  SubscriptionLog[]
-  searchHistory     SearchHistory[]
-  
+  id                 String            @id @default(uuid())
+  name               String?
+  email              String            @unique
+  emailVerified      DateTime?         @map("email_verified")
+  image              String?
+  role               String            @default("user")
+  subscriptionStatus String            @default("free") @map("subscription_status")
+  subscriptionId     String?           @map("subscription_id")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  accounts           Account[]
+  favorites          Favorite[]
+  ratings            RatingsUsers[]
+  searchHistory      SearchHistory[]
+  sessions           Session[]
+  subscriptionLogs   SubscriptionLog[]
+  searches           UserSearches?
+
   @@map("users")
 }
 
-// NextAuth models
 model Account {
   id                String  @id @default(uuid())
   userId            String  @map("user_id")
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -75,81 +67,73 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-// User search tracking for subscription limits
 model UserSearches {
   userId      String   @id @map("user_id")
   searchCount Int      @default(0) @map("search_count")
   lastReset   DateTime @default(now()) @map("last_reset")
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([lastReset])
   @@map("user_searches")
 }
 
-// Subscription logging
 model SubscriptionLog {
   id             String   @id @default(uuid())
   userId         String   @map("user_id")
-  event          String   // "subscription_created", "subscription_updated", "subscription_deleted"
+  event          String
   subscriptionId String   @map("subscription_id")
-  data           String   @db.Text // JSON stringified data
+  data           String
   createdAt      DateTime @default(now()) @map("created_at")
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([userId])
   @@index([subscriptionId])
   @@map("subscription_logs")
 }
 
-// Core School Data
 model School {
-  id              String   @id @default(uuid())
+  id              String                @id @default(uuid())
   name            String
-  type            String   // Using the school_type enum values
-  address         Json     // { street, city, postal, voivodeship, district }
-  contact         Json     // { phone, email, website, fax }
-  location        Json?    // { latitude, longitude }
-  googlePlaceId   String?  @map("google_place_id")
-  officialId      String?  @map("official_id") // Ministry of Education ID (RSPO)
-  status          String   @default("active") // "active", "inactive", "closed"
-  studentCount    Int?     @map("student_count")
-  teacherCount    Int?     @map("teacher_count")
-  establishedYear Int?     @map("established_year")
-  languages       Json?    // ["polish", "english", "german"]
-  specializations Json?    // ["mathematics", "sports", "arts"]
-  facilities      Json?    // ["library", "gym", "computer_lab"]
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-  
-  // Relations
+  type            String
+  address         Json
+  contact         Json
+  location        Json?
+  googlePlaceId   String?               @map("google_place_id")
+  officialId      String?               @map("official_id")
+  status          String                @default("active")
+  studentCount    Int?                  @map("student_count")
+  teacherCount    Int?                  @map("teacher_count")
+  establishedYear Int?                  @map("established_year")
+  languages       Json?
+  specializations Json?
+  facilities      Json?
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+  favorites       Favorite[]
+  googleRatings   RatingsGoogle[]
+  portalRatings   RatingsPortal?
+  publicRatings   RatingsPublicPoland[]
+  userRatings     RatingsUsers[]
+  analytics       SchoolAnalytics[]
   images          SchoolImage[]
   socialMedia     SchoolSocialMedia[]
-  userRatings     RatingsUsers[]
-  googleRatings   RatingsGoogle[]
-  publicRatings   RatingsPublicPoland[]
-  portalRatings   RatingsPortal[]
-  favorites       Favorite[]
-  analytics       SchoolAnalytics[]
 
-  
   @@map("schools")
 }
 
-
-// Media & Content
 model SchoolImage {
   id           String   @id @default(uuid())
   schoolId     String   @map("school_id")
   imageUrl     String   @map("image_url")
-  imageType    String   @map("image_type") // "main", "building", "classroom", "playground", "cafeteria", "logo"
+  imageType    String   @map("image_type")
   altText      String?  @map("alt_text")
-  caption      String?  @db.Text
-  source       String   // "admin", "scraping", "user_upload"
+  caption      String?
+  source       String
   isVerified   Boolean  @default(false) @map("is_verified")
   displayOrder Int      @default(0) @map("display_order")
   uploadedAt   DateTime @default(now()) @map("uploaded_at")
   school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  
+
   @@index([schoolId])
   @@map("school_images")
 }
@@ -157,7 +141,7 @@ model SchoolImage {
 model SchoolSocialMedia {
   id            String   @id @default(uuid())
   schoolId      String   @map("school_id")
-  platform      String   // "facebook", "instagram", "youtube", "tiktok", "linkedin", "twitter"
+  platform      String
   profileUrl    String   @map("profile_url")
   username      String?
   followerCount Int?     @map("follower_count")
@@ -165,30 +149,29 @@ model SchoolSocialMedia {
   lastScraped   DateTime @default(now()) @map("last_scraped")
   createdAt     DateTime @default(now()) @map("created_at")
   school        School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  
+
   @@index([schoolId])
   @@map("school_social_media")
 }
 
-// Rating Systems
 model RatingsUsers {
-  id               String   @id @default(uuid())
-  userId           String   @map("user_id")
-  schoolId         String   @map("school_id")
-  overallRating    Decimal  @map("overall_rating") @db.Decimal(2, 1)
-  teachingQuality  Decimal? @map("teaching_quality") @db.Decimal(2, 1)
-  facilities       Decimal? @map("facilities") @db.Decimal(2, 1)
-  safety           Decimal? @map("safety") @db.Decimal(2, 1)
-  extracurricular  Decimal? @map("extracurricular") @db.Decimal(2, 1)
-  comment          String?  @db.Text
-  isAnonymous      Boolean  @default(false) @map("is_anonymous")
-  isVerified       Boolean  @default(false) @map("is_verified")
-  helpfulVotes     Int      @default(0) @map("helpful_votes")
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  schoolId        String   @map("school_id")
+  overallRating   Decimal  @map("overall_rating") @db.Decimal(2, 1)
+  teachingQuality Decimal? @map("teaching_quality") @db.Decimal(2, 1)
+  facilities      Decimal? @map("facilities") @db.Decimal(2, 1)
+  safety          Decimal? @map("safety") @db.Decimal(2, 1)
+  extracurricular Decimal? @map("extracurricular") @db.Decimal(2, 1)
+  comment         String?
+  isAnonymous     Boolean  @default(false) @map("is_anonymous")
+  isVerified      Boolean  @default(false) @map("is_verified")
+  helpfulVotes    Int      @default(0) @map("helpful_votes")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  school          School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([userId, schoolId])
   @@index([schoolId])
   @@map("ratings_users")
@@ -199,13 +182,13 @@ model RatingsGoogle {
   schoolId       String   @map("school_id")
   googleReviewId String   @map("google_review_id")
   rating         Decimal  @db.Decimal(2, 1)
-  reviewText     String?  @map("review_text") @db.Text
+  reviewText     String?  @map("review_text")
   authorName     String?  @map("author_name")
   authorPhoto    String?  @map("author_photo")
   reviewDate     DateTime @map("review_date")
   scrapedAt      DateTime @default(now()) @map("scraped_at")
   school         School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  
+
   @@unique([schoolId, googleReviewId])
   @@index([schoolId])
   @@map("ratings_google")
@@ -214,15 +197,15 @@ model RatingsGoogle {
 model RatingsPublicPoland {
   id          String   @id @default(uuid())
   schoolId    String   @map("school_id")
-  source      String   // "kuratorium", "oke", "matura_results", "rankings"
-  metricType  String   @map("metric_type") // "exam_results", "matura_pass_rate", "university_admission", "ranking_position"
+  source      String
+  metricType  String   @map("metric_type")
   score       Decimal  @db.Decimal(5, 2)
   maxScore    Decimal? @map("max_score") @db.Decimal(5, 2)
   year        Int
   sourceUrl   String?  @map("source_url")
   collectedAt DateTime @default(now()) @map("collected_at")
   school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  
+
   @@index([schoolId])
   @@index([year])
   @@map("ratings_public_poland")
@@ -230,68 +213,63 @@ model RatingsPublicPoland {
 
 model RatingsPortal {
   id        String   @id @default(uuid())
-  schoolId  String   @map("school_id")
-  sentiment Decimal  @db.Decimal(3, 2) // -1.00 to 1.00 sentiment score
-  keywords  Json?    // ["positive": ["great teachers"], "negative": ["poor facilities"]]
+  schoolId  String   @unique @map("school_id")
+  sentiment Decimal  @db.Decimal(3, 2)
+  keywords  Json?
   updatedAt DateTime @default(now()) @map("updated_at")
   school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  
-  @@unique([schoolId])
+
   @@map("ratings_portal")
 }
 
-// User favorites
 model Favorite {
   id        String   @id @default(uuid())
   userId    String   @map("user_id")
   schoolId  String   @map("school_id")
-  notes     String?  @db.Text
+  notes     String?
   createdAt DateTime @default(now()) @map("created_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([userId, schoolId])
   @@index([userId])
   @@index([schoolId])
   @@map("favorites")
 }
 
-// School analytics for tracking engagement metrics
 model SchoolAnalytics {
   schoolId         String   @map("school_id")
   date             DateTime @db.Date
   pageViews        Int      @default(0) @map("page_views")
-  favoritesAdded   Int      @default(0) @map("favorites_added") // Times added to favorites
-  ratingsSubmitted Int      @default(0) @map("ratings_submitted") // New ratings received
-  avgTimeOnPage    Int      @default(0) @map("avg_time_on_page") // Average viewing time in seconds
-  clickThroughRate Decimal  @default(0) @map("click_through_rate") @db.Decimal(3, 2) // CTR from search results
+  favoritesAdded   Int      @default(0) @map("favorites_added")
+  ratingsSubmitted Int      @default(0) @map("ratings_submitted")
+  avgTimeOnPage    Int      @default(0) @map("avg_time_on_page")
+  clickThroughRate Decimal  @default(0) @map("click_through_rate") @db.Decimal(3, 2)
   school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  
+
   @@id([schoolId, date])
   @@index([date])
   @@map("school_analytics")
 }
 
-// Search analytics for tracking search term statistics
 model SearchAnalytics {
   date        DateTime @db.Date
-  searchTerm  String   @map("search_term") @db.VarChar(255) // What was searched
-  searchCount Int      @default(0) @map("search_count") // How many times searched
-  avgResults  Decimal  @default(0) @map("avg_results") @db.Decimal(5, 1) // Average number of results
-  
+  searchTerm  String   @map("search_term") @db.VarChar(255)
+  searchCount Int      @default(0) @map("search_count")
+  avgResults  Decimal  @default(0) @map("avg_results") @db.Decimal(5, 1)
+
   @@id([date, searchTerm])
   @@index([searchTerm])
   @@map("search_analytics")
 }
 
-// User search history for tracking individual user searches
 model SearchHistory {
   id        String   @id @default(uuid())
   userId    String   @map("user_id")
   query     String   @db.VarChar(255)
   timestamp DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([userId])
   @@map("search_history")
 }

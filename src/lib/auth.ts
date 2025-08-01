@@ -13,15 +13,21 @@ export async function getUserProfile() {
     return null
   }
 
+  // Get subscription status from user metadata or default to free
+  const subscriptionStatus = user.clientMetadata?.subscriptionStatus || 'free'
+  
+  // Check admin permission
+  const isAdmin = await user.hasPermission('admin')
+
   // Get user profile data from Stack Auth
   const profile = {
     id: user.id,
     email: user.primaryEmail,
     displayName: user.displayName,
     profileImageUrl: user.profileImageUrl,
-    role: user.hasPermission('admin') ? 'admin' : 'user',
-    subscriptionStatus: 'free', // TODO: Implement subscription logic with Stack Auth
-    createdAt: user.createdAtMillis ? new Date(user.createdAtMillis) : new Date(),
+    role: isAdmin ? 'admin' : 'user',
+    subscriptionStatus: subscriptionStatus as 'free' | 'premium' | 'enterprise',
+    createdAt: new Date(), // Use current date as Stack Auth doesn't expose createdAt directly
   }
   
   return { user, profile }

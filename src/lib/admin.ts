@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from './auth'
+import { getUser } from './auth'
 import { prisma } from './prisma'
 
 export async function isAdminUser(userId?: string): Promise<boolean> {
@@ -20,30 +19,30 @@ export async function isAdminUser(userId?: string): Promise<boolean> {
 }
 
 export async function requireAdmin() {
-  const session = await getServerSession(authOptions)
+  const user = await getUser()
   
-  if (!session?.user?.id) {
+  if (!user?.id) {
     throw new Error('Unauthorized: No session')
   }
 
-  const isAdmin = await isAdminUser(session.user.id)
+  const isAdmin = await isAdminUser(user.id)
   
   if (!isAdmin) {
     throw new Error('Unauthorized: Admin access required')
   }
 
-  return session
+  return user
 }
 
 export async function getCurrentUser() {
-  const session = await getServerSession(authOptions)
+  const user = await getUser()
   
-  if (!session?.user?.id) {
+  if (!user?.id) {
     return null
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
+  const dbUser = await prisma.user.findUnique({
+    where: { id: user.id },
     select: {
       id: true,
       name: true,
@@ -56,7 +55,7 @@ export async function getCurrentUser() {
     }
   })
 
-  return user
+  return dbUser
 }
 
 export function withAdminAuth(handler: any) {

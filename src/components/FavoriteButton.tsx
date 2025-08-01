@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useFavorites } from '@/hooks/useFavorites';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { cn } from '@/lib/utils';
 
 interface FavoriteButtonProps {
@@ -20,7 +20,7 @@ export function FavoriteButton({
   variant = 'ghost',
   className 
 }: FavoriteButtonProps) {
-  const { data: session } = useSession();
+  const { user, isAuthenticated } = useUser();
   const { isFavorited, toggleFavorite, loading } = useFavorites();
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -30,7 +30,7 @@ export function FavoriteButton({
     e.preventDefault();
     e.stopPropagation();
     
-    if (!session?.user?.id) {
+    if (!isAuthenticated || !user?.id) {
       // Could add toast notification here
       return;
     }

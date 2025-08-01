@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { requireAdmin, getUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user || session.user.role !== 'admin') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    await requireAdmin();
+    const user = await getUser();
 
     // Mock security events data - in a real app, this would come from a security logging system
     const securityEvents = [
@@ -57,7 +53,7 @@ export async function GET() {
         id: '5',
         type: 'admin_action',
         severity: 'info',
-        user: session.user.email,
+        user: user?.primaryEmail || 'admin@example.com',
         ipAddress: '192.168.1.1',
         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 8), // 8 hours ago

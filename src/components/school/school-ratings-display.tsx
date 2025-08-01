@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -48,7 +48,7 @@ interface SchoolRatingsDisplayProps {
 }
 
 export function SchoolRatingsDisplay({ schoolId, refreshTrigger }: SchoolRatingsDisplayProps) {
-  const { data: session } = useSession();
+  const { user, isAuthenticated } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const [ratingData, setRatingData] = useState<RatingData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -60,8 +60,8 @@ export function SchoolRatingsDisplay({ schoolId, refreshTrigger }: SchoolRatings
       
       const url = new URL('/api/ratings', typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
       url.searchParams.set('schoolId', schoolId);
-      if (session?.user?.id) {
-        url.searchParams.set('userId', session.user.id);
+      if (isAuthenticated && user?.id) {
+        url.searchParams.set('userId', user.id);
       }
 
       const response = await fetch(url);
@@ -82,7 +82,7 @@ export function SchoolRatingsDisplay({ schoolId, refreshTrigger }: SchoolRatings
 
   useEffect(() => {
     fetchRatings();
-  }, [schoolId, session?.user?.id, refreshTrigger]);
+  }, [schoolId, user?.id, refreshTrigger]);
 
   if (isLoading) {
     return (

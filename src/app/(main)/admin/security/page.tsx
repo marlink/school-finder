@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { 
   Shield, 
   AlertTriangle, 
@@ -71,8 +71,8 @@ type SystemHealth = {
   lastChecked: string;
 };
 
-export default function SecurityDashboard() {
-  const { data: session } = useSession();
+export default function SecurityManagement() {
+  const { user, isAdmin } = useUser();
   const [events, setEvents] = useState<SecurityEvent[]>([]);
   const [stats, setStats] = useState<SecurityStats | null>(null);
   const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null);
@@ -104,10 +104,10 @@ export default function SecurityDashboard() {
       }
     };
 
-    if (session?.user?.role === 'admin') {
+    if (isAdmin) {
       fetchData();
     }
-  }, [session]);
+  }, [isAdmin]);
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {

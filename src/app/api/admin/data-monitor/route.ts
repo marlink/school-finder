@@ -1,19 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { requireAdmin } from '@/lib/auth';
 import { DataMonitor, getDataOverview } from '@/lib/data-monitor';
 
 export async function GET(request: NextRequest) {
   try {
     // Check if user is authenticated and is admin
-    const session = await getServerSession(authOptions);
-    
-    if (!session || session.user.role !== 'admin') {
-      return NextResponse.json(
-        { error: 'Unauthorized access' },
-        { status: 401 }
-      );
-    }
+    await requireAdmin();
 
     const { searchParams } = new URL(request.url);
     const reportType = searchParams.get('type') || 'full';

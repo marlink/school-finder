@@ -19,13 +19,15 @@ jest.mock('@/lib/prisma', () => ({
   },
 }));
 
-// Mock NextAuth
-jest.mock('next-auth/next', () => ({
-  getServerSession: jest.fn(),
+// Mock Stack Auth
+jest.mock('@/stack', () => ({
+  stackServerApp: {
+    getUser: jest.fn(),
+  },
 }));
 
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth/next';
+import { stackServerApp } from '@/stack';
 
 jest.mock('next/server', () => {
   const originalModule = jest.requireActual('next/server');
@@ -45,8 +47,8 @@ describe('GET /api/search/schools', () => {
     // Reset all mocks before each test
     jest.clearAllMocks();
     
-    // Mock session as null (no authentication required for search)
-    (getServerSession as jest.Mock).mockResolvedValue(null);
+    // Mock no user (no authentication required for search)
+    (stackServerApp.getUser as jest.Mock).mockResolvedValue(null);
   });
 
   it('should return empty array when no schools match', async () => {

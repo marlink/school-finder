@@ -1,19 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { requireAuth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 // GET: Retrieve user's search history
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
-    }
+    const user = await requireAuth();
 
     // Get query parameters
     const { searchParams } = new URL(request.url);
@@ -22,7 +14,7 @@ export async function GET(request: NextRequest) {
     // Retrieve search history for the user
     const searchHistory = await prisma.searchHistory.findMany({
       where: {
-        userId: session.user.id
+        userId: user.id
       },
       orderBy: {
         timestamp: 'desc'
@@ -47,14 +39,7 @@ export async function GET(request: NextRequest) {
 // POST: Add a new search query to history
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
-    }
+    const user = await requireAuth();
 
     // Get the search query from request body
     const body = await request.json();
@@ -70,7 +55,7 @@ export async function POST(request: NextRequest) {
     // Add the search query to history
     const newSearchHistory = await prisma.searchHistory.create({
       data: {
-        userId: session.user.id,
+        userId: user.id,
         query: query.trim()
       }
     });

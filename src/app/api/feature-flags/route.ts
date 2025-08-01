@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { requireAuth, requireAdmin } from '@/lib/auth';
 import { featureFlagService } from '@/lib/feature-flags';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const user = await requireAuth();
 
-    const userRole = session.user.role || 'user';
-    const userId = session.user.id;
+    const userRole = (await user.hasPermission('admin')) ? 'admin' : 'user';
+    const userId = user.id;
 
     // Get enabled features for the user
     const enabledFeatures = featureFlagService.getEnabledFeatures(userRole, userId);
@@ -33,11 +28,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user || session.user.role !== 'admin') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const user = await requireAdmin();
 
     const body = await request.json();
     const { featureName, updates } = body;

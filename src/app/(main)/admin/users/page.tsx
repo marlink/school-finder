@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { 
   Users, 
   Search, 
@@ -70,7 +70,7 @@ type UserStats = {
 };
 
 export default function UserManagement() {
-  const { data: session } = useSession();
+  const { user, isAdmin } = useUser();
   const [users, setUsers] = useState<User[]>([]);
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -99,10 +99,10 @@ export default function UserManagement() {
       }
     };
 
-    if (session?.user?.role === 'admin') {
+    if (isAdmin) {
       fetchData();
     }
-  }, [session]);
+  }, [isAdmin]);
 
   const handleRoleChange = async (userId: string, newRole: 'user' | 'admin') => {
     try {

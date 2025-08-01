@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { 
   GraduationCap, 
   Plus, 
@@ -79,7 +79,7 @@ type SchoolStats = {
 };
 
 export default function SchoolManagement() {
-  const { data: session } = useSession();
+  const { user, isAdmin } = useUser();
   const [schools, setSchools] = useState<School[]>([]);
   const [stats, setStats] = useState<SchoolStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -110,10 +110,10 @@ export default function SchoolManagement() {
       }
     };
 
-    if (session?.user?.role === 'admin') {
+    if (isAdmin) {
       fetchData();
     }
-  }, [session]);
+  }, [isAdmin]);
 
   const handleSchoolStatusToggle = async (schoolId: string, isActive: boolean) => {
     try {

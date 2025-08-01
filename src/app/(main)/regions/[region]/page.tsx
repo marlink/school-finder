@@ -583,14 +583,14 @@ export default async function RegionPage({ params }: RegionPageProps) {
                       </div>
                       
                       <div className="flex flex-col gap-2 ml-4">
-                        <Button size="sm" variant="outline">
-                          <Heart className="h-4 w-4 mr-1" />
-                          Zapisz
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <ExternalLink className="h-4 w-4 mr-1" />
-                          Odwiedź
-                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => window.location.href = '/'}>
+                  <Heart className="h-4 w-4 mr-1" />
+                  Zapisz
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => window.location.href = '/'}>
+                  <ExternalLink className="h-4 w-4 mr-1" />
+                  Odwiedź
+                </Button>
                       </div>
                     </div>
                     
@@ -620,11 +620,11 @@ export default async function RegionPage({ params }: RegionPageProps) {
             {/* Pagination */}
             <div className="mt-8 flex justify-center">
               <div className="flex items-center space-x-2">
-                <Button variant="outline" disabled>Poprzednia</Button>
-                <Button variant="default">1</Button>
-                <Button variant="outline">2</Button>
-                <Button variant="outline">3</Button>
-                <Button variant="outline">Następna</Button>
+                <Button variant="outline" disabled onClick={() => window.location.href = '/'}>Poprzednia</Button>
+                <Button variant="default" onClick={() => window.location.href = '/'}>1</Button>
+                <Button variant="outline" onClick={() => window.location.href = '/'}>2</Button>
+                <Button variant="outline" onClick={() => window.location.href = '/'}>3</Button>
+                <Button variant="outline" onClick={() => window.location.href = '/'}>Następna</Button>
               </div>
             </div>
           </div>

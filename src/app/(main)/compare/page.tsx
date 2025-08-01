@@ -15,7 +15,7 @@ import {
   X 
 } from 'lucide-react';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 
 export const dynamic = 'force-dynamic';
 
@@ -113,7 +113,7 @@ const MOCK_SCHOOLS = [
 ];
 
 export default function ComparePage() {
-  const { data: session } = useSession();
+  const { user, isAuthenticated } = useUser();
   const [selectedSchools, setSelectedSchools] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [availableSchools, setAvailableSchools] = useState(MOCK_SCHOOLS);
@@ -341,11 +341,15 @@ export default function ComparePage() {
               <div className="flex items-center gap-4">
                 <Link href="/search">
                   <Button>
-                    <Search className="h-4 w-4 mr-2" />
-                    Search Schools
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Schools to Compare
                   </Button>
                 </Link>
-                {session && (
+                <Button variant="outline" onClick={() => alert('Export functionality coming soon!')}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Export Comparison
+                </Button>
+                {isAuthenticated && (
                   <Link href="/favorites">
                     <Button variant="outline">
                       View Favorites

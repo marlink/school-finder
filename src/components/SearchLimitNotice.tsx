@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -101,17 +101,17 @@ export default function SearchLimitNotice({
   language = 'pl',
   variant = 'card' 
 }: SearchLimitNoticeProps) {
-  const { data: session } = useSession();
+  const { user, isAuthenticated } = useUser();
   const t = translations[language];
   
   const [limitData, setLimitData] = useState<SearchLimitData | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (session?.user?.id) {
+    if (isAuthenticated && user?.id) {
       fetchSearchLimitData();
     }
-  }, [session]);
+  }, [isAuthenticated, user]);
 
   const fetchSearchLimitData = async () => {
     setLoading(true);
@@ -170,7 +170,7 @@ export default function SearchLimitNotice({
     }
   };
 
-  if (!session || loading) {
+  if (!isAuthenticated || loading) {
     return null;
   }
 

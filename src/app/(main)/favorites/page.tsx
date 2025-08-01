@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useFavorites } from '@/hooks/useFavorites';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { FavoriteButton } from '@/components/FavoriteButton';
 
 export default function FavoritesPage() {
@@ -25,7 +25,7 @@ export default function FavoritesPage() {
   useEffect(() => {
     setIsClient(true);
   }, []);
-  const { data: session } = useSession();
+  const { user, isAuthenticated } = useUser();
 
   if (!isClient) {
     return null;
@@ -65,7 +65,7 @@ export default function FavoritesPage() {
   };
 
   // If not logged in, show login prompt
-  if (!session) {
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="w-full max-w-md">
@@ -77,11 +77,9 @@ export default function FavoritesPage() {
             <p className="text-gray-600 mb-4">
               You need to be logged in to save and view favorite schools.
             </p>
-            <Link href="/auth/signin">
-              <Button>
-                Sign In
-              </Button>
-            </Link>
+            <Button onClick={() => window.location.href = '/handler/signin'}>
+              Sign In
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -383,14 +381,14 @@ export default function FavoritesPage() {
               </div>
               
               <div className="flex gap-2">
-                <Button size="sm" variant="outline">
+                <Button size="sm" variant="outline" onClick={() => window.location.href = '/'}>
                   <Eye className="h-4 w-4 mr-1" />
                   View
                 </Button>
-                <Button size="sm" variant="outline">
+                <Button size="sm" variant="outline" onClick={() => alert('Edit functionality coming soon!')}>
                   <Edit3 className="h-4 w-4" />
                 </Button>
-                <Button size="sm" variant="outline">
+                <Button size="sm" variant="outline" onClick={() => alert('Delete functionality coming soon!')}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
@@ -419,16 +417,16 @@ export default function FavoritesPage() {
             
             <div className="flex items-center gap-3">
               {selectedSchools.length > 0 && (
-                <Button>
+                <Button onClick={() => window.location.href = '/compare'}>
                   <GitCompare className="h-4 w-4 mr-2" />
                   Compare ({selectedSchools.length})
                 </Button>
               )}
-              <Button variant="outline">
+              <Button variant="outline" onClick={() => alert('Export functionality coming soon!')}>
                 <Download className="h-4 w-4 mr-2" />
                 Export
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" onClick={() => alert('Share functionality coming soon!')}>
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
               </Button>

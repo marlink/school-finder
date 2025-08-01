@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { useRouter } from 'next/navigation';
 
 // Types for analytics data
@@ -24,7 +24,7 @@ type SearchAnalyticsData = {
 
 // Client component to display analytics
 export default function AnalyticsDashboard() {
-  const { data: session, status } = useSession();
+  const { user, isAuthenticated, isAdmin } = useUser();
   const router = useRouter();
   
   const [schoolAnalytics, setSchoolAnalytics] = useState<SchoolAnalyticsData[]>([]);
@@ -34,12 +34,12 @@ export default function AnalyticsDashboard() {
   
   // Check if user is authenticated and is an admin
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/api/auth/signin');
-    } else if (session?.user?.role !== 'admin') {
+    if (!isAuthenticated) {
+      router.push('/handler/signin');
+    } else if (!isAdmin) {
       router.push('/');
     }
-  }, [session, status, router]);
+  }, [isAuthenticated, isAdmin, router]);
   
   // Fetch analytics data
   useEffect(() => {
@@ -67,13 +67,13 @@ export default function AnalyticsDashboard() {
       }
     };
     
-    if (session?.user?.role === 'admin') {
+    if (isAdmin) {
       fetchData();
     }
-  }, [session]);
+  }, [isAdmin]);
   
   // If loading or not authenticated, show loading state
-  if (loading || status === 'loading' || session?.user?.role !== 'admin') {
+  if (loading || !isAuthenticated || !isAdmin) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>

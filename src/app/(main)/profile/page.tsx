@@ -1,4 +1,7 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,21 +15,85 @@ import {
 import Link from 'next/link';
 
 export default function ProfilePage() {
-  // Mock user data
-  const user = {
+  const router = useRouter();
+  const [isEditing, setIsEditing] = useState(false);
+  const [userInfo, setUserInfo] = useState({
     name: 'Sarah Johnson',
     email: 'sarah.johnson@email.com',
     phone: '(555) 123-4567',
     location: 'Seattle, WA',
+  });
+  const [preferences, setPreferences] = useState({
+    notifications: true,
+    emailUpdates: true,
+    searchRadius: '10 miles',
+    schoolTypes: ['Public', 'Private'],
+    grades: ['Elementary', 'Middle School']
+  });
+
+  // Handler functions
+  const handleEditProfile = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleExportFavorites = () => {
+    alert('Exporting favorites list...');
+  };
+
+  const handleEditSchool = (schoolId: string) => {
+    alert(`Editing school ${schoolId}...`);
+  };
+
+  const handleRemoveSchool = (schoolId: string) => {
+    alert(`Removing school ${schoolId} from favorites...`);
+  };
+
+  const handleSearchAgain = (query: string) => {
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+  };
+
+  const handleSavePersonalInfo = () => {
+    alert('Personal information saved!');
+  };
+
+  const handleSavePreferences = () => {
+    alert('Preferences saved!');
+  };
+
+  const handleToggleNotification = (type: string) => {
+    setPreferences(prev => ({
+      ...prev,
+      [type]: !prev[type as keyof typeof prev]
+    }));
+  };
+
+  const handleToggleSchoolType = (type: string) => {
+    setPreferences(prev => ({
+      ...prev,
+      schoolTypes: prev.schoolTypes.includes(type) 
+        ? prev.schoolTypes.filter(t => t !== type)
+        : [...prev.schoolTypes, type]
+    }));
+  };
+
+  const handleToggleGrade = (grade: string) => {
+    setPreferences(prev => ({
+      ...prev,
+      grades: prev.grades.includes(grade) 
+        ? prev.grades.filter(g => g !== grade)
+        : [...prev.grades, grade]
+    }));
+  };
+
+  // Mock user data
+  const user = {
+    name: userInfo.name,
+    email: userInfo.email,
+    phone: userInfo.phone,
+    location: userInfo.location,
     joinDate: 'January 15, 2024',
     avatar: '/api/placeholder/150/150',
-    preferences: {
-      notifications: true,
-      emailUpdates: true,
-      searchRadius: '10 miles',
-      schoolTypes: ['Public', 'Private'],
-      grades: ['Elementary', 'Middle School']
-    }
+    preferences
   };
 
   const favoriteSchools = [
@@ -97,7 +164,7 @@ export default function ProfilePage() {
                 <p className="text-sm text-gray-500">Member since {user.joinDate}</p>
               </div>
             </div>
-            <Button>
+            <Button onClick={handleEditProfile}>
               <Edit3 className="h-4 w-4 mr-2" />
               Edit Profile
             </Button>
@@ -122,7 +189,7 @@ export default function ProfilePage() {
                     <Heart className="h-5 w-5 mr-2" />
                     Saved Schools ({favoriteSchools.length})
                   </CardTitle>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={handleExportFavorites}>
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Export List
                   </Button>
@@ -172,11 +239,11 @@ export default function ProfilePage() {
                         </div>
                         
                         <div className="flex items-center gap-2 ml-4">
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" onClick={() => handleEditSchool(school.id)}>
                             <Edit3 className="h-4 w-4 mr-1" />
                             Edit
                           </Button>
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" onClick={() => handleRemoveSchool(school.id)}>
                             <Trash2 className="h-4 w-4 mr-1" />
                             Remove
                           </Button>
@@ -191,7 +258,7 @@ export default function ProfilePage() {
                       <h3 className="text-lg font-medium text-gray-900 mb-2">No saved schools yet</h3>
                       <p className="text-gray-600 mb-4">Start exploring schools and save your favorites to compare later.</p>
                       <Link href="/search">
-                        <Button>Find Schools</Button>
+                        <Button onClick={() => window.location.href = '/search'}>Find Schools</Button>
                       </Link>
                     </div>
                   )}
@@ -218,7 +285,7 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex items-center gap-4">
                         <span className="text-sm text-gray-500">{search.date}</span>
-                        <Button size="sm" variant="outline">Search Again</Button>
+                        <Button size="sm" variant="outline" onClick={() => handleSearchAgain(search.query)}>Search Again</Button>
                       </div>
                     </div>
                   ))}
@@ -253,7 +320,7 @@ export default function ProfilePage() {
                     <Label htmlFor="location">Location</Label>
                     <Input id="location" defaultValue={user.location} />
                   </div>
-                  <Button className="w-full">
+                  <Button className="w-full" onClick={handleSavePersonalInfo}>
                     <Save className="h-4 w-4 mr-2" />
                     Save Changes
                   </Button>
@@ -280,6 +347,7 @@ export default function ProfilePage() {
                           key={type} 
                           variant={user.preferences.schoolTypes.includes(type) ? 'default' : 'outline'}
                           className="cursor-pointer"
+                          onClick={() => handleToggleSchoolType(type)}
                         >
                           {type}
                         </Badge>
@@ -294,13 +362,14 @@ export default function ProfilePage() {
                           key={grade} 
                           variant={user.preferences.grades.includes(grade) ? 'default' : 'outline'}
                           className="cursor-pointer"
+                          onClick={() => handleToggleGrade(grade)}
                         >
                           {grade}
                         </Badge>
                       ))}
                     </div>
                   </div>
-                  <Button className="w-full">
+                  <Button className="w-full" onClick={handleSavePreferences}>
                     <Save className="h-4 w-4 mr-2" />
                     Save Preferences
                   </Button>
@@ -323,7 +392,7 @@ export default function ProfilePage() {
                     <h3 className="font-medium">Email Notifications</h3>
                     <p className="text-sm text-gray-600">Receive updates about new schools and features</p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => handleToggleNotification('emailUpdates')}>
                     {user.preferences.emailUpdates ? 'Disable' : 'Enable'}
                   </Button>
                 </div>
@@ -333,7 +402,7 @@ export default function ProfilePage() {
                     <h3 className="font-medium">Push Notifications</h3>
                     <p className="text-sm text-gray-600">Get notified about saved school updates</p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => handleToggleNotification('notifications')}>
                     {user.preferences.notifications ? 'Disable' : 'Enable'}
                   </Button>
                 </div>
@@ -343,7 +412,7 @@ export default function ProfilePage() {
                     <h3 className="font-medium">Weekly Digest</h3>
                     <p className="text-sm text-gray-600">Summary of new schools in your area</p>
                   </div>
-                  <Button variant="outline" size="sm">Enable</Button>
+                  <Button variant="outline" size="sm" onClick={() => alert('Weekly digest enabled!')}>Enable</Button>
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -351,7 +420,7 @@ export default function ProfilePage() {
                     <h3 className="font-medium">School Events</h3>
                     <p className="text-sm text-gray-600">Open houses and enrollment deadlines</p>
                   </div>
-                  <Button variant="outline" size="sm">Enable</Button>
+                  <Button variant="outline" size="sm" onClick={() => alert('School events notifications enabled!')}>Enable</Button>
                 </div>
               </CardContent>
             </Card>

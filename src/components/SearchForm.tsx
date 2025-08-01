@@ -177,6 +177,7 @@ export default function SearchForm({ onSearch, variant = 'full', className = '' 
 
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showHistoryDropdown, setShowHistoryDropdown] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const { addSearchQuery } = useSearchHistory();
   
   // Debounce and prevent double submission
@@ -253,7 +254,14 @@ export default function SearchForm({ onSearch, variant = 'full', className = '' 
       rating: 'all',
       distance: 'all',
       enrollment: 'all',
-      specialPrograms: []
+      specialPrograms: [],
+      languages: [],
+      facilities: [],
+      establishedAfter: '',
+      establishedBefore: '',
+      hasImages: false,
+      voivodeship: '',
+      district: ''
     });
   };
 
@@ -275,11 +283,22 @@ export default function SearchForm({ onSearch, variant = 'full', className = '' 
               placeholder="Search schools, districts, or locations..."
               value={searchParams.query}
               onChange={(e) => handleInputChange('query', e.target.value)}
-              onFocus={() => setShowHistoryDropdown(true)}
+              onFocus={() => {
+                setShowHistoryDropdown(true);
+                setIsInputFocused(true);
+              }}
+              onBlur={() => {
+                // Delay hiding to allow for suggestion clicks
+                setTimeout(() => {
+                  setShowHistoryDropdown(false);
+                  setIsInputFocused(false);
+                }, 150);
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
                   setShowHistoryDropdown(false);
+                  setIsInputFocused(false);
                   executeSearch(searchParams);
                 }
               }}
@@ -305,12 +324,13 @@ export default function SearchForm({ onSearch, variant = 'full', className = '' 
               onClose={() => setShowHistoryDropdown(false)}
             />
             
-            {searchParams.query && (
+            {searchParams.query && isInputFocused && (
               <SearchSuggestions 
                 query={searchParams.query} 
                 onSelectSuggestion={(suggestion) => {
                   handleInputChange('query', suggestion);
                   setShowHistoryDropdown(false);
+                  setIsInputFocused(false);
                 }}
                 onAutoSearch={handleAutoSearch}
                 className="mt-1"
@@ -339,11 +359,22 @@ export default function SearchForm({ onSearch, variant = 'full', className = '' 
                   placeholder="Search schools..."
                   value={searchParams.query}
                   onChange={(e) => handleInputChange('query', e.target.value)}
-                  onFocus={() => setShowHistoryDropdown(true)}
+                  onFocus={() => {
+                    setShowHistoryDropdown(true);
+                    setIsInputFocused(true);
+                  }}
+                  onBlur={() => {
+                    // Delay hiding to allow for suggestion clicks
+                    setTimeout(() => {
+                      setShowHistoryDropdown(false);
+                      setIsInputFocused(false);
+                    }, 150);
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
                       setShowHistoryDropdown(false);
+                      setIsInputFocused(false);
                       executeSearch(searchParams);
                     }
                   }}
@@ -369,12 +400,13 @@ export default function SearchForm({ onSearch, variant = 'full', className = '' 
                   onClose={() => setShowHistoryDropdown(false)}
                 />
                 
-                {searchParams.query && (
+                {searchParams.query && isInputFocused && (
                   <SearchSuggestions 
                     query={searchParams.query} 
                     onSelectSuggestion={(suggestion) => {
                       handleInputChange('query', suggestion);
                       setShowHistoryDropdown(false);
+                      setIsInputFocused(false);
                     }}
                     onAutoSearch={handleAutoSearch}
                     className="mt-1"
@@ -523,11 +555,22 @@ export default function SearchForm({ onSearch, variant = 'full', className = '' 
                 placeholder="Search schools, districts, or locations..."
                 value={searchParams.query}
                 onChange={(e) => handleInputChange('query', e.target.value)}
-                onFocus={() => setShowHistoryDropdown(true)}
+                onFocus={() => {
+                  setShowHistoryDropdown(true);
+                  setIsInputFocused(true);
+                }}
+                onBlur={() => {
+                  // Delay hiding to allow for suggestion clicks
+                  setTimeout(() => {
+                    setShowHistoryDropdown(false);
+                    setIsInputFocused(false);
+                  }, 150);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                     setShowHistoryDropdown(false);
+                    setIsInputFocused(false);
                     executeSearch(searchParams);
                   }
                 }}
@@ -553,12 +596,13 @@ export default function SearchForm({ onSearch, variant = 'full', className = '' 
                 onClose={() => setShowHistoryDropdown(false)}
               />
               
-              {searchParams.query && (
+              {searchParams.query && isInputFocused && (
                 <SearchSuggestions 
                   query={searchParams.query} 
                   onSelectSuggestion={(suggestion) => {
                     handleInputChange('query', suggestion);
                     setShowHistoryDropdown(false);
+                    setIsInputFocused(false);
                   }}
                   onAutoSearch={handleAutoSearch}
                   className="mt-1"

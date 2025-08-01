@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { getUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { cache, cacheKeys, getCachedData, createCachedResponse } from '@/lib/cache';
 
@@ -13,7 +12,7 @@ const CACHE_CONFIG = {
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getUser();
     
     // Get search parameters
     const searchParams = request.nextUrl.searchParams;
@@ -45,7 +44,7 @@ export async function GET(request: NextRequest) {
       page, limit, minRating, maxDistance, userLat, userLng,
       languages, specializations, facilities, hasImages,
       establishedAfter, establishedBefore, minStudents, maxStudents,
-      userId: session?.user?.id || 'anonymous'
+      userId: user?.id || 'anonymous'
     });
 
     // Try to get cached result
@@ -55,14 +54,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Check rate limiting for non-premium users
-    if (session?.user?.email) {
-      const userId = session.user.id;
-      const user = await prisma.user.findUnique({
+    if (user?.primaryEmail) {
+      const userId = user.id;
+      const dbUser = await prisma.user.findUnique({
         where: { id: userId },
         select: { subscriptionStatus: true }
       });
 
-      if (user?.subscriptionStatus === 'free') {
+      if (dbUser?.subscriptionStatus === 'free') {
         // Check search limit for free users
         const searchRecord = await prisma.userSearches.findUnique({
           where: { userId }

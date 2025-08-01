@@ -245,15 +245,15 @@ export default function AdminDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+            <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => window.location.href = '/admin/users'}>
               <Users className="h-6 w-6 mb-2" />
               <span>Manage Users</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+            <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => window.location.href = '/admin/schools'}>
               <GraduationCap className="h-6 w-6 mb-2" />
               <span>Add School</span>
             </Button>
-            <Button variant="outline" className="h-20 flex flex-col items-center justify-center">
+            <Button variant="outline" className="h-20 flex flex-col items-center justify-center" onClick={() => window.location.href = '/admin/analytics'}>
               <BarChart3 className="h-6 w-6 mb-2" />
               <span>View Analytics</span>
             </Button>

@@ -274,9 +274,9 @@ export default function RegionsPage() {
                   </div>
                   
                   <Link href={`/regions/${region.id}`}>
-                    <Button className="w-full bg-orange-600 hover:bg-orange-700">
-                      Przeglądaj szkoły
-                      <ArrowRight className="h-4 w-4 ml-2" />
+                    <Button className="w-full bg-orange-600 hover:bg-orange-700" onClick={() => window.location.href = '/search'}>
+                      <Search className="h-4 w-4 mr-2" />
+                      Explore Schools
                     </Button>
                   </Link>
                 </CardContent>

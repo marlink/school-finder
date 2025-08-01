@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getUser } from '@/lib/auth';
 import { validateRequest, getSecurityHeaders, sanitizeInput } from '@/lib/security';
 import { z } from 'zod';
 
@@ -51,19 +50,21 @@ export async function withApiSecurity(
 
       // Handle authentication if required
       if (config.requireAuth) {
-        const session = await getServerSession(authOptions);
+        const user = await getUser();
         
-        if (!session?.user) {
+        if (!user) {
           return NextResponse.json(
             { error: 'Authentication required' },
             { status: 401 }
           );
         }
 
+        const isAdmin = await user.hasPermission('admin');
+        
         apiRequest.user = {
-          id: session.user.id,
-          email: session.user.email || '',
-          role: session.user.role || 'user',
+          id: user.id,
+          email: user.primaryEmail || '',
+          role: isAdmin ? 'admin' : 'user',
         };
 
         // Check role-based authorization

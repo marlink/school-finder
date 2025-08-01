@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 import { useUser as useStackUser } from "@stackframe/stack";
-import { createClient } from "@/lib/supabase/client";
 import { 
   Menu, 
   X, 
@@ -38,9 +37,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
-  const { user, loading } = useUser();
+  const { user, loading, isAdmin } = useUser();
   const stackUser = useStackUser();
 
   useEffect(() => {
@@ -51,25 +49,6 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    const checkAdminRole = async () => {
-      if (user?.id) {
-        const supabase = createClient();
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single();
-        
-        setIsAdmin(profile?.role === 'admin');
-      } else {
-        setIsAdmin(false);
-      }
-    };
-
-    checkAdminRole();
-  }, [user]);
 
   const navigation = [
     { 
@@ -191,6 +170,7 @@ export function Navbar() {
                   variant="ghost"
                   size="sm"
                   className="relative p-2 hover:bg-orange-50 rounded-xl"
+                  onClick={() => alert('Notifications functionality coming soon!')}
                 >
                   <Bell className="h-5 w-5 text-gray-600" />
                   <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 bg-red-500 text-white text-xs flex items-center justify-center">
@@ -271,7 +251,7 @@ export function Navbar() {
               </div>
             ) : (
               <div className="flex items-center space-x-2">
-                <Link href="/auth/signin">
+                <Link href="/handler/signin">
                   <Button 
                     variant="ghost" 
                     size="sm"
@@ -280,7 +260,7 @@ export function Navbar() {
                     Zaloguj się
                   </Button>
                 </Link>
-                <Link href="/auth/signin">
+                <Link href="/handler/signup">
                   <Button 
                     size="sm"
                     className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 rounded-xl"
@@ -339,7 +319,7 @@ export function Navbar() {
               
               {!user && (
                 <div className="pt-4 border-t border-orange-100 space-y-2">
-                  <Link href="/auth/signin" onClick={() => setIsOpen(false)}>
+                  <Link href="/handler/signin" onClick={() => setIsOpen(false)}>
                     <Button 
                       variant="outline" 
                       className="w-full justify-start border-orange-200 hover:bg-orange-50"
@@ -348,7 +328,7 @@ export function Navbar() {
                       Zaloguj się
                     </Button>
                   </Link>
-                  <Link href="/auth/signin" onClick={() => setIsOpen(false)}>
+                  <Link href="/handler/signup" onClick={() => setIsOpen(false)}>
                     <Button className="w-full justify-start bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600">
                       <Sparkles className="mr-2 h-4 w-4" />
                       Dołącz do nas

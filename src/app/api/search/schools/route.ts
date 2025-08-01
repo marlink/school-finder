@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { getUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { withPerformanceTracking } from '@/lib/performance';
 import { withCacheAndRateLimit, defaultCacheConfigs, defaultRateLimitConfigs } from '@/lib/cache-middleware';
 
 async function searchHandler(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getUser();
     
     // Get search parameters
     const searchParams = request.nextUrl.searchParams;
@@ -34,14 +33,14 @@ async function searchHandler(request: NextRequest) {
     const maxStudents = searchParams.get('maxStudents') ? parseInt(searchParams.get('maxStudents')!) : null;
 
     // Check rate limiting for non-premium users
-    if (session?.user?.email) {
-      const userId = session.user.id;
-      const user = await prisma.user.findUnique({
+    if (user?.primaryEmail) {
+      const userId = user.id;
+      const userRecord = await prisma.user.findUnique({
         where: { id: userId },
         select: { subscriptionStatus: true }
       });
 
-      if (user?.subscriptionStatus === 'free') {
+      if (userRecord?.subscriptionStatus === 'free') {
         // Check search limit for free users
         const searchRecord = await prisma.userSearches.findUnique({
           where: { userId }
@@ -245,8 +244,8 @@ async function searchHandler(request: NextRequest) {
               rating: true
             }
           },
-          favorites: session?.user?.id ? {
-            where: { userId: session.user.id },
+          favorites: user?.id ? {
+            where: { userId: user.id },
             select: { id: true }
           } : false
         }
@@ -286,7 +285,7 @@ async function searchHandler(request: NextRequest) {
         userRatingCount: userRatings.length,
         googleRatingCount: googleRatings.length,
         distance: distance ? Number(distance.toFixed(1)) : null,
-        isFavorite: session?.user?.id ? school.favorites.length > 0 : false,
+        isFavorite: user?.id ? school.favorites.length > 0 : false,
         mainImage: school.images[0]?.imageUrl || null,
         userRatings: undefined, // Remove from response
         googleRatings: undefined, // Remove from response

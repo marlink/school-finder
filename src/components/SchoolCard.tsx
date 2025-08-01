@@ -347,7 +347,7 @@ export default function SchoolCard({
             {showActions && (
               <div className="flex items-center gap-2">
                 <Link href={`/schools/${school.id}`} className="flex-1">
-                  <Button size="sm" className="w-full">
+                  <Button size="sm" className="w-full" onClick={() => window.location.href = '/'}>
                     <ExternalLink className="h-4 w-4 mr-2" />
                     {t.viewDetails}
                   </Button>
@@ -580,10 +580,10 @@ export default function SchoolCard({
             {showActions && (
               <div className="flex items-center gap-3 pt-4 border-t">
                 <Link href={`/schools/${school.id}`} className="flex-1">
-                  <Button size="sm" className="w-full">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    {t.viewDetails}
-                  </Button>
+                  <Button size="sm" className="w-full" onClick={() => window.location.href = '/'}>
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  View Details
+                </Button>
                 </Link>
                 <FavoriteButton 
                   schoolId={school.id} 
@@ -688,10 +688,10 @@ export default function SchoolCard({
             {showActions && (
               <div className="flex items-center gap-3">
                 <Link href={`/schools/${school.id}`}>
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    {t.viewDetails}
-                  </Button>
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => window.location.href = '/'}>
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  View Details
+                </Button>
                 </Link>
                 <FavoriteButton 
                   schoolId={school.id} 

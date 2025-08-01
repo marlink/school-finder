@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/hooks/useUser';
 import { 
   Download, 
   Upload, 
@@ -86,8 +86,8 @@ type DataSource = {
   successRate: number;
 };
 
-export default function DataScrapingSystem() {
-  const { data: session } = useSession();
+export default function ScrapingManagement() {
+  const { user, isAdmin } = useUser();
   const [jobs, setJobs] = useState<ScrapingJob[]>([]);
   const [stats, setStats] = useState<ScrapingStats | null>(null);
   const [dataSources, setDataSources] = useState<DataSource[]>([]);
@@ -120,10 +120,10 @@ export default function DataScrapingSystem() {
       }
     };
 
-    if (session?.user?.role === 'admin') {
+    if (isAdmin) {
       fetchData();
     }
-  }, [session]);
+  }, [isAdmin]);
 
   const handleJobAction = async (jobId: string, action: 'start' | 'pause' | 'stop' | 'restart') => {
     try {
