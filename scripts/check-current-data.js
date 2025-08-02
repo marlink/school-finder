@@ -1,36 +1,30 @@
-import * as dotenv from 'dotenv';
-import { createClient } from '@supabase/supabase-js';
+import { PrismaClient } from '@prisma/client';
 
-dotenv.config({ path: '.env.local' });
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const prisma = new PrismaClient();
 
 async function checkCurrentData() {
   console.log('🔍 Checking current database state...\n');
 
   try {
     // Check schools table
-    const { data: schools, error: schoolsError } = await supabase
-      .from('schools')
-      .select('id, name, address, contact')
-      .limit(10);
-
-    if (schoolsError) {
-      console.error('❌ Error fetching schools:', schoolsError);
-      return;
-    }
+    const schools = await prisma.school.findMany({
+      select: {
+        id: true,
+        name: true,
+        address: true,
+        contact: true,
+      },
+      take: 10,
+    });
 
     console.log(`📚 Found ${schools?.length || 0} schools in database:`);
     if (schools && schools.length > 0) {
       schools.forEach((school, i) => {
         console.log(`${i + 1}. ${school.name}`);
-        if (school.address) {
+        if (school.address && typeof school.address === 'object') {
           console.log(`   📍 ${school.address.city || 'Unknown city'}`);
         }
-        if (school.contact) {
+        if (school.contact && typeof school.contact === 'object') {
           console.log(`   📞 ${school.contact.phone || 'No phone'}`);
         }
         console.log('');
@@ -40,17 +34,21 @@ async function checkCurrentData() {
     }
 
     // Check users table
-    const { data: users, error: usersError } = await supabase
-      .from('users')
-      .select('id, email, role')
-      .limit(5);
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        // Note: User model might not have 'role' field, check schema
+      },
+      take: 5,
+    });
 
-    if (!usersError && users) {
-      console.log(`👥 Found ${users.length} users in database`);
-    }
+    console.log(`👥 Found ${users.length} users in database`);
 
   } catch (error) {
     console.error('❌ Unexpected error:', error);
+  } finally {
+    await prisma.$disconnect();
   }
 }
 

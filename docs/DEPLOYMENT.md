@@ -1,6 +1,8 @@
-# Deployment Guide
+# 🚀 DEPLOYMENT GUIDE
 
-## Current Status
+*School Finder Production Deployment Guide - Updated for Stack Auth*
+
+## 📊 Current Status
 
 ### ✅ Build Status
 - ✅ Local build: **SUCCESSFUL**
@@ -12,36 +14,64 @@
 - **Framework**: Next.js 15.4.1 (App Router)
 - **Frontend**: React 19.1.0, Tailwind CSS, Radix UI
 - **Backend**: API routes, Prisma ORM
-- **Database**: Supabase (PostgreSQL)
-- **Authentication**: NextAuth.js
+- **Database**: Neon PostgreSQL (serverless)
+- **Authentication**: Stack Auth (OAuth2 with Google/GitHub)
+- **Storage**: Supabase (file uploads)
 - **Deployment**: Vercel-ready configuration
 
-## Environment Setup
+## 🔧 Environment Setup
 
 ### Required Environment Variables
 
 #### Production
 ```bash
-NEXTAUTH_SECRET="your-production-secret"
-NEXTAUTH_URL="https://your-domain.vercel.app"
-NEXT_PUBLIC_SUPABASE_URL="your-production-supabase-url"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="your-production-supabase-key"
-SUPABASE_SERVICE_ROLE_KEY="your-production-service-key"
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="your-google-maps-key"
-GOOGLE_CLIENT_ID="your-google-oauth-id"
-GOOGLE_CLIENT_SECRET="your-google-oauth-secret"
-GITHUB_ID="your-github-oauth-id"
-GITHUB_SECRET="your-github-oauth-secret"
+# Stack Auth Configuration
+NEXT_PUBLIC_STACK_PROJECT_ID="your_stack_project_id"
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY="your_stack_publishable_key"
+STACK_SECRET_SERVER_KEY="your_stack_secret_key"
+
+# Database Configuration (Neon PostgreSQL)
+DATABASE_URL="postgresql://user:password@host:port/database?sslmode=require"
+
+# Supabase Configuration (for file storage)
+NEXT_PUBLIC_SUPABASE_URL="your_supabase_url"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key"
+SUPABASE_SERVICE_ROLE_KEY="your_supabase_service_key"
+
+# Google Maps API
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="your_google_maps_api_key"
+
+# MCP Service Configuration
+MCP_API_KEY="your_mcp_api_key"
+FIRECRAWL_API_KEY="your_firecrawl_api_key"
+HYPERBROWSER_API_KEY="your_hyperbrowser_api_key"
+
+# Apify Configuration
+APIFY_API_TOKEN="your_apify_token"
+
+# Environment
+NODE_ENV="production"
+NEXT_PUBLIC_ENV="production"
 ```
 
 #### Staging
 ```bash
-NEXTAUTH_SECRET="your-staging-secret"
-NEXTAUTH_URL="https://your-staging-domain.vercel.app"
-NEXT_PUBLIC_SUPABASE_URL="your-staging-supabase-url"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="your-staging-supabase-key"
-SUPABASE_SERVICE_ROLE_KEY="your-staging-service-key"
-# ... other staging variables
+# Stack Auth Configuration (Staging)
+NEXT_PUBLIC_STACK_PROJECT_ID="your_staging_stack_project_id"
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY="your_staging_stack_publishable_key"
+STACK_SECRET_SERVER_KEY="your_staging_stack_secret_key"
+
+# Database Configuration (Staging)
+DATABASE_URL="postgresql://staging_user:password@staging_host:port/staging_database?sslmode=require"
+
+# Staging API Keys (use test/staging keys)
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="YOUR_STAGING_GOOGLE_MAPS_API_KEY_HERE"
+MCP_API_KEY="your_staging_mcp_api_key"
+APIFY_API_TOKEN="your_staging_apify_token"
+
+# Environment
+NODE_ENV="development"
+NEXT_PUBLIC_ENV="staging"
 ```
 
 ## Deployment Options

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mcpService } from '@/lib/mcp/service';
 import { validateRequest, getSecurityHeaders } from '@/lib/security';
+import { stackServerApp } from '@/stack';
+import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
 // MCP Search validation schema
@@ -35,6 +37,15 @@ export async function POST(request: NextRequest) {
 
     if (securityCheck) return securityCheck;
 
+    // Check user authentication
+    const user = await stackServerApp.getUser();
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
     // Parse and validate request body
     const body = await request.json();
     const validationResult = mcpSearchSchema.safeParse(body);
@@ -50,6 +61,48 @@ export async function POST(request: NextRequest) {
     }
 
     const { query, filters, limit } = validationResult.data;
+
+    // Check search limits based on user subscription
+    const subscriptionTier = user.clientMetadata?.subscriptionTier || 'free';
+    const hasActiveSubscription = user.clientMetadata?.subscriptionStatus === 'active';
+    
+    // Define search limits
+    const searchLimits = {
+      free: 50,
+      premium: 500,
+      enterprise: -1 // unlimited
+    };
+
+    // Skip limit check for enterprise users
+    if (subscriptionTier !== 'enterprise' || !hasActiveSubscription) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      // Count today's searches
+      const searchCount = await prisma.searchHistory.count({
+        where: {
+          userId: user.id,
+          timestamp: {
+            gte: today
+          }
+        }
+      });
+
+      const currentLimit = searchLimits[subscriptionTier as keyof typeof searchLimits] || searchLimits.free;
+      
+      if (searchCount >= currentLimit) {
+        return NextResponse.json(
+          { 
+            error: 'Search limit exceeded',
+            message: `Daily search limit of ${currentLimit} reached. Upgrade your plan for more searches.`,
+            searchesUsed: searchCount,
+            searchLimit: currentLimit,
+            subscriptionTier
+          },
+          { status: 429 }
+        );
+      }
+    }
 
     // Start timing for performance measurement
     const startTime = performance.now();
@@ -69,12 +122,30 @@ export async function POST(request: NextRequest) {
     // Calculate processing time
     const processingTime = Math.round(performance.now() - startTime);
 
+    // Log search to history for usage tracking
+    try {
+      await prisma.searchHistory.create({
+        data: {
+          userId: user.id,
+          query,
+          timestamp: new Date()
+        }
+      });
+    } catch (error) {
+      console.error('Failed to log search history:', error);
+      // Don't fail the search if logging fails
+    }
+
     // Return search results
     const response = NextResponse.json({
       results: searchResults,
       totalResults: searchResults.length,
       processingTime,
-      suggestions
+      suggestions,
+      searchLimitInfo: {
+        subscriptionTier,
+        hasActiveSubscription
+      }
     });
 
     // Add security headers

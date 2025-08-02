@@ -126,19 +126,106 @@ export function useMCPSearch(options: UseMCPSearchOptions = {}) {
     }
 
     try {
-      // For now, generate simple suggestions
-      // TODO: Implement actual MCP suggestion API
-      const mockSuggestions = [
-        `${searchQuery} in Warsaw`,
-        `${searchQuery} public schools`,
-        `${searchQuery} with English programs`
-      ];
-      
-      setSuggestions(mockSuggestions);
+      // Call the actual MCP suggestion API
+      const response = await fetch('/api/mcp/suggestions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: searchQuery }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Suggestion API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setSuggestions(data.suggestions || []);
     } catch (err) {
       console.error('Failed to get suggestions:', err);
+      
+      // Fallback to intelligent mock suggestions based on query analysis
+      const fallbackSuggestions = generateIntelligentSuggestions(searchQuery);
+      setSuggestions(fallbackSuggestions.slice(0, 5));
     }
   }, []);
+
+  // Helper function for intelligent fallback suggestions
+  const generateIntelligentSuggestions = (query: string): string[] => {
+    const lowerQuery = query.toLowerCase();
+    const suggestions: string[] = [];
+
+    // Location-based suggestions
+    if (lowerQuery.includes('london') || lowerQuery.includes('uk')) {
+      suggestions.push(
+        `${query} international schools`,
+        `${query} independent schools`,
+        `${query} grammar schools`
+      );
+    } else if (lowerQuery.includes('paris') || lowerQuery.includes('france')) {
+      suggestions.push(
+        `${query} international schools`,
+        `${query} bilingual schools`,
+        `${query} lycée international`
+      );
+    } else if (lowerQuery.includes('berlin') || lowerQuery.includes('germany')) {
+      suggestions.push(
+        `${query} international schools`,
+        `${query} deutsche schulen`,
+        `${query} bilingual education`
+      );
+    }
+
+    // Subject/program-based suggestions
+    if (lowerQuery.includes('stem') || lowerQuery.includes('science')) {
+      suggestions.push(
+        `${query} STEM programs`,
+        `${query} science schools`,
+        `${query} technology education`
+      );
+    } else if (lowerQuery.includes('art') || lowerQuery.includes('music')) {
+      suggestions.push(
+        `${query} arts schools`,
+        `${query} creative programs`,
+        `${query} performing arts`
+      );
+    } else if (lowerQuery.includes('language') || lowerQuery.includes('bilingual')) {
+      suggestions.push(
+        `${query} bilingual schools`,
+        `${query} language immersion`,
+        `${query} multilingual education`
+      );
+    }
+
+    // School type suggestions
+    if (!lowerQuery.includes('international')) {
+      suggestions.push(`${query} international schools`);
+    }
+    if (!lowerQuery.includes('private')) {
+      suggestions.push(`${query} private schools`);
+    }
+    if (!lowerQuery.includes('public')) {
+      suggestions.push(`${query} public schools`);
+    }
+
+    // Age/level-based suggestions
+    if (lowerQuery.includes('primary') || lowerQuery.includes('elementary')) {
+      suggestions.push(
+        `${query} primary education`,
+        `${query} elementary schools`
+      );
+    } else if (lowerQuery.includes('secondary') || lowerQuery.includes('high')) {
+      suggestions.push(
+        `${query} secondary schools`,
+        `${query} high schools`
+      );
+    }
+
+    // Remove duplicates and filter out exact matches
+    return [...new Set(suggestions)].filter(suggestion => 
+      suggestion.toLowerCase() !== query.toLowerCase()
+    );
+  };
 
   // Auto-search with debouncing
   useEffect(() => {

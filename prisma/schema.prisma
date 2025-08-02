@@ -91,6 +91,7 @@ model SubscriptionLog {
   @@map("subscription_logs")
 }
 
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model School {
   id              String                @id @default(uuid())
   name            String
