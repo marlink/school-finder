@@ -36,14 +36,6 @@ yarn-error.log*
 .env*
 !.env.example
 
-# specific env files (extra protection)
-.env
-.env.local
-.env.production
-.env.staging
-.env.testing
-.env.apify
-
 # vercel
 .vercel
 
