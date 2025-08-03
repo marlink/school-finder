@@ -80,6 +80,20 @@
 - Error handling and monitoring
 - Performance optimization
 
+### 🔄 [HANDOVER_SESSIONS.md](./HANDOVER_SESSIONS.md)
+**Session continuity and handover documentation** including:
+- Session checklist and workflow
+- Project status and current priorities
+- Troubleshooting quick reference
+- Session management scripts
+
+### 🚀 [VERCEL_TROUBLESHOOTING.md](./VERCEL_TROUBLESHOOTING.md)
+**Vercel deployment troubleshooting guide** covering:
+- Current deployment issues and diagnosis
+- Step-by-step resolution procedures
+- Environment variable management
+- Emergency recovery procedures
+
 ## 📁 Additional Resources
 
 ### 🎨 [wireframes/](./wireframes/)

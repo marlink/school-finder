@@ -9,18 +9,24 @@ const stackServerApp = new StackServerApp({
 })
 
 export async function middleware(request: NextRequest) {
-  const user = await stackServerApp.getUser()
-  
-  // Check if the route is an admin route
+  // Only apply authentication to admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    if (!user) {
-      // Redirect to login if not authenticated
+    try {
+      const user = await stackServerApp.getUser()
+      
+      if (!user) {
+        // Redirect to login if not authenticated
+        return NextResponse.redirect(new URL('/handler/signin', request.url))
+      }
+      
+      // Check if user has admin role (you may need to adjust this based on your user structure)
+      // For now, we'll allow any authenticated user to access admin
+      // You can add role checking here later
+    } catch (error) {
+      console.error('Stack Auth error in middleware:', error)
+      // If Stack Auth fails, redirect to signin
       return NextResponse.redirect(new URL('/handler/signin', request.url))
     }
-    
-    // Check if user has admin role (you may need to adjust this based on your user structure)
-    // For now, we'll allow any authenticated user to access admin
-    // You can add role checking here later
   }
   
   return NextResponse.next()
