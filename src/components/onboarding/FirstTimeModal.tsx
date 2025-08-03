@@ -42,7 +42,7 @@ export function FirstTimeModal({ onComplete, onStartTour }: FirstTimeModalProps)
         const status = await onboardingService.getOnboardingStatus(user.id);
         
         // Show modal if user is new (no onboarding status) or hasn't completed welcome tour
-        if (!status || !status.welcome_tour_completed) {
+        if (!status || !status.welcomeTourCompleted) {
           setIsOpen(true);
         }
       } catch (error) {

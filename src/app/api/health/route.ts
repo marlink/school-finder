@@ -21,7 +21,7 @@ interface ServiceStatus {
   status: 'up' | 'down' | 'degraded';
   responseTime?: number;
   error?: string;
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 export async function GET(request: NextRequest) {
@@ -86,7 +86,7 @@ async function checkAuth(): Promise<ServiceStatus> {
     // Check if Stack Auth environment variables are set
     const requiredVars = [
       'NEXT_PUBLIC_STACK_PROJECT_ID',
-      'NEXT_PUBLIC_STACK_PUBLISHABLE_KEY',
+      'NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY',
       'STACK_SECRET_SERVER_KEY'
     ];
     
@@ -123,9 +123,7 @@ function checkEnvironment(): ServiceStatus {
   
   try {
     const requiredVars = [
-      'DATABASE_URL',
-      'NEXT_PUBLIC_SUPABASE_URL',
-      'NEXT_PUBLIC_SUPABASE_ANON_KEY'
+      'DATABASE_URL'
     ];
     
     const optionalVars = [

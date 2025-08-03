@@ -37,7 +37,7 @@ export function WelcomeTour({ onComplete, onSkip }: WelcomeTourProps) {
           status = await onboardingService.createOnboardingStatus(user.id);
         }
 
-        if (status && !status.welcome_tour_completed) {
+        if (status && !status.welcomeTourCompleted) {
           setRun(true);
         }
       } catch (error) {

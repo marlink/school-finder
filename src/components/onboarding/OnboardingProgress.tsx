@@ -62,7 +62,7 @@ export function OnboardingProgress({ onStartTour, className }: OnboardingProgres
   }
 
   // Don't show if onboarding is completed
-  if (status.onboarding_completed) {
+  if (status.onboardingCompleted) {
     return null;
   }
 
@@ -71,7 +71,7 @@ export function OnboardingProgress({ onStartTour, className }: OnboardingProgres
       id: 'welcome_tour',
       title: 'Welcome Tour',
       description: 'Learn the basics of School Finder',
-      completed: status.welcome_tour_completed,
+      completed: status.welcomeTourCompleted,
       icon: Play,
       action: onStartTour,
       actionText: 'Start Tour',
@@ -80,7 +80,7 @@ export function OnboardingProgress({ onStartTour, className }: OnboardingProgres
       id: 'profile_setup',
       title: 'Profile Setup',
       description: 'Complete your profile information',
-      completed: status.profile_setup_completed,
+      completed: status.profileSetupCompleted,
       icon: User,
       action: () => {
         if (typeof window !== 'undefined') {
@@ -93,7 +93,7 @@ export function OnboardingProgress({ onStartTour, className }: OnboardingProgres
       id: 'first_search',
       title: 'First Search',
       description: 'Try searching for schools',
-      completed: status.first_search_completed,
+      completed: status.firstSearchCompleted,
       icon: Search,
       action: () => {
         if (typeof window !== 'undefined') {
@@ -106,7 +106,7 @@ export function OnboardingProgress({ onStartTour, className }: OnboardingProgres
       id: 'first_favorite',
       title: 'Save a Favorite',
       description: 'Add a school to your favorites',
-      completed: status.first_favorite_added,
+      completed: status.firstFavoriteAdded,
       icon: Heart,
       action: () => {
         if (typeof window !== 'undefined') {
@@ -119,7 +119,7 @@ export function OnboardingProgress({ onStartTour, className }: OnboardingProgres
       id: 'email_preferences',
       title: 'Email Preferences',
       description: 'Set up your notification preferences',
-      completed: status.email_preferences_set,
+      completed: status.emailPreferencesSet,
       icon: Mail,
       action: () => {
         if (typeof window !== 'undefined') {
