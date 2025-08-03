@@ -33,3 +33,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Nested Git repositories
+school-finder/

@@ -8,7 +8,7 @@
 
 | Component | Version/Configuration | Notes |
 |:----------|:---------------------|:-------|
-| **Next.js** | 14.2.0 (App Router, Edge Runtime) | Our primary framework that provides server-side rendering, static site generation, and API routes. The App Router architecture allows for more intuitive routing and better performance. |
+| **Next.js** | 15.4.1 (App Router, Edge Runtime) | Our primary framework that provides server-side rendering, static site generation, and API routes. The App Router architecture allows for more intuitive routing and better performance. |
 | **Shadcn UI** | `@shadcn/ui@latest` (Radix UI + Tailwind CSS) | A collection of reusable components built on Radix UI primitives and styled with Tailwind CSS. This provides accessible, customizable UI components that maintain consistency throughout the application. |
 | **State Management** | React Context API + SWR | For global state management, we'll use React's built-in Context API. For data fetching, caching, and revalidation, we'll use SWR (stale-while-revalidate) to ensure optimal user experience with real-time updates. |
 | **Styling** | Tailwind CSS + CSS Modules | Tailwind for utility-first styling with CSS Modules for component-specific styles when needed. This combination provides flexibility while maintaining performance. |
@@ -17,9 +17,9 @@
 
 | Component | Version/Configuration | Notes |
 |:----------|:---------------------|:-------|
-| **Authentication** | next-auth@4.23.0 (OAuth2 with Google/GitHub as providers) | Handles user authentication with multiple provider options. All configuration is centralized in `lib/auth.ts`. |
+| **Authentication** | Stack Auth (OAuth2 with Google/GitHub as providers) | Handles user authentication with multiple provider options. Stack Auth provides a complete authentication solution with built-in user management, permissions, and session handling. |
 | **Backend** | Vercel (Edge Functions, Serverless API Routes) | Our serverless infrastructure that automatically scales based on demand. Edge Functions provide low-latency responses globally. |
-| **Database** | PlanetScale (serverless MySQL) or DynamoDB (AWS) | PlanetScale offers a serverless MySQL database with automatic scaling and no connection limits. DynamoDB is an alternative for NoSQL needs. |
+| **Database** | Neon (serverless PostgreSQL with connection pooling) | Neon provides a serverless PostgreSQL database with automatic scaling, connection pooling via PgBouncer, and seamless Prisma integration. Connection pooling is enabled by default for optimal performance with Next.js serverless functions. |
 
 ### 1.3. External Services & Integrations
 
@@ -35,7 +35,7 @@
 | Component | Version/Configuration | Notes |
 |:----------|:---------------------|:-------|
 | **Environment** | `.env.local` | Stores all sensitive configuration values and API keys. Must be properly secured and never committed to version control. |
-| **Required Secrets** | `APIFY_API_TOKEN`, `GOOGLE_MAPS_API_KEY`, `NEXTAUTH_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Critical API keys and tokens that must be properly secured. |
+| **Required Secrets** | `APIFY_API_TOKEN`, `GOOGLE_MAPS_API_KEY`, `STACK_SECRET_SERVER_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Critical API keys and tokens that must be properly secured. |
 
 
 ## 2. Project Setup Instructions
@@ -54,15 +54,13 @@ Before you begin working with the configuration files, follow these steps to set
 2. **Install required dependencies**:
    ```bash
    # Core dependencies
-   npm install next-auth@4.23.0 @react-google-maps/api@2.2.4 apify@2.0.0 swr
+   npm install @stackframe/stack @react-google-maps/api@2.2.4 apify@2.0.0 swr
    
    # UI dependencies
    npm install @shadcn/ui@latest tailwindcss postcss autoprefixer
    
-   # Database dependencies (choose one based on your database selection)
-   npm install @prisma/client prisma   # For PlanetScale with Prisma
-   # OR
-   npm install @aws-sdk/client-dynamodb   # For DynamoDB
+   # Database dependencies for Neon PostgreSQL
+   npm install @prisma/client prisma
    
    # Payment processing
    npm install @stripe/stripe-js stripe
@@ -132,74 +130,48 @@ module.exports = nextConfig;
 
 #### 2.2.2. Set up Authentication
 
-Create the directory structure `lib/` if it doesn't exist, then create the file `lib/auth.ts` with the following NextAuth.js configuration. This handles user authentication with multiple providers:
+Create the directory structure `lib/` if it doesn't exist, then create the file `lib/stack.ts` with the following Stack Auth configuration. This handles user authentication with multiple providers:
 
 ```typescript
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import GitHubProvider from 'next-auth/providers/github';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { prisma } from './prisma';
+import { StackServerApp, StackClientApp } from '@stackframe/stack';
 
-// Define the NextAuth configuration options
-export const authOptions: NextAuthOptions = {
-  // Use Prisma adapter to store sessions and users in the database
-  adapter: PrismaAdapter(prisma),
-  
-  // Configure authentication providers
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      // Request additional scopes if needed
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code"
-        }
-      }
-    }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
-    }),
-  ],
-  
-  // Configure session handling
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-  
-  // Customize JWT handling
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-  
-  // Customize pages (optional)
-  pages: {
+// Server-side Stack Auth configuration
+export const stackServerApp = new StackServerApp({
+  tokenStore: 'nextjs-cookie',
+  urls: {
     signIn: '/auth/signin',
-    signOut: '/auth/signout',
-    error: '/auth/error',
+    signUp: '/auth/signup',
+    afterSignIn: '/dashboard',
+    afterSignUp: '/dashboard',
+    afterSignOut: '/',
   },
-  
-  // Callbacks for customizing session and JWT
-  callbacks: {
-    async session({ session, token }) {
-      // Add user role and subscription status to session
-      if (token && session.user) {
-        session.user.id = token.sub;
-        session.user.role = token.role as string;
-        session.user.subscriptionStatus = token.subscriptionStatus as string;
-      }
-      return session;
-    },
-    async jwt({ token, user }) {
-      // Add custom claims to the JWT
-      if (user) {
-        // Fetch user data from database
+});
+
+// Client-side Stack Auth configuration
+export const stackClientApp = new StackClientApp({
+  tokenStore: 'cookie',
+  baseUrl: process.env.NEXT_PUBLIC_STACK_URL,
+  projectId: process.env.NEXT_PUBLIC_STACK_PROJECT_ID,
+  publishableClientKey: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY,
+});
+
+// Authentication patterns for server-side usage
+export async function requireAuth() {
+  const user = await stackServerApp.getUser();
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+  return user;
+}
+
+// Admin permission check
+export async function requireAdmin() {
+  const user = await requireAuth();
+  if (!user.hasPermission('admin')) {
+    throw new Error('Forbidden: Admin access required');
+  }
+  return user;
+}
         const userData = await prisma.user.findUnique({
           where: { id: user.id },
           select: { role: true, subscriptionStatus: true }
@@ -343,8 +315,11 @@ STRIPE_PUBLIC_KEY=your-stripe-publishable-key
 STRIPE_SECRET_KEY=your-stripe-secret-key
 STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
 
-# Database connection string (for PlanetScale)
-DATABASE_URL="mysql://username:password@aws.connect.psdb.cloud/database-name?sslaccept=strict"
+# Database connection strings (for Neon PostgreSQL)
+# Pooled connection for application use (recommended for serverless)
+DATABASE_URL="postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/neondb?pgbouncer=true&connect_timeout=10"
+# Direct connection for migrations and specific operations
+DIRECT_DATABASE_URL="postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/neondb"
 
 # Admin credentials
 ADMIN_EMAIL=neatgroupnet@gmail.com
@@ -457,7 +432,7 @@ The School Finder Portal implements a tiered search limit system to encourage us
 
 1. **Create the database schema**:
    ```sql
-   -- For PlanetScale/MySQL
+   -- For Neon PostgreSQL
    CREATE TABLE user_searches (
      user_id VARCHAR(255) NOT NULL,
      search_count INT DEFAULT 0,
@@ -1050,7 +1025,7 @@ export default async function handler(req: Request) {
 // Helper function to fetch nearby schools
 async function fetchNearbySchools(lat: number, lng: number, radius: number) {
   // Implementation depends on your database choice
-  // For example, with PlanetScale and MySQL:
+  // For example, with Neon PostgreSQL:
   // SELECT *, 
   //   (6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance 
   // FROM schools 
@@ -1386,7 +1361,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function getSchoolsByLocation(lat: number, lng: number, radius: number = 5) {
   // Use a spatial query with an index for better performance
-  // This example uses Prisma with MySQL
+  // This example uses Prisma with Neon PostgreSQL
   
   // Calculate bounding box for initial filtering (faster than calculating distance for all records)
   const latDelta = radius / 111.32; // 1 degree latitude = 111.32 km
@@ -2610,7 +2585,7 @@ NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-key-at-least-32-chars
 
 # Database
-DATABASE_URL=mysql://user:password@localhost:3306/school_finder
+DATABASE_URL=postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/neondb?pgbouncer=true&connect_timeout=10
 
 # External APIs
 GOOGLE_MAPS_API_KEY=your-google-maps-api-key

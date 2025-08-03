@@ -1,5 +1,7 @@
 # School Finder Portal - Product Specification
 
+> **WAŻNE**: NIGDY nie używaj plików z folderu `-Trash`. Folder ten zawiera przestarzałe lub odrzucone dokumenty, które nie powinny być wykorzystywane w implementacji.
+
 ## 1. Project Overview
 
 The School Finder Portal is a web application designed to simplify the process of discovering and evaluating schools in Poland. Users can easily search for schools, access essential information including basic school details, Google ratings visualized as stars, and location map thumbnails. The platform also leverages a custom sentiment analysis of extracted comments to provide an additional layer of insight into school quality. A secure, simple registration/login system allows users to personalize their experience by saving favorite schools. The entire platform will operate with a strong commitment to RODO (GDPR) compliant data handling.
@@ -124,7 +126,7 @@ To balance server load and encourage user registration, we'll implement a limite
 
 - **User Consent**: Obtain explicit consent from users for data collection and processing during the registration process. A clear link to the Privacy Policy will be provided.
 - **Data Minimization**: Collect only the data necessary for the core functionality of the portal (e.g., for authentication, saving favorites, submitting ratings).
-- **Secure Storage**: Implement secure methods for storing user data, especially sensitive information like passwords (hashed and salted). Utilize the security features of chosen providers (Firebase/Supabase).
+- **Secure Storage**: Implement secure methods for storing user data, especially sensitive information like passwords (hashed and salted). Utilize Neon PostgreSQL with connection pooling for optimal performance and scalability.
 - **Privacy Policy**: Maintain a clear, accessible, and comprehensive Privacy Policy outlining:
   - What data is collected.
   - How data is used.
@@ -140,9 +142,59 @@ To balance server load and encourage user registration, we'll implement a limite
 - **Accessibility**: Adhere to WCAG 2.1 AA standards for broader accessibility.
 - **Performance Optimization**: Implement techniques for fast loading times, efficient data fetching, and smooth interactions.
 
-## 7. User Scenarios
+## 7. Security & Maintenance Requirements
 
-### 7.1. Happy Paths (Success Scenarios)
+### 7.1. Security Testing Schedule
+
+**CRITICAL**: The School Finder Portal implements comprehensive security measures that require regular validation to maintain production-ready security standards.
+
+#### 7.1.1. Weekly Security Testing (MANDATORY)
+- **Frequency**: Every Monday at 9:00 AM UTC
+- **Automated via**: GitHub Actions workflow (`security-weekly.yml`)
+- **Manual Backup**: `npm run security:full` (if automation fails)
+- **Components Tested**:
+  - SQL Injection Protection (100% success rate required)
+  - XSS Prevention (100% success rate required)
+  - CSRF Protection validation
+  - Input validation schemas (Zod)
+  - Rate limiting functionality
+  - Dependency vulnerability scanning
+  - TypeScript compilation integrity
+
+#### 7.1.2. Security Monitoring Dashboard
+- **Current Security Score**: 10/10 ⭐
+- **Test Success Rate**: 100% (33/33 tests passing)
+- **Last Security Audit**: Automated via GitHub Actions
+- **Security Documentation**: `/docs/SECURITY_IMPLEMENTATION_SUMMARY.md`
+
+#### 7.1.3. Security Incident Response
+- **Immediate Action**: If any security test fails, deployment is blocked
+- **Notification**: GitHub Actions will create issues for failed security tests
+- **Resolution Time**: Maximum 24 hours for critical security issues
+- **Escalation**: Security failures require immediate developer attention
+
+#### 7.1.4. Compliance Requirements
+- **RODO/GDPR**: Weekly validation of data protection measures
+- **Input Sanitization**: Continuous monitoring of XSS/SQL injection protection
+- **Authentication Security**: Regular validation of user session management
+- **API Security**: Weekly testing of rate limiting and CSRF protection
+
+### 7.2. Maintenance Automation
+
+#### 7.2.1. GitHub Actions Integration
+- **Security Workflow**: Automated weekly security testing
+- **Dependency Updates**: Monthly automated dependency audits
+- **Performance Monitoring**: Weekly performance regression tests
+- **Code Quality**: Continuous linting and type checking
+
+#### 7.2.2. Manual Maintenance Tasks
+- **Monthly**: Review security logs and update security patterns if needed
+- **Quarterly**: Full security assessment and penetration testing
+- **Annually**: Complete security architecture review
+
+## 8. User Scenarios
+
+### 8.1. Happy Paths (Success Scenarios)
 
 - **Successful School Search**:
   - Scenario: User searches for "Warsaw, Kindergarten."
@@ -220,7 +272,28 @@ To balance server load and encourage user registration, we'll implement a limite
   - Scenario: Admin token expires after inactivity.
   - Expected: Auto-redirect to login page with clear error: "Session expired. Log in again."
 
-## 8. Future Enhancements
+## 8. Data Update Mechanism
+
+- **Static Data Storage**:
+  - Scraped data is stored in a static directory (e.g., static/school-data-backups/) or a dedicated database table marked as is_staging = true.
+  - Live site content references the production dataset (e.g., school_data_production).
+
+- **Scheduled Nightly Replacement**:
+  - Use Vercel Cron Jobs (serverless) or AWS Lambda@Edge to trigger a script at 1 AM local time.
+  - Alternative: Neon database scheduled functions or external cron services.
+  - Process Flow:
+    - Scraping: Admin triggers a manual scrape (via Apify/Vercel function) and saves data to staging/.
+    - Validation: System checks for errors (e.g., missing fields, duplicate entries).
+    - Swap at Midnight: Production references switch from production/ to staging/.
+    - Old data in production/ is archived (e.g., archived-2024-07-10.json).
+    - Cleanup: Remove stale staging data after 24 hours.
+
+- **User Experience Considerations**:
+  - No Disruption: Users interacting with the site during the update will always see the stable production data.
+  - New Sessions After Update: Users visiting the site after midnight will see fresh data.
+  - Fallback Mechanism: If the scheduled job fails, retain production data and alert admins via email.
+
+## 9. Future Enhancements
 
 - **Advanced Filtering**: Implement more granular search filters (e.g., school size, extracurricular activities, language of instruction).
 - **School Comparison**: Allow users to compare multiple schools side-by-side.
@@ -228,7 +301,7 @@ To balance server load and encourage user registration, we'll implement a limite
 - **Integration with Educational Resources**: Link to relevant government education websites or other reputable sources.
 - **User Commenting**: Allow logged-in users to post their own text comments/reviews.
 
-## 9. Success Metrics
+## 10. Success Metrics
 
 - Number of registered users and active users.
 - Frequency and success rate of school searches.

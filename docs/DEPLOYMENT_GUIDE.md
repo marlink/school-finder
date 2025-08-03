@@ -7,7 +7,7 @@
 ### 1.1. Wymagania
 - Konto Vercel
 - Konto GitHub
-- Konto PlanetScale (lub AWS dla DynamoDB)
+- Konto Neon (PostgreSQL database)
 - Konto Google Cloud Platform (dla Google Maps API)
 - Konto Apify
 - Konto Stripe (dla płatności)
@@ -24,8 +24,9 @@ GOOGLE_CLIENT_SECRET=twoj-google-client-secret
 GITHUB_ID=twoj-github-id
 GITHUB_SECRET=twoj-github-secret
 
-# Baza danych
-DATABASE_URL=twoj-url-do-bazy-danych
+# Baza danych Neon
+DATABASE_URL=postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/neondb?pgbouncer=true&connect_timeout=10
+DIRECT_DATABASE_URL=postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/neondb
 
 # API
 APIFY_API_TOKEN=twoj-token-apify
@@ -58,14 +59,18 @@ STRIPE_PRICE_ID=twoj-id-ceny-premium
 
 ## 3. Konfiguracja Bazy Danych
 
-### 3.1. PlanetScale
-1. Utwórz nową bazę danych w PlanetScale
-2. Połącz bazę danych z projektem używając zmiennej środowiskowej `DATABASE_URL`
-3. Uruchom migracje Prisma: `npx prisma migrate deploy`
+### 3.1. Neon PostgreSQL
+1. Utwórz nową bazę danych w Neon Console
+2. Skopiuj connection string z włączonym connection pooling
+3. Skonfiguruj zmienne środowiskowe:
+   - `DATABASE_URL`: Connection string z pooling (dla aplikacji)
+   - `DIRECT_DATABASE_URL`: Direct connection string (dla migracji)
+4. Uruchom migracje Prisma: `npx prisma migrate deploy`
 
-### 3.2. DynamoDB (alternatywnie)
-1. Utwórz tabele w AWS DynamoDB
-2. Skonfiguruj dostęp AWS w zmiennych środowiskowych
+### 3.2. Zalety Connection Pooling
+- **Wydajność**: Obsługa do 10,000 równoczesnych połączeń
+- **Skalowalność**: Idealne dla Next.js serverless functions
+- **Niezawodność**: Automatyczne zarządzanie połączeniami przez PgBouncer
 
 ## 4. Konfiguracja Zadań Cron
 
