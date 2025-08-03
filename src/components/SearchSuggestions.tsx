@@ -156,7 +156,7 @@ export default function SearchSuggestions({
     <div 
       ref={dropdownRef}
       className={cn(
-        "absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-md shadow-lg max-h-80 overflow-y-auto",
+        "absolute top-full left-0 right-0 z-[9999] bg-white border border-gray-200 rounded-md shadow-lg max-h-80 overflow-y-auto",
         className
       )}
     >

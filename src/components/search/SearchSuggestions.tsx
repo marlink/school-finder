@@ -150,7 +150,7 @@ export default function SearchSuggestions({
   }
 
   return (
-    <Card className={`absolute top-full left-0 right-0 z-50 mt-2 shadow-xl border-0 bg-white/95 backdrop-blur-sm ${className}`}>
+    <Card className={`absolute top-full left-0 right-0 z-[9999] mt-2 shadow-xl border-0 bg-white/95 backdrop-blur-sm ${className}`}>
       <CardContent className="p-0">
         {/* API Suggestions */}
         {showSuggestions && (

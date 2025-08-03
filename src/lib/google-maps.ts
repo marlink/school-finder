@@ -44,32 +44,70 @@ export interface DirectionsResult {
   steps: google.maps.DirectionsStep[];
 }
 
+// Global promise to track loading state
+let loadingPromise: Promise<void> | null = null;
+
 /**
  * Load Google Maps API
  */
 export const loadGoogleMapsAPI = (): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    if (typeof window !== 'undefined' && window.google?.maps) {
-      resolve();
-      return;
-    }
+  // If already loaded, resolve immediately
+  if (typeof window !== 'undefined' && window.google?.maps) {
+    return Promise.resolve();
+  }
 
+  // If already loading, return the existing promise
+  if (loadingPromise) {
+    return loadingPromise;
+  }
+
+  // Create new loading promise
+  loadingPromise = new Promise((resolve, reject) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
     if (!apiKey) {
       reject(new Error('Google Maps API key not found'));
       return;
     }
 
+    // Check if script already exists
+    const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+    if (existingScript) {
+      // Script exists, wait for it to load
+      const checkLoaded = setInterval(() => {
+        if (window.google?.maps) {
+          clearInterval(checkLoaded);
+          resolve();
+        }
+      }, 100);
+      
+      // Timeout after 10 seconds
+      setTimeout(() => {
+        clearInterval(checkLoaded);
+        reject(new Error('Timeout waiting for Google Maps API to load'));
+      }, 10000);
+      return;
+    }
+
+    // Create and add new script
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry`;
     script.async = true;
     script.defer = true;
     
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Failed to load Google Maps API'));
+    script.onload = () => {
+      loadingPromise = null; // Reset for future calls
+      resolve();
+    };
+    
+    script.onerror = () => {
+      loadingPromise = null; // Reset for future calls
+      reject(new Error('Failed to load Google Maps API'));
+    };
     
     document.head.appendChild(script);
   });
+
+  return loadingPromise;
 };
 
 /**

@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useCallback, memo } from 'react';
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import React, { useCallback, memo, useEffect, useState } from 'react';
+import { GoogleMap, Marker, InfoWindow } from '@react-google-maps/api';
+import { isGoogleMapsLoaded } from '@/lib/google-maps';
 
 interface GoogleMapComponentProps {
   school: {
@@ -42,6 +43,51 @@ const defaultOptions = {
       stylers: [{ visibility: 'off' }]
     }
   ]
+};
+
+// Custom LoadScript component that checks if API is already loaded
+const ConditionalLoadScript: React.FC<{ children: React.ReactNode; apiKey: string }> = ({ children, apiKey }) => {
+  const [isApiLoaded, setIsApiLoaded] = useState(false);
+
+  useEffect(() => {
+    // Check if Google Maps API is already loaded
+    if (isGoogleMapsLoaded()) {
+      setIsApiLoaded(true);
+    } else {
+      // If not loaded, we'll load it manually to avoid conflicts
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry`;
+      script.async = true;
+      script.defer = true;
+      
+      script.onload = () => setIsApiLoaded(true);
+      script.onerror = () => console.error('Failed to load Google Maps API');
+      
+      // Only add script if it doesn't already exist
+      const existingScript = document.querySelector(`script[src*="maps.googleapis.com"]`);
+      if (!existingScript) {
+        document.head.appendChild(script);
+      } else {
+        // If script exists but API not loaded, wait for it
+        const checkLoaded = setInterval(() => {
+          if (isGoogleMapsLoaded()) {
+            setIsApiLoaded(true);
+            clearInterval(checkLoaded);
+          }
+        }, 100);
+      }
+    }
+  }, [apiKey]);
+
+  if (!isApiLoaded) {
+    return (
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+        <p className="text-gray-600">Loading map...</p>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
 };
 
 const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ 
@@ -96,7 +142,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
 
   return (
     <div className={className}>
-      <LoadScript googleMapsApiKey={apiKey}>
+      <ConditionalLoadScript apiKey={apiKey}>
         <GoogleMap
           mapContainerStyle={{ ...mapContainerStyle, width, height }}
           options={mapOptions}
@@ -124,7 +170,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
             </InfoWindow>
           )}
         </GoogleMap>
-      </LoadScript>
+      </ConditionalLoadScript>
     </div>
   );
 };

@@ -156,7 +156,7 @@ export default function Home() {
           </div>
 
           {/* Search Form */}
-          <div className="max-w-5xl mx-auto mb-16" data-tour="home-search">
+          <div className="max-w-5xl mx-auto mb-16 relative z-[10000]" data-tour="home-search">
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/20">
               <SearchForm onSearch={handleSearch} variant="hero" />
             </div>
