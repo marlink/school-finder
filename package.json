@@ -1,18 +1,22 @@
 {
   "name": "school-finder-workspace",
   "version": "1.0.0",
+  "description": "School Finder Portal - Workspace Root",
   "private": true,
   "workspaces": [
     "school-finder"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=school-finder",
-    "build": "npm run build --workspace=school-finder",
-    "start": "npm run start --workspace=school-finder",
-    "lint": "npm run lint --workspace=school-finder",
-    "test": "npm run test --workspace=school-finder"
+    "dev": "cd school-finder && npm run dev",
+    "build": "cd school-finder && npm run build",
+    "start": "cd school-finder && npm start",
+    "lint": "cd school-finder && npm run lint",
+    "test": "cd school-finder && npm test"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5"
+  },
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"

@@ -36,3 +36,23 @@ Thumbs.db
 
 # Nested Git repositories
 school-finder/
+
+# Testing
+/coverage
+*.tsbuildinfo
+
+# Vercel
+.vercel
+
+# TypeScript
+next-env.d.ts
+
+# Misc
+*.pem
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.pnpm-debug.log*

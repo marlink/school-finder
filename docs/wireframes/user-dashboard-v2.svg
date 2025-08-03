@@ -1,0 +1,218 @@
+<svg width="800" height="1600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="1600" fill="#f8f9fa"/>
+  
+  <!-- Header with Gradient -->
+  <linearGradient id="header-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#f8f9fa;stop-opacity:1" />
+  </linearGradient>
+  <rect x="0" y="0" width="800" height="80" fill="url(#header-gradient)" stroke="#e9ecef" stroke-width="1"/>
+  
+  <!-- Logo -->
+  <circle cx="40" cy="40" r="20" fill="#007bff"/>
+  <text x="70" y="50" font-family="Arial" font-size="24" font-weight="bold" fill="#212529">School Finder</text>
+  
+  <!-- Navigation with Hover Effect -->
+  <rect x="500" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1">
+    <animate attributeName="fill" values="#ffffff;#e9ecef;#ffffff" dur="2s" begin="mouseover" repeatCount="1"/>
+  </rect>
+  <text x="520" y="50" font-family="Arial" font-size="14" fill="#495057">Search</text>
+  
+  <rect x="600" y="30" width="80" height="30" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1">
+    <animate attributeName="fill" values="#ffffff;#e9ecef;#ffffff" dur="2s" begin="mouseover" repeatCount="1"/>
+  </rect>
+  <text x="620" y="50" font-family="Arial" font-size="14" fill="#495057">Home</text>
+  
+  <!-- User Menu -->
+  <circle cx="740" cy="40" r="20" fill="#e9ecef" stroke="#dee2e6" stroke-width="1"/>
+  <text x="740" y="45" font-family="Arial" font-size="14" font-weight="bold" fill="#212529" text-anchor="middle">JD</text>
+  
+  <!-- Dashboard Layout -->
+  <rect x="0" y="80" width="200" height="1220" fill="#212529"/>
+  
+  <!-- Sidebar Navigation -->
+  <text x="100" y="120" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">Dashboard</text>
+  
+  <!-- Active Menu Item -->
+  <rect x="0" y="140" width="200" height="50" fill="#0d6efd"/>
+  <text x="20" y="170" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff">📊 Overview</text>
+  
+  <!-- Other Menu Items -->
+  <text x="20" y="230" font-family="Arial" font-size="16" fill="#adb5bd">❤️ Saved Schools</text>
+  <text x="20" y="290" font-family="Arial" font-size="16" fill="#adb5bd">🔍 Search History</text>
+  <text x="20" y="350" font-family="Arial" font-size="16" fill="#adb5bd">🔔 Notifications</text>
+  <text x="20" y="410" font-family="Arial" font-size="16" fill="#adb5bd">📝 Reviews</text>
+  <text x="20" y="470" font-family="Arial" font-size="16" fill="#adb5bd">⚙️ Settings</text>
+  
+  <!-- Logout Option -->
+  <line x1="20" y1="520" x2="180" y2="520" stroke="#495057" stroke-width="1"/>
+  <text x="20" y="550" font-family="Arial" font-size="16" fill="#adb5bd">🚪 Logout</text>
+  
+  <!-- Main Content Area -->
+  <rect x="200" y="80" width="600" height="1220" fill="#ffffff"/>
+  
+  <!-- Welcome Banner -->
+  <linearGradient id="banner-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" style="stop-color:#0d6efd;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#0a58ca;stop-opacity:1" />
+  </linearGradient>
+  <rect x="220" y="100" width="560" height="120" rx="10" fill="url(#banner-gradient)"/>
+  
+  <text x="250" y="140" font-family="Arial" font-size="24" font-weight="bold" fill="#ffffff">Welcome back, John!</text>
+  <text x="250" y="170" font-family="Arial" font-size="16" fill="#ffffff">You have 3 new notifications and 2 new school recommendations.</text>
+  
+  <!-- Quick Stats -->
+  <text x="220" y="260" font-family="Arial" font-size="20" font-weight="bold" fill="#212529">Your Activity</text>
+  
+  <!-- Stats Cards -->
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.15"/>
+  </filter>
+  
+  <rect x="220" y="280" width="170" height="100" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  <text x="240" y="310" font-family="Arial" font-size="14" fill="#6c757d">Saved Schools</text>
+  <text x="240" y="345" font-family="Arial" font-size="28" font-weight="bold" fill="#0d6efd">12</text>
+  
+  <rect x="410" y="280" width="170" height="100" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  <text x="430" y="310" font-family="Arial" font-size="14" fill="#6c757d">Recent Searches</text>
+  <text x="430" y="345" font-family="Arial" font-size="28" font-weight="bold" fill="#0d6efd">24</text>
+  
+  <rect x="600" y="280" width="170" height="100" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  <text x="620" y="310" font-family="Arial" font-size="14" fill="#6c757d">Reviews Given</text>
+  <text x="620" y="345" font-family="Arial" font-size="28" font-weight="bold" fill="#0d6efd">7</text>
+  
+  <!-- Recent Activity -->
+  <text x="220" y="420" font-family="Arial" font-size="20" font-weight="bold" fill="#212529">Recent Activity</text>
+  
+  <!-- Activity Timeline -->
+  <line x1="250" y1="450" x2="250" y2="650" stroke="#dee2e6" stroke-width="2"/>
+  
+  <circle cx="250" cy="470" r="10" fill="#28a745"/>
+  <rect x="270" y="450" width="490" height="40" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="290" y="475" font-family="Arial" font-size="14" fill="#212529">Added Warsaw International School to favorites</text>
+  <text x="650" y="475" font-family="Arial" font-size="12" fill="#6c757d">Today, 10:30 AM</text>
+  
+  <circle cx="250" cy="530" r="10" fill="#007bff"/>
+  <rect x="270" y="510" width="490" height="40" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="290" y="535" font-family="Arial" font-size="14" fill="#212529">Searched for "International schools in Warsaw"</text>
+  <text x="650" y="535" font-family="Arial" font-size="12" fill="#6c757d">Today, 10:15 AM</text>
+  
+  <circle cx="250" cy="590" r="10" fill="#ffc107"/>
+  <rect x="270" y="570" width="490" height="40" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="290" y="595" font-family="Arial" font-size="14" fill="#212529">Rated Krakow Academy (4.5 stars)</text>
+  <text x="650" y="595" font-family="Arial" font-size="12" fill="#6c757d">Yesterday, 3:45 PM</text>
+  
+  <circle cx="250" cy="650" r="10" fill="#6c757d"/>
+  <rect x="270" y="630" width="490" height="40" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="290" y="655" font-family="Arial" font-size="14" fill="#212529">Updated profile information</text>
+  <text x="650" y="655" font-family="Arial" font-size="12" fill="#6c757d">2 days ago, 11:20 AM</text>
+  
+  <!-- Recommended Schools -->
+  <text x="220" y="710" font-family="Arial" font-size="20" font-weight="bold" fill="#212529">Recommended for You</text>
+  
+  <!-- School Cards with Rating Indicators -->
+  <rect x="220" y="730" width="560" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  <!-- School Logo -->
+  <circle cx="270" cy="790" r="35" fill="#e9ecef"/>
+  <text x="270" y="795" font-family="Arial" font-size="12" fill="#6c757d" text-anchor="middle">LOGO</text>
+  
+  <text x="320" y="760" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Warsaw International School</text>
+  <text x="320" y="785" font-family="Arial" font-size="14" fill="#6c757d">Warsaw • International</text>
+  
+  <!-- Rating Stars -->
+  <rect x="320" y="800" width="100" height="25" rx="12.5" fill="#28a745"/>
+  <text x="330" y="817" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">★★★★★ 4.8</text>
+  
+  <!-- Recommendation Reason -->
+  <text x="430" y="817" font-family="Arial" font-size="14" fill="#6c757d">Based on your search history</text>
+  
+  <!-- View Button -->
+  <linearGradient id="button-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" style="stop-color:#0d6efd;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#0a58ca;stop-opacity:1" />
+  </linearGradient>
+  <rect x="680" y="775" width="80" height="30" rx="15" fill="url(#button-gradient)"/>
+  <text x="700" y="795" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">View</text>
+  
+  <rect x="220" y="870" width="560" height="120" rx="10" fill="#ffffff" stroke="#dee2e6" stroke-width="1" filter="url(#shadow)"/>
+  <!-- School Logo -->
+  <circle cx="270" cy="930" r="35" fill="#e9ecef"/>
+  <text x="270" y="935" font-family="Arial" font-size="12" fill="#6c757d" text-anchor="middle">LOGO</text>
+  
+  <text x="320" y="900" font-family="Arial" font-size="18" font-weight="bold" fill="#212529">Gdansk Private Academy</text>
+  <text x="320" y="925" font-family="Arial" font-size="14" fill="#6c757d">Gdansk • Private</text>
+  
+  <!-- Rating Stars -->
+  <rect x="320" y="940" width="100" height="25" rx="12.5" fill="#28a745"/>
+  <text x="330" y="957" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">★★★★☆ 4.6</text>
+  
+  <!-- Recommendation Reason -->
+  <text x="430" y="957" font-family="Arial" font-size="14" fill="#6c757d">Similar to your favorites</text>
+  
+  <!-- View Button -->
+  <rect x="680" y="915" width="80" height="30" rx="15" fill="url(#button-gradient)"/>
+  <text x="700" y="935" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">View</text>
+  
+  <!-- Recent Searches -->
+  <text x="220" y="1030" font-family="Arial" font-size="20" font-weight="bold" fill="#212529">Recent Searches</text>
+  
+  <!-- Search History -->
+  <rect x="220" y="1050" width="560" height="40" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="1075" font-family="Arial" font-size="14" fill="#212529">International schools in Warsaw</text>
+  <text x="650" y="1075" font-family="Arial" font-size="12" fill="#6c757d">Today</text>
+  
+  <rect x="220" y="1100" width="560" height="40" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="1125" font-family="Arial" font-size="14" fill="#212529">Private schools in Krakow</text>
+  <text x="650" y="1125" font-family="Arial" font-size="12" fill="#6c757d">Yesterday</text>
+  
+  <rect x="220" y="1150" width="560" height="40" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="1175" font-family="Arial" font-size="14" fill="#212529">Science-focused schools</text>
+  <text x="650" y="1175" font-family="Arial" font-size="12" fill="#6c757d">3 days ago</text>
+  
+  <rect x="220" y="1200" width="560" height="40" rx="5" fill="#ffffff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="1225" font-family="Arial" font-size="14" fill="#212529">Schools with IB curriculum</text>
+  <text x="650" y="1225" font-family="Arial" font-size="12" fill="#6c757d">Last week</text>
+  
+  <!-- Newsletter/Signup Promo Section -->
+  <rect x="0" y="1300" width="800" height="150" fill="#e9ecef"/>
+  <text x="400" y="1340" font-family="Arial" font-size="24" font-weight="bold" fill="#212529" text-anchor="middle">Stay Updated with School Finder</text>
+  <text x="400" y="1370" font-family="Arial" font-size="16" fill="#6c757d" text-anchor="middle">Get the latest school information and personalized recommendations</text>
+  
+  <!-- Email Signup -->
+  <rect x="200" y="1390" width="300" height="40" rx="5" fill="#ffffff" stroke="#ced4da" stroke-width="1"/>
+  <text x="220" y="1415" font-family="Arial" font-size="14" fill="#adb5bd">Your email address</text>
+  
+  <!-- Subscribe Button -->
+  <rect x="510" y="1390" width="100" height="40" rx="5" fill="url(#button-gradient)"/>
+  <text x="525" y="1415" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">Subscribe</text>
+  
+  <!-- Footer -->
+  <rect x="0" y="1450" width="800" height="150" fill="#343a40"/>
+  
+  <!-- Footer Links -->
+  <text x="50" y="1485" font-family="Arial" font-size="14" fill="#ffffff">About Us</text>
+  <text x="150" y="1485" font-family="Arial" font-size="14" fill="#ffffff">Contact</text>
+  <text x="250" y="1485" font-family="Arial" font-size="14" fill="#ffffff">Privacy Policy</text>
+  <text x="380" y="1485" font-family="Arial" font-size="14" fill="#ffffff">Terms of Service</text>
+  
+  <!-- Social Media Icons -->
+  <circle cx="600" cy="1485" r="15" fill="#ffffff" opacity="0.2"/>
+  <text x="600" y="1490" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">f</text>
+  
+  <circle cx="640" cy="1485" r="15" fill="#ffffff" opacity="0.2"/>
+  <text x="640" y="1490" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">t</text>
+  
+  <circle cx="680" cy="1485" r="15" fill="#ffffff" opacity="0.2"/>
+  <text x="680" y="1490" font-family="Arial" font-size="14" fill="#ffffff" text-anchor="middle">in</text>
+  
+  <!-- Copyright -->
+  <text x="400" y="1520" font-family="Arial" font-size="12" fill="#adb5bd" text-anchor="middle">© 2023 School Finder. All rights reserved.</text>
+  
+  <!-- App Stats -->
+  <text x="400" y="1550" font-family="Arial" font-size="12" fill="#adb5bd" text-anchor="middle">1000+ Schools • 50+ Regions • 10,000+ Users</text>
+  
+  <!-- Back to Top Button -->
+  <circle cx="750" cy="1520" r="20" fill="#495057"/>
+  <text x="750" y="1525" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">↑</text>
+</svg>

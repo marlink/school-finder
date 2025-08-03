@@ -1,0 +1,59 @@
+# Page snapshot
+
+```yaml
+- banner:
+  - link "SF School Finder":
+    - /url: /
+  - button
+- main:
+  - heading "Search Schools" [level=1]
+  - textbox "Search for schools, locations, or specializations..."
+  - button "Search"
+  - button "Advanced Filters"
+  - alert: Failed to fetch search results
+- contentinfo:
+  - heading "School Finder" [level=3]
+  - paragraph: Platforma do wyszukiwania i oceniania szkół w Polsce. Pomagamy rodzicom i uczniom znaleźć idealną szkołę.
+  - text: SF Twoja przyszłość zaczyna się tutaj
+  - heading "Szybkie linki" [level=3]
+  - list:
+    - listitem:
+      - link "Wyszukaj szkołę":
+        - /url: /search
+    - listitem:
+      - link "Przeglądaj regiony":
+        - /url: /regions
+    - listitem:
+      - link "O nas":
+        - /url: /about
+    - listitem:
+      - link "Kontakt":
+        - /url: /contact
+    - listitem:
+      - link "Subskrypcja":
+        - /url: /subscription
+  - heading "Pomoc i informacje" [level=3]
+  - list:
+    - listitem:
+      - link "Polityka prywatności":
+        - /url: /privacy
+    - listitem:
+      - link "Regulamin":
+        - /url: /terms
+    - listitem:
+      - link "Polityka cookies":
+        - /url: /cookies
+    - listitem:
+      - link "Najczęściej zadawane pytania":
+        - /url: /faq
+    - listitem:
+      - link "Wsparcie techniczne":
+        - /url: /support
+  - text: "© 2025 School Finder. Wszelkie prawa zastrzeżone. Kontakt:"
+  - link "kontakt@schoolfinder.pl":
+    - /url: mailto:kontakt@schoolfinder.pl
+  - text: "|"
+  - link "+48 123 456 789":
+    - /url: tel:+48123456789
+- alert
+```

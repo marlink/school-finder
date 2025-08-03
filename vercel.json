@@ -1,0 +1,21 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next", 
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "crons": [
+    {
+      "path": "/api/cron/update-school-data",
+      "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/cron/sentiment-analysis",
+      "schedule": "0 2 * * *"
+    }
+  ],
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
+}

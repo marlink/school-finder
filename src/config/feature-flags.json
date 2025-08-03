@@ -1,0 +1,79 @@
+{
+  "features": {
+    "enhanced_search": {
+      "enabled": true,
+      "description": "Enhanced search functionality with advanced filters",
+      "rollout_percentage": 100,
+      "allowed_roles": ["user", "admin"],
+      "environments": ["development", "staging", "production"]
+    },
+    "user_onboarding": {
+      "enabled": false,
+      "description": "Welcome tour and onboarding flow for new users",
+      "rollout_percentage": 0,
+      "allowed_roles": ["user", "admin"],
+      "environments": ["development", "staging"]
+    },
+    "admin_panel_v2": {
+      "enabled": true,
+      "description": "Enhanced admin panel with advanced features",
+      "rollout_percentage": 100,
+      "allowed_roles": ["admin"],
+      "environments": ["development", "staging", "production"]
+    },
+    "data_scraping": {
+      "enabled": false,
+      "description": "Automated data scraping from external sources",
+      "rollout_percentage": 0,
+      "allowed_roles": ["admin"],
+      "environments": ["development"]
+    },
+    "premium_features": {
+      "enabled": false,
+      "description": "Premium subscription features",
+      "rollout_percentage": 0,
+      "allowed_roles": ["premium", "admin"],
+      "environments": ["development", "staging"]
+    },
+    "analytics_tracking": {
+      "enabled": true,
+      "description": "User behavior and search analytics",
+      "rollout_percentage": 100,
+      "allowed_roles": ["user", "admin"],
+      "environments": ["development", "staging", "production"]
+    },
+    "email_notifications": {
+      "enabled": false,
+      "description": "Email notifications for users",
+      "rollout_percentage": 0,
+      "allowed_roles": ["user", "admin"],
+      "environments": ["development"]
+    },
+    "social_login": {
+      "enabled": true,
+      "description": "Google and GitHub OAuth login",
+      "rollout_percentage": 100,
+      "allowed_roles": ["user", "admin"],
+      "environments": ["development", "staging", "production"]
+    },
+    "school_ratings": {
+      "enabled": true,
+      "description": "User rating and review system",
+      "rollout_percentage": 100,
+      "allowed_roles": ["user", "admin"],
+      "environments": ["development", "staging", "production"]
+    },
+    "mobile_app": {
+      "enabled": false,
+      "description": "Mobile application features",
+      "rollout_percentage": 0,
+      "allowed_roles": ["user", "admin"],
+      "environments": ["development"]
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2024-12-25T00:00:00Z",
+    "environment": "development"
+  }
+}
