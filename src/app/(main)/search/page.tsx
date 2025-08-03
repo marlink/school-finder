@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import EnhancedSearchBar from '@/components/enhanced-search/enhancedsearchbar';
+import UnifiedSearchBar, { SearchParams } from '@/components/UnifiedSearchBar';
 import ImprovedSearchFilters from '@/components/search/ImprovedSearchFilters';
 import { LocationSearch } from '@/components/search/LocationSearch';
 import EnhancedSearchResults from '@/components/search/EnhancedSearchResults';
@@ -201,11 +201,19 @@ function SearchPageContent() {
   }, [userLocation]);
 
   // Handle search
-  const handleSearch = useCallback((newQuery: string) => {
-    setQuery(newQuery);
-    setCurrentPage(1);
-    updateURL(newQuery, filters, 1);
-    performSearch(newQuery, filters, 1);
+  const handleSearch = useCallback((queryOrParams: string | SearchParams) => {
+    if (typeof queryOrParams === 'string') {
+      setQuery(queryOrParams);
+      setCurrentPage(1);
+      updateURL(queryOrParams, filters, 1);
+      performSearch(queryOrParams, filters, 1);
+    } else {
+      // Handle SearchParams object
+      setQuery(queryOrParams.query);
+      setCurrentPage(1);
+      updateURL(queryOrParams.query, filters, 1);
+      performSearch(queryOrParams.query, filters, 1);
+    }
   }, [filters, updateURL, performSearch]);
 
   // Handle filter changes
@@ -327,12 +335,13 @@ function SearchPageContent() {
           
           {/* Search Bar */}
           <div className="mb-6" data-tour="search-bar">
-            <EnhancedSearchBar
+            <UnifiedSearchBar
               value={query}
               onChange={setQuery}
               onSearch={handleSearch}
               placeholder="Search for schools, locations, or specializations..."
               className="w-full"
+              variant="compact"
             />
           </div>
 
