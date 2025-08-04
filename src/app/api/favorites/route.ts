@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { PrismaClient } from '@prisma/client'
 import { getUser } from '@/lib/auth'
+
+const prisma = new PrismaClient()
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,34 +15,27 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const supabase = createClient()
+    const favorites = await prisma.favorite.findMany({
+      where: {
+        userId: user.id
+      },
+      include: {
+        school: {
+          include: {
+            images: {
+              where: {
+                imageType: 'main'
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
 
-    const { data: favorites, error } = await supabase
-      .from('favorites')
-      .select(`
-        *,
-        schools (
-          id,
-          name,
-          type,
-          address,
-          school_images!inner (
-            id,
-            image_url,
-            alt_text,
-            image_type
-          )
-        )
-      `)
-      .eq('user_id', user.id)
-      .eq('schools.school_images.image_type', 'main')
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      throw error
-    }
-
-    return NextResponse.json(favorites || [])
+    return NextResponse.json(favorites)
   } catch (error) {
     console.error('Favorites API error:', error)
     return NextResponse.json(
@@ -70,14 +65,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = createClient()
-
     // Check if school exists
-    const { data: school } = await supabase
-      .from('schools')
-      .select('id')
-      .eq('id', schoolId)
-      .single()
+    const school = await prisma.school.findUnique({
+      where: { id: schoolId }
+    })
 
     if (!school) {
       return NextResponse.json(
@@ -87,12 +78,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if already favorited
-    const { data: existingFavorite } = await supabase
-      .from('favorites')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('school_id', schoolId)
-      .single()
+    const existingFavorite = await prisma.favorite.findUnique({
+      where: {
+        userId_schoolId: {
+          userId: user.id,
+          schoolId: schoolId
+        }
+      }
+    })
 
     if (existingFavorite) {
       return NextResponse.json(
@@ -101,27 +94,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: favorite, error } = await supabase
-      .from('favorites')
-      .insert({
-        user_id: user.id,
-        school_id: schoolId,
+    const favorite = await prisma.favorite.create({
+      data: {
+        userId: user.id,
+        schoolId: schoolId,
         notes: notes || null
-      })
-      .select(`
-        *,
-        schools (
-          id,
-          name,
-          type,
-          address
-        )
-      `)
-      .single()
-
-    if (error) {
-      throw error
-    }
+      },
+      include: {
+        school: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            address: true
+          }
+        }
+      }
+    })
 
     return NextResponse.json(favorite, { status: 201 })
   } catch (error) {
@@ -154,17 +143,12 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    const supabase = createClient()
-
-    const { error } = await supabase
-      .from('favorites')
-      .delete()
-      .eq('user_id', user.id)
-      .eq('school_id', schoolId)
-
-    if (error) {
-      throw error
-    }
+    await prisma.favorite.deleteMany({
+      where: {
+        userId: user.id,
+        schoolId: schoolId
+      }
+    })
 
     return NextResponse.json({ success: true })
   } catch (error) {

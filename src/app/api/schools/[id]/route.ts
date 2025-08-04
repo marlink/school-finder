@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { PrismaClient } from '@prisma/client';
 import { getUser } from '@/lib/auth';
+
+const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
@@ -18,26 +20,24 @@ export async function GET(
       );
     }
 
-    const supabase = createClient();
-
     // Fetch school details with images
-    const { data: school, error: schoolError } = await supabase
-      .from('schools')
-      .select(`
-        *,
-        school_images (
-          id,
-          image_url,
-          alt_text,
-          image_type,
-          caption,
-          uploaded_at
-        )
-      `)
-      .eq('id', schoolId)
-      .single();
+    const school = await prisma.school.findUnique({
+      where: { id: schoolId },
+      include: {
+        images: {
+          select: {
+            id: true,
+            imageUrl: true,
+            altText: true,
+            imageType: true,
+            caption: true,
+            uploadedAt: true
+          }
+        }
+      }
+    });
 
-    if (schoolError || !school) {
+    if (!school) {
       return NextResponse.json(
         { error: 'School not found' },
         { status: 404 }
@@ -47,21 +47,23 @@ export async function GET(
     // Check if school is favorited by the current user
     let isFavorite = false;
     if (user) {
-      const { data: favorite } = await supabase
-        .from('favorites')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('school_id', schoolId)
-        .single();
+      const favorite = await prisma.favorite.findUnique({
+        where: {
+          userId_schoolId: {
+            userId: user.id,
+            schoolId: schoolId
+          }
+        }
+      });
       
       isFavorite = !!favorite;
     }
 
     // Organize images by type
-    const images = school.school_images || [];
-    const mainImages = images.filter((img: any) => img.image_type === 'main');
-    const galleryImages = images.filter((img: any) => img.image_type === 'gallery');
-    const facilityImages = images.filter((img: any) => img.image_type === 'facility');
+    const images = school.images || [];
+    const mainImages = images.filter(img => img.imageType === 'main');
+    const galleryImages = images.filter(img => img.imageType === 'gallery');
+    const facilityImages = images.filter(img => img.imageType === 'facility');
 
     // Structure the response (without ratings)
     const response = {
@@ -72,7 +74,7 @@ export async function GET(
         gallery: galleryImages,
         facility: facilityImages
       },
-      school_images: undefined // Remove from response as it's processed into organizedImages
+      images: undefined // Remove from response as it's processed into organizedImages
     };
 
     return NextResponse.json(response);

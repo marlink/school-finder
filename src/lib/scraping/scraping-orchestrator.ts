@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-import { ApifyScrapingService } from './services/apify-service';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { FirecrawlScrapingService } from './services/firecrawl-service';
 import { PythonScrapingService } from './services/python-service';
 
@@ -14,13 +13,13 @@ export interface ScrapingJob {
   totalSchools: number;
   errorMessage?: string;
   config: {
-    method: 'apify' | 'firecrawl' | 'python' | 'all';
+    method: 'firecrawl' | 'python' | 'all';
     schoolCount: number;
     regions: string[];
     testMode: boolean;
     schools?: string[];
     limit?: number;
-    preferredMethod?: 'apify' | 'firecrawl' | 'python';
+    preferredMethod?: 'firecrawl' | 'python';
   };
 }
 
@@ -34,7 +33,7 @@ export interface ScrapingStats {
 
 export interface ScrapingResult {
   success: boolean;
-  data: any[];
+  data: ScrapedSchoolData[];
   errors: string[];
   stats: {
     processed: number;
@@ -43,16 +42,27 @@ export interface ScrapingResult {
   };
 }
 
+export interface ScrapedSchoolData {
+  name: string;
+  address: string;
+  contact?: Record<string, unknown>;
+  latitude?: number;
+  longitude?: number;
+  googlePlaceId?: string;
+  type?: string;
+  googleRating?: number;
+  url?: string;
+  website?: string;
+}
+
 export class ScrapingOrchestrator {
   private prisma: PrismaClient;
-  private apifyService: ApifyScrapingService;
   private firecrawlService: FirecrawlScrapingService;
   private pythonService: PythonScrapingService;
   private jobs: Map<string, ScrapingJob> = new Map();
 
   constructor() {
     this.prisma = new PrismaClient();
-    this.apifyService = new ApifyScrapingService();
     this.firecrawlService = new FirecrawlScrapingService();
     this.pythonService = new PythonScrapingService();
   }
@@ -61,13 +71,13 @@ export class ScrapingOrchestrator {
    * Start a new scraping job
    */
   async startScrapingJob(config: {
-    method: 'apify' | 'firecrawl' | 'python' | 'all';
+    method: 'firecrawl' | 'python' | 'all';
     schoolCount: number;
     regions: string[];
     testMode?: boolean;
     schools?: string[];
     limit?: number;
-    preferredMethod?: 'apify' | 'firecrawl' | 'python';
+    preferredMethod?: 'firecrawl' | 'python';
   }): Promise<string> {
     const jobId = `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
@@ -130,17 +140,15 @@ export class ScrapingOrchestrator {
    * Test all service connections
    */
   async testAllConnections(): Promise<{
-    apify: boolean;
     firecrawl: boolean;
     python: boolean;
   }> {
-    const [apify, firecrawl, python] = await Promise.all([
-      this.apifyService.testConnection().catch(() => false),
+    const [firecrawl, python] = await Promise.all([
       this.firecrawlService.testConnection().catch(() => false),
       this.pythonService.testConnection().catch(() => false)
     ]);
 
-    return { apify, firecrawl, python };
+    return { firecrawl, python };
   }
 
   /**
@@ -169,39 +177,7 @@ export class ScrapingOrchestrator {
     try {
       job.status = 'running';
       
-      let results: any[] = [];
-      
-      if (job.config.method === 'apify' || job.config.method === 'all') {
-        console.log(`🔄 Executing Apify scraping for job ${jobId}`);
-        
-        // First get places data
-        const placesResults = await this.apifyService.scrapeGooglePlaces({
-          searchTerms: job.config.regions.map(region => `szkoła podstawowa ${region}`),
-          locations: job.config.regions,
-          limit: job.config.schoolCount
-        }, (progress) => {
-          job.progress = Math.min(50, progress.percentage);
-        });
-        
-        // Extract place URLs from results for reviews
-        const placeUrls = placesResults
-          .filter(result => result.url)
-          .map(result => result.url)
-          .slice(0, 5); // Limit to first 5 for testing
-        
-        if (placeUrls.length > 0) {
-          const reviewsResults = await this.apifyService.scrapeGoogleReviews({
-            placeUrls: placeUrls,
-            maxReviews: 10
-          }, (progress) => {
-            job.progress = 50 + Math.min(25, progress.percentage);
-          });
-          
-          results = [...results, ...placesResults, ...reviewsResults];
-        } else {
-          results = [...results, ...placesResults];
-        }
-      }
+      let results: unknown[] = [];
 
       if (job.config.method === 'firecrawl' || job.config.method === 'all') {
         console.log(`🔥 Executing Firecrawl scraping for job ${jobId}`);
@@ -259,10 +235,11 @@ export class ScrapingOrchestrator {
   /**
    * Save scraping results to database
    */
-  private async saveResults(results: any[]): Promise<void> {
+  private async saveResults(results: unknown[]): Promise<void> {
     console.log(`💾 Saving ${results.length} results to database...`);
     
-    for (const result of results) {
+    for (const resultData of results) {
+      const result = resultData as ScrapedSchoolData;
       try {
         // Skip if no googlePlaceId
         if (!result.googlePlaceId) {
@@ -273,8 +250,8 @@ export class ScrapingOrchestrator {
         const existingSchool = await this.prisma.school.findFirst({
           where: { 
             OR: [
-              { googlePlaceId: result.googlePlaceId },
-              { name: result.name, address: result.address }
+              ...(result.googlePlaceId ? [{ googlePlaceId: result.googlePlaceId }] : []),
+              { name: result.name }
             ]
           }
         });
@@ -286,10 +263,10 @@ export class ScrapingOrchestrator {
 
         const schoolData = {
           name: result.name,
-          address: result.address,
-          contact: result.contact || {},
+          address: result.address as Prisma.InputJsonValue,
+          contact: (result.contact || {}) as Prisma.InputJsonValue,
           location: locationData,
-          googlePlaceId: result.googlePlaceId
+          ...(result.googlePlaceId && { googlePlaceId: result.googlePlaceId })
         };
 
         if (existingSchool) {

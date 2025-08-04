@@ -256,7 +256,7 @@ export default function EnhancedSearchBar({
 
       {/* Suggestions Dropdown */}
       {showSuggestions && showDropdown && (
-        <Card className="absolute top-full left-0 right-0 mt-2 shadow-xl border-2 border-gray-100 z-50 max-h-96 overflow-hidden">
+        <Card className="absolute top-full left-0 right-0 mt-2 shadow-xl border-2 border-gray-100 z-[9999] max-h-96 overflow-hidden">
           <CardContent className="p-0">
             {/* Quick suggestions when empty */}
             {!value.trim() && (

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import SearchForm, { SearchParams } from "@/components/SearchForm";
+import UnifiedSearchBar, { SearchParams } from "@/components/UnifiedSearchBar";
 import { 
   GraduationCap, 
   MapPin, 
@@ -34,9 +34,16 @@ export default function Home() {
     return null;
   }
 
-  const handleSearch = (searchParams: SearchParams) => {
-    // Search functionality redirects to search page with parameters
-    // This is handled by the SearchForm component internally
+  const handleSearch = (query: string | SearchParams) => {
+    // Search functionality redirects to search page with query
+    // This is handled by the UnifiedSearchBar component internally
+    if (typeof query === 'string') {
+      window.location.href = `/search?q=${encodeURIComponent(query)}`;
+    } else {
+      // Handle SearchParams object
+      const searchQuery = query.query || '';
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
+    }
   };
 
   const featuredSchools = [
@@ -156,9 +163,9 @@ export default function Home() {
           </div>
 
           {/* Search Form */}
-          <div className="max-w-5xl mx-auto mb-16" data-tour="home-search">
+          <div className="max-w-5xl mx-auto mb-16 relative z-[10000]" data-tour="home-search">
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/20">
-              <SearchForm onSearch={handleSearch} variant="hero" />
+              <UnifiedSearchBar onSearch={handleSearch} variant="hero" />
             </div>
           </div>
 

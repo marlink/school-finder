@@ -1,16 +1,18 @@
-import createSupabaseClient from '@/lib/supabase/client';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export interface OnboardingStatus {
   id: string;
-  user_id: string;
-  welcome_tour_completed: boolean;
-  profile_setup_completed: boolean;
-  first_search_completed: boolean;
-  first_favorite_added: boolean;
-  email_preferences_set: boolean;
-  onboarding_completed: boolean;
-  created_at: string;
-  updated_at: string;
+  userId: string;
+  welcomeTourCompleted: boolean;
+  profileSetupCompleted: boolean;
+  firstSearchCompleted: boolean;
+  firstFavoriteAdded: boolean;
+  emailPreferencesSet: boolean;
+  onboardingCompleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface OnboardingStep {
@@ -101,22 +103,13 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
 ];
 
 export class OnboardingService {
-  private supabase = createSupabaseClient();
-
   async getOnboardingStatus(userId: string): Promise<OnboardingStatus | null> {
     try {
-      const { data, error } = await this.supabase
-        .from('user_onboarding_status')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
+      const status = await prisma.userOnboardingStatus.findUnique({
+        where: { userId },
+      });
 
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error fetching onboarding status:', error);
-        return null;
-      }
-
-      return data;
+      return status;
     } catch (error) {
       console.error('Error in getOnboardingStatus:', error);
       return null;
@@ -125,26 +118,19 @@ export class OnboardingService {
 
   async createOnboardingStatus(userId: string): Promise<OnboardingStatus | null> {
     try {
-      const { data, error } = await this.supabase
-        .from('user_onboarding_status')
-        .insert({
-          user_id: userId,
-          welcome_tour_completed: false,
-          profile_setup_completed: false,
-          first_search_completed: false,
-          first_favorite_added: false,
-          email_preferences_set: false,
-          onboarding_completed: false,
-        })
-        .select()
-        .single();
+      const status = await prisma.userOnboardingStatus.create({
+        data: {
+          userId,
+          welcomeTourCompleted: false,
+          profileSetupCompleted: false,
+          firstSearchCompleted: false,
+          firstFavoriteAdded: false,
+          emailPreferencesSet: false,
+          onboardingCompleted: false,
+        },
+      });
 
-      if (error) {
-        console.error('Error creating onboarding status:', error);
-        return null;
-      }
-
-      return data;
+      return status;
     } catch (error) {
       console.error('Error in createOnboardingStatus:', error);
       return null;
@@ -153,25 +139,25 @@ export class OnboardingService {
 
   async updateOnboardingStatus(
     userId: string,
-    updates: Partial<Omit<OnboardingStatus, 'id' | 'user_id' | 'created_at' | 'updated_at'>>
+    updates: Partial<Omit<OnboardingStatus, 'id' | 'userId' | 'createdAt' | 'updatedAt'>>
   ): Promise<OnboardingStatus | null> {
     try {
-      const { data, error } = await this.supabase
-        .from('user_onboarding_status')
-        .update({
+      const status = await prisma.userOnboardingStatus.upsert({
+        where: { userId },
+        update: updates,
+        create: {
+          userId,
+          welcomeTourCompleted: false,
+          profileSetupCompleted: false,
+          firstSearchCompleted: false,
+          firstFavoriteAdded: false,
+          emailPreferencesSet: false,
+          onboardingCompleted: false,
           ...updates,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('user_id', userId)
-        .select()
-        .single();
+        },
+      });
 
-      if (error) {
-        console.error('Error updating onboarding status:', error);
-        return null;
-      }
-
-      return data;
+      return status;
     } catch (error) {
       console.error('Error in updateOnboardingStatus:', error);
       return null;
@@ -180,42 +166,42 @@ export class OnboardingService {
 
   async markWelcomeTourCompleted(userId: string): Promise<boolean> {
     const result = await this.updateOnboardingStatus(userId, {
-      welcome_tour_completed: true,
+      welcomeTourCompleted: true,
     });
     return result !== null;
   }
 
   async markProfileSetupCompleted(userId: string): Promise<boolean> {
     const result = await this.updateOnboardingStatus(userId, {
-      profile_setup_completed: true,
+      profileSetupCompleted: true,
     });
     return result !== null;
   }
 
   async markFirstSearchCompleted(userId: string): Promise<boolean> {
     const result = await this.updateOnboardingStatus(userId, {
-      first_search_completed: true,
+      firstSearchCompleted: true,
     });
     return result !== null;
   }
 
   async markFirstFavoriteAdded(userId: string): Promise<boolean> {
     const result = await this.updateOnboardingStatus(userId, {
-      first_favorite_added: true,
+      firstFavoriteAdded: true,
     });
     return result !== null;
   }
 
   async markEmailPreferencesSet(userId: string): Promise<boolean> {
     const result = await this.updateOnboardingStatus(userId, {
-      email_preferences_set: true,
+      emailPreferencesSet: true,
     });
     return result !== null;
   }
 
   async markOnboardingCompleted(userId: string): Promise<boolean> {
     const result = await this.updateOnboardingStatus(userId, {
-      onboarding_completed: true,
+      onboardingCompleted: true,
     });
     return result !== null;
   }
@@ -229,7 +215,7 @@ export class OnboardingService {
       return true;
     }
 
-    return !status.onboarding_completed;
+    return !status.onboardingCompleted;
   }
 
   async getOnboardingProgress(userId: string): Promise<number> {
@@ -240,11 +226,11 @@ export class OnboardingService {
     }
 
     const steps = [
-      status.welcome_tour_completed,
-      status.profile_setup_completed,
-      status.first_search_completed,
-      status.first_favorite_added,
-      status.email_preferences_set,
+      status.welcomeTourCompleted,
+      status.profileSetupCompleted,
+      status.firstSearchCompleted,
+      status.firstFavoriteAdded,
+      status.emailPreferencesSet,
     ];
 
     const completedSteps = steps.filter(Boolean).length;

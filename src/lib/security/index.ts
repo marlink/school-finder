@@ -106,7 +106,7 @@ export function getSecurityHeaders(): Record<string, string> {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
-      "connect-src 'self' https://api.supabase.co https://maps.googleapis.com",
+      "connect-src 'self' https://maps.googleapis.com",
       "frame-src 'self' https://www.google.com",
     ].join('; '),
   };

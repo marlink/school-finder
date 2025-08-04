@@ -288,7 +288,7 @@ export function LocationSearch({
             {showSuggestions && suggestions.length > 0 && (
               <div
                 ref={suggestionsRef}
-                className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
+                className="absolute top-full left-0 right-0 z-[9999] mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
               >
                 {suggestions.map((place, index) => (
                   <button
